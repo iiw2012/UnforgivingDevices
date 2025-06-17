@@ -67,7 +67,7 @@ Bool Function TimeUpdateHour(UD_Modifier_Combo akModifier, UD_CustomDevice_Rende
         Return False
     EndIf
 
-    If RandomFloat(0.0, 100.0) < 50.0
+    If RandomFloat(0.0, 100.0) < 30.0 * akModifier.MultVerboseness
         PrintNotification(akDevice, ;/ reacted /;" because of the items in your inventory. An image of an " + akForm1.GetName() + " appears in front of your eyes for a second.")
     EndIf
     
@@ -129,7 +129,7 @@ Bool Function ItemAdded(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScri
     Int loc_min_count = MultInt(GetStringParamInt(aiDataStr, 0, 1), akModifier.MultInputQuantities)
     Bool loc_stolen = GetStringParamInt(aiDataStr, 2, 0) > 0
     
-    If RandomFloat(0.0, 100.0) < 50.0
+    If RandomFloat(0.0, 100.0) < 30.0 * akModifier.MultVerboseness
         PrintNotification(akDevice, ;/ reacted /;" because of the items in your inventory. An image of an " + akForm1.GetName() + " appears in front of your eyes for a second.")
     EndIf
 

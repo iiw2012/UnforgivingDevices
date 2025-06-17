@@ -44,7 +44,7 @@ Bool Function Sleep(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript a
     Float loc_prob_accum = MultFloat(GetStringParamFloat(aiDataStr, 2, 0.0), akModifier.MultProbabilities)
     Bool loc_repeat = GetStringParamInt(aiDataStr, 4, 0) > 0
 
-    If BaseTriggerIsActive(aiDataStr, 5) && RandomFloat(0.0, 100.0) < 50.0
+    If BaseTriggerIsActive(aiDataStr, 5) && RandomFloat(0.0, 100.0) < 30.0 * akModifier.MultVerboseness
         PrintNotification(akDevice, ;/ reacted /;" in response to your awakening from sleep.")
     EndIf
 

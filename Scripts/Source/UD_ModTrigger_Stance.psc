@@ -60,7 +60,7 @@ Bool Function TimeUpdateSeconds(UD_Modifier_Combo akModifier, UD_CustomDevice_Re
             EndIf
         EndIf
 
-        If BaseTriggerIsActive(aiDataStr, 5) && RandomFloat(0.0, 100.0) < 15.0
+        If BaseTriggerIsActive(aiDataStr, 5) && RandomFloat(0.0, 100.0) < 15.0 * akModifier.MultVerboseness
             PrintNotification(akDevice, ;/ reacted /;"probably because of the way you move.")
         EndIf
 

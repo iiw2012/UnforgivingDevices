@@ -26,6 +26,8 @@ Scriptname UD_ModTrigger_TimeSeconds extends UD_ModTrigger
 import UnforgivingDevicesMain
 import UD_Native
 
+Sound       Property TickTackSound      Auto
+
 ;/  Group: Events Processing
 ===========================================================================================
 ===========================================================================================
@@ -37,8 +39,13 @@ Bool Function TimeUpdateSeconds(UD_Modifier_Combo akModifier, UD_CustomDevice_Re
     Float loc_prob_acc = MultFloat(GetStringParamFloat(aiDataStr, 2, 0.0), akModifier.MultProbabilities)
     Bool loc_repeat = GetStringParamInt(aiDataStr, 3, 1) > 0
 
-    If BaseTriggerIsActive(aiDataStr, 4) && RandomFloat(0.0, 100.0) < 3.0
-        PrintNotification(akDevice, "You feel that your " + akDevice.UD_DeviceType + " pulsing fast, as if responding to the passage of time.", aiEffectId = 0)
+    If BaseTriggerIsActive(aiDataStr, 4)
+        If RandomFloat(0.0, 100.0) < 1.0 * akModifier.MultVerboseness
+            PrintNotification(akDevice, "You feel that your " + akDevice.UD_DeviceType + " pulsing fast, as if responding to the passage of time.", aiEffectId = 0)
+        EndIf
+        If TickTackSound && RandomFloat(0.0, 100.0) < 5.0 * akModifier.MultVerboseness
+            TickTackSound.Play(akDevice.GetWearer())
+        EndIf
     EndIf
 
     Return TriggerOnValueDelta(akDevice, akModifier.NameAlias, aiDataStr, afValueDelta = afGameHoursSinceLastCall, afMinAccum = loc_min_value, afProbBase = loc_prob_base, afProbAccum = loc_prob_acc, abRepeat = loc_repeat, aiAccumParamIndex = 4)

@@ -51,7 +51,7 @@ Bool Function ConditionLoss(UD_Modifier_Combo akModifier, UD_CustomDevice_Render
     Float loc_prob_value = MultFloat(GetStringParamFloat(aiDataStr, 2, 0.0), akModifier.MultProbabilities)
     Bool loc_repeat = GetStringParamInt(aiDataStr, 3, 0) > 0
 
-    If BaseTriggerIsActive(aiDataStr, 4)
+    If BaseTriggerIsActive(aiDataStr, 4) && RandomFloat(0.0, 100.0) < 100.0 * akModifier.MultVerboseness
         PrintNotification(akDevice, ;/ reacted /;"after its condition worsened.")
     EndIf
 

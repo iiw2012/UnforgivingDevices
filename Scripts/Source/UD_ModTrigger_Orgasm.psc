@@ -37,7 +37,7 @@ Bool Function Orgasm(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript 
     Float loc_prob_accum = MultFloat(GetStringParamFloat(aiDataStr, 2, 0.0), akModifier.MultProbabilities)
     Bool loc_repeat = GetStringParamInt(aiDataStr, 3, 0) > 0
 
-    If BaseTriggerIsActive(aiDataStr, 4) && RandomFloat(0.0, 100.0) < 50.0
+    If BaseTriggerIsActive(aiDataStr, 4) && RandomFloat(0.0, 100.0) < 30.0 * akModifier.MultVerboseness
         PrintNotification(akDevice, ;/ reacted /;" while you shudder in the spasms of orgasm.")
     EndIf
 

@@ -31,7 +31,7 @@ Bool Function ActorAction(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderSc
         ; TODO PR195: check associated skill
         EndIf
 
-        If RandomFloat(0.0, 100.0) < 50.0
+        If RandomFloat(0.0, 100.0) < 30.0 * akModifier.MultVerboseness
             PrintNotification(akDevice, ;/ reacted /;"because of your actions. For a moment, you see the silhouette of a mage.")
         EndIf
 
@@ -44,7 +44,7 @@ Bool Function SkillIncreased(UD_Modifier_Combo akModifier, UD_CustomDevice_Rende
     If asSkill == "Alteration" || asSkill == "Conjuration" || asSkill == "Destruction" || asSkill == "Illusion"
         Float loc_prob = MultFloat(GetStringParamFloat(aiDataStr, 1, 0.0), akModifier.MultProbabilities)
         
-        If RandomFloat(0.0, 100.0) < 50.0
+        If RandomFloat(0.0, 100.0) < 30.0 * akModifier.MultVerboseness
             PrintNotification(akDevice, ;/ reacted /;"because of your actions. For a moment, you see the silhouette of a mage.")
         EndIf
 

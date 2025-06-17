@@ -46,10 +46,8 @@ Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDe
 
     UD_CustomDevice_RenderScript[] loc_devices = GetEquippedDevicesWithSelectionMethod(akDevice, loc_count, akForm2, loc_method_list2, akForm3, "")
 
-    If loc_devices.Length > 0
-        If RandomFloat(0.0, 100.0) < 50.0
-            PrintNotification(akDevice, ;/changed/; "and mended some of your devices a little bit.")
-        EndIf
+    If loc_devices.Length > 0 && RandomFloat(0.0, 100.0) < 50.0 * akModifier.MultVerboseness
+        PrintNotification(akDevice, ;/changed/; "and mended some of your devices a little bit.")
     EndIf
 
     Int loc_i = 0

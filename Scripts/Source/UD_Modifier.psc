@@ -116,6 +116,12 @@ Float       Property MultInputQuantities        = 1.0       Auto Hidden
 /;
 Float       Property MultOutputQuantities       = 1.0       Auto Hidden
 
+;/  Variable: MultOutputQuantities
+
+    Multiplier for adjusting the frequency of textual, audio and visual hints from the modifier
+/;
+Float       Property MultVerboseness            = 1.0       Auto Hidden
+
 Int         Property PrintFormsMax              = 3         AutoReadOnly Hidden
 
 

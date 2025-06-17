@@ -53,7 +53,7 @@ Bool Function ActorAction(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderSc
     EndIf
 
     Bool loc_rare_events = PapyrusUtil.CountString(_FrequentEvents, loc_event) == 0
-    If RandomFloat(0.0, 100.0) < (4.0 * (1.0 + 4.0 * (loc_rare_events As Int)))         ; 4% for the frequent events and 20% for the less common
+    If RandomFloat(0.0, 100.0) < (2.0 * (1.0 + 4.0 * (loc_rare_events As Int))) * akModifier.MultVerboseness                     ; 3% for the frequent events and 15% for the less common
         PrintNotification(akDevice, ;/ reacted /;"on your actions. You should be careful when using weapons and spells.")
     EndIf
 

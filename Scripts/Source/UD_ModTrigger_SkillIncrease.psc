@@ -63,7 +63,7 @@ Bool Function SkillIncreased(UD_Modifier_Combo akModifier, UD_CustomDevice_Rende
     Float loc_prob_accum = MultFloat(GetStringParamFloat(aiDataStr, 3, 0.0), akModifier.MultProbabilities)
     Bool loc_repeat = GetStringParamInt(aiDataStr, 4, 0) > 0
 
-    If BaseTriggerIsActive(aiDataStr, 5)
+    If BaseTriggerIsActive(aiDataStr, 5) && RandomFloat(0.0, 100.0) < 100.0 * akModifier.MultVerboseness
         PrintNotification(akDevice, ;/ reacted /;"in response to your new knowledge.")
     EndIf
 

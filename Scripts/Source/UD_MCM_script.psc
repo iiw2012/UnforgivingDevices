@@ -704,6 +704,7 @@ Int UD_Modifier_AddToTest_T
 int UD_ModifierMultiplier1_S
 int UD_ModifierMultiplier2_S
 int UD_ModifierMultiplier3_S
+Int UD_ModifierMultiplier4_S 
 int UD_ModifierPatchPowerMultiplier_S
 int UD_ModifierPatchChanceMultiplier_S
 int UD_ModifierDescription_T
@@ -816,6 +817,7 @@ Function resetModifiersPage()
     UD_ModifierMultiplier1_S = AddSliderOption("$UD_CUSTOMMOD_MULTPROB", loc_mod.MultProbabilities, "{1} x", UD_LockMenu_flag)          ; Probabilities multiplier
     UD_ModifierMultiplier2_S = AddSliderOption("$UD_CUSTOMMOD_MULTIN", loc_mod.MultInputQuantities, "{1} x", UD_LockMenu_flag)          ; Input multiplier
     UD_ModifierMultiplier3_S = AddSliderOption("$UD_CUSTOMMOD_MULTOUT", loc_mod.MultOutputQuantities, "{1} x", UD_LockMenu_flag)        ; Output multiplier
+    UD_ModifierMultiplier4_S = AddSliderOption("$UD_CUSTOMMOD_MULTVERB", loc_mod.MultVerboseness, "{1} x", UD_LockMenu_flag)            ; Verboseness
     UD_Modifier_AddToTest_T = addToggleOption("$UD_CUSTOMMOD_ADDTOTEST", loc_mod.NameAlias == UDCDmain.UDPatcher.UD_ModAddToTest, FlagSwitchOr(FlagSwitch(loc_presets_names.Length > 0), UD_LockMenu_flag))         ; add to test in the next Patcher call
 
     SetCursorPosition(26)
@@ -2894,6 +2896,12 @@ Function OnOptionSliderOpenModifiers(int option)
         SetSliderDialogDefaultValue(1.0)
         SetSliderDialogRange(0.0, 100.0)
         SetSliderDialogInterval(0.1)
+    ElseIf (option == UD_ModifierMultiplier4_S)
+        UD_Modifier loc_mod = UDmain.UDMOM.GetModifierFromStorage(UD_ModifierStorageSelected, UD_ModifierSelected)
+        SetSliderDialogStartValue(loc_mod.MultVerboseness)
+        SetSliderDialogDefaultValue(1.0)
+        SetSliderDialogRange(0.0, 100.0)
+        SetSliderDialogInterval(0.1)
     ElseIf option == UD_ModsMin_S
         SetSliderDialogStartValue(UDCDmain.UDPatcher.UD_ModsMin)
         SetSliderDialogDefaultValue(1)
@@ -3228,6 +3236,10 @@ Function OnOptionSliderAcceptModifiers(int option, float value)
         UD_Modifier loc_mod = UDmain.UDMOM.GetModifierFromStorage(UD_ModifierStorageSelected, UD_ModifierSelected)
         loc_mod.MultOutputQuantities  = value
         SetSliderOptionValue(UD_ModifierMultiplier3_S, value, "{1} x")
+    ElseIf (option == UD_ModifierMultiplier4_S)
+        UD_Modifier loc_mod = UDmain.UDMOM.GetModifierFromStorage(UD_ModifierStorageSelected, UD_ModifierSelected)
+        loc_mod.MultVerboseness  = value
+        SetSliderOptionValue(UD_ModifierMultiplier4_S, value, "{1} x")
     ElseIf option == UD_ModsMin_S
         UDCDmain.UDPatcher.UD_ModsMin = Round(value)
         SetSliderOptionValue(UD_ModsMin_S, value, "{0}")
@@ -4203,6 +4215,8 @@ Function ModifierPageInfo(int option)
         SetInfoText("$UD_CUSTOMMOD_MULTIN_INFO")
     ElseIf(option == UD_ModifierMultiplier3_S)
         SetInfoText("$UD_CUSTOMMOD_MULTOUT_INFO")
+    ElseIf(option == UD_ModifierMultiplier4_S)
+        SetInfoText("$UD_CUSTOMMOD_MULTVERB_INFO")
     ElseIf option == UD_ModsMin_S
         SetInfoText("$UD_PATCHER_MODSMIN_INFO")
     ElseIf option == UD_ModsMax_S

@@ -70,7 +70,7 @@ Bool Function KillMonitor(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderSc
         EndIf
     EndIf
 
-    If BaseTriggerIsActive(aiDataStr, 5) && RandomFloat(0.0, 100.0) < 50.0
+    If BaseTriggerIsActive(aiDataStr, 5) && RandomFloat(0.0, 100.0) < 30.0 * akModifier.MultVerboseness
         PrintNotification(akDevice, ;/ reacted /;" because of your actions. You're horrified to realize you've taken someone's life.")
     EndIf
 

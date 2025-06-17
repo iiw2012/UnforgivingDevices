@@ -43,8 +43,9 @@ Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDe
     If loc_devices.Length == 0
         Return
     EndIf
-
-    PrintNotification(akDevice, ;/changed/; "and unlock device on you.")
+    If RandomFloat(0.0, 100.0) < 100.0 * akModifier.MultVerboseness
+        PrintNotification(akDevice, ;/changed/; "and unlock device on you.")
+    EndIf
 
     Int loc_i = 0
     While loc_i < loc_devices.Length

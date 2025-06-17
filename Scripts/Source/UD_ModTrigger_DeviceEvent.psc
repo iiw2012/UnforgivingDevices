@@ -33,7 +33,9 @@ Bool Function DeviceLocked(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderS
         Return False
     EndIf
 
-    PrintNotification(akDevice, ;/ reacted /;"as soon as it touches you.")
+    If RandomFloat(0.0, 100.0) < 100.0 * akModifier.MultVerboseness
+        PrintNotification(akDevice, ;/ reacted /;"as soon as it touches you.")
+    EndIf
 
     Return (RandomFloat(0.0, 100.0) < loc_prob)
 EndFunction
