@@ -825,6 +825,12 @@ String Function getDeviceName()
     return DeviceInventory.GetName()
 EndFunction
 
+Bool Function GetManipulatedState()
+    If Ready
+        Return StorageUtil.GetIntValue(GetWearer(), "zad_Equipped" + libs.LookupDeviceType(UD_DeviceKeyword) + "_ManipulatedStatus", 0) == 1
+    EndIf
+    Return False
+EndFunction
 
 Event OnInit()
     ResetHealth()
