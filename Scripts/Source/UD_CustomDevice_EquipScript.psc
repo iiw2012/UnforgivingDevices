@@ -1035,6 +1035,9 @@ bool Function EquipDeviceMenu(Actor akActor)
             EndIf
             If Choice == 1
                 StorageUtil.SetIntValue(akActor, "zad_Equipped" + libs.LookupDeviceType(zad_DeviousDevice) + "_ManipulatedStatus", 1)
+                If UDmain.TraceAllowed()
+                    UDmain.Log(Self + "::EquipDeviceMenu() zad_Equipped" + libs.LookupDeviceType(zad_DeviousDevice) + "_ManipulatedStatus := 1", 3)
+                EndIf
             EndIf
         EndIf
         return false

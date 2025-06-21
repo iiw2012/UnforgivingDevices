@@ -826,10 +826,11 @@ String Function getDeviceName()
 EndFunction
 
 Bool Function GetManipulatedState()
-    If Ready
-        Return StorageUtil.GetIntValue(GetWearer(), "zad_Equipped" + libs.LookupDeviceType(UD_DeviceKeyword) + "_ManipulatedStatus", 0) == 1
+    Int loc_value = StorageUtil.GetIntValue(GetWearer(), "zad_Equipped" + libs.LookupDeviceType(UD_DeviceKeyword) + "_ManipulatedStatus", 0)
+    If UDmain.TraceAllowed()
+        UDmain.Log(Self + "::GetManipulatedState() zad_Equipped" + libs.LookupDeviceType(UD_DeviceKeyword) + "_ManipulatedStatus = " + loc_value, 3)
     EndIf
-    Return False
+    Return loc_value == 1
 EndFunction
 
 Event OnInit()

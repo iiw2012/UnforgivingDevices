@@ -34,7 +34,7 @@ Sound       Property TickTackSound      Auto
 ===========================================================================================
 /;
 Bool Function TimeUpdateSeconds(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Float afGameHoursSinceLastCall, Float afRealSecondsSinceLastCall, String aiDataStr, Form akForm1)
-    Float loc_min_value = MultFloat(GetStringParamInt(aiDataStr, 0, 0), akModifier.MultInputQuantities)
+    Float loc_min_value = MultFloat(GetStringParamFloat(aiDataStr, 0, 0), akModifier.MultInputQuantities)
     Float loc_prob_base = MultFloat(GetStringParamFloat(aiDataStr, 1, 100.0), akModifier.MultProbabilities)
     Float loc_prob_acc = MultFloat(GetStringParamFloat(aiDataStr, 2, 0.0), akModifier.MultProbabilities)
     Bool loc_repeat = GetStringParamInt(aiDataStr, 3, 1) > 0
@@ -57,7 +57,7 @@ EndFunction
 ===========================================================================================
 /;
 String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
-    Float loc_min_value = MultFloat(GetStringParamInt(aiDataStr, 0, 0), akModifier.MultInputQuantities)
+    Float loc_min_value = MultFloat(GetStringParamFloat(aiDataStr, 0, 0), akModifier.MultInputQuantities)
     Float loc_prob_base = MultFloat(GetStringParamFloat(aiDataStr, 1, 100.0), akModifier.MultProbabilities)
     Float loc_prob_acc = MultFloat(GetStringParamFloat(aiDataStr, 2, 0.0), akModifier.MultProbabilities)
     String loc_res = ""

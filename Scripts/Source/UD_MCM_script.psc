@@ -820,7 +820,7 @@ Function resetModifiersPage()
     UD_ModifierMultiplier4_S = AddSliderOption("$UD_CUSTOMMOD_MULTVERB", loc_mod.MultVerboseness, "{1} x", UD_LockMenu_flag)            ; Verboseness
     UD_Modifier_AddToTest_T = addToggleOption("$UD_CUSTOMMOD_ADDTOTEST", loc_mod.NameAlias == UDCDmain.UDPatcher.UD_ModAddToTest, FlagSwitchOr(FlagSwitch(loc_presets_names.Length > 0), UD_LockMenu_flag))         ; add to test in the next Patcher call
 
-    SetCursorPosition(26)
+    SetCursorPosition(28)
     SetCursorFillMode(LEFT_TO_RIGHT)
     AddHeaderOption("$UD_CUSTOMMOD_PPSCONFIG")            ; Patcher Presets Configuration
     AddHeaderOption("")
