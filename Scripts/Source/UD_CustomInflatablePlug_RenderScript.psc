@@ -536,6 +536,16 @@ bool Function canBeActivated()
         return false
     endif
 EndFunction
+
+String Function GetDeviceMainMenuTextAddition()
+    String loc_res = ""
+    If getPlugInflateLevel() >= 5
+        loc_res += UDMTF.LineBreak()
+        loc_res += UDMTF.Text("There's no way you can get the plug out while it's so inflated!", asColor = UDMTF.BoolToRainbow(False))
+    EndIf
+    Return loc_res
+EndFunction
+
 ;======================================================================
 ;Place new override functions here, do not forget to check override functions in parent if its not base script (UD_CustomDevice_RenderScript)
 ;======================================================================

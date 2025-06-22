@@ -7142,17 +7142,15 @@ String Function _GetDeviceMainMenuText()
     loc_res += UDMTF.ParagraphBegin(asAlign = "center")
     loc_res += UDMTF.LineGap()
     
-    loc_res += UDMTF.Text("Item has a " + getHealthString(True) + " health and is in a " + getConditionString(True) + " condition.")
+    loc_res += UDMTF.Text("Item is in " + getHealthString(True) + " health and in " + getConditionString(True) + " condition.")
     loc_res += UDMTF.LineBreak()
     loc_res += UDMTF.Text("This device is " + getAccesibilityString(True) + " to reach, and it is " + getBaseDamageString(True) + " to get rid of.")
     loc_res += UDMTF.LineBreak()
     
-    If getModResistPhysical(0.0) == 1.0 && getModResistMagicka(0.0) == 1.0
+    If getModResistPhysical(0.0) >= 1.0 && getModResistMagicka(0.0) >= 1.0
         loc_res += UDMTF.Text("You feel that it is " + UDMTF.Text("Impossible", asColor = UDMTF.BoolToRainbow(False)) + " to struggle out of this contraption!")
-    ElseIf getModResistPhysical(0.0) > getModResistMagicka(0.0)
-        loc_res += UDMTF.Text("You feel that device is more " + UDMTF.Text("Vulnerable", asColor = UDMTF.PercentToRainbow(Round(getModResistPhysical(0.0) * 50 + 50))) + " to brute force than magic.")
     Else
-        loc_res += UDMTF.Text("You feel that device is more " + UDMTF.Text("Vulnerable", asColor = UDMTF.PercentToRainbow(Round(getModResistMagicka(0.0) * 50 + 50))) + " to magic than brute force.")
+        loc_res += UDMTF.Text("You feel that device is " + getResistanceString(getModResistPhysical(0.0) * -100.0, True) + " to brute force and " + getResistanceString(getModResistMagicka(0.0) * -100.0, True) + " to magic.")
     EndIf
     loc_res += UDMTF.LineBreak()
     
@@ -7178,6 +7176,8 @@ String Function _GetDeviceMainMenuText()
         EndWhile
     EndIf
 
+    loc_res += GetDeviceMainMenuTextAddition()
+
     loc_res += UDMTF.LineBreak()
     loc_res += UDMTF.Text("What do you want to do with this device?")
     loc_res += UDMTF.LineBreak()
@@ -7186,6 +7186,10 @@ String Function _GetDeviceMainMenuText()
     loc_res += UDMTF.FontEnd()
     
     Return loc_res
+EndFunction
+
+String Function GetDeviceMainMenuTextAddition()
+    Return ""
 EndFunction
 
 String Function _GetDeviceStruggleMenuText()
@@ -7218,7 +7222,7 @@ String Function _GetDeviceDetailsMenuText()
     
     loc_res += UDMTF.Text(UD_DeviceType + " (level " + UD_Level + ")")
     loc_res += UDMTF.LineBreak()
-    loc_res += UDMTF.Text("Item has a " + getHealthString(True) + " health and in a " + getConditionString(True) + " condition.")
+    loc_res += UDMTF.Text("Item is in " + getHealthString(True) + " health and in " + getConditionString(True) + " condition.")
     loc_res += UDMTF.LineBreak()
     loc_res += UDMTF.Text("Locked for " + FormatFloat(GetGameTimeLockedTime() * 24.0, 2) + " hours.")
     loc_res += UDMTF.LineBreak()
