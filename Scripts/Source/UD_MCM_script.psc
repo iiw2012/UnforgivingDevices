@@ -696,6 +696,7 @@ Int UD_ModifierPatchList_M
 
 Int UD_ModsMin_S
 Int UD_ModsMax_S
+Int UD_ModValidate_T
 Int UD_ModGlobalProbabilityMult_S
 Int UD_ModGlobalSeverityShift_S
 Int UD_ModGlobalSeverityDispMult_S
@@ -749,13 +750,14 @@ Function resetModifiersPage()
     AddHeaderOption("$UD_PATCHER_MODSNUMTOADD")       ; Number of Modifiers to Add
     UD_ModsMin_S = AddSliderOption("$UD_PATCHER_MODSMIN", UDCDmain.UDPatcher.UD_ModsMin, "{0}", UD_LockMenu_flag)                   ; No less than
     UD_ModsMax_S = AddSliderOption("$UD_PATCHER_MODSMAX", UDCDmain.UDPatcher.UD_ModsMax, "{0}", UD_LockMenu_flag)                   ; No more than
+    UD_ModValidate_T = AddTextOption("$UD_PATCHER_VALIDATE", "$-PRESS-", FlagSwitch(true))
     
     SetCursorPosition(3)
     SetCursorFillMode(TOP_TO_BOTTOM)
     AddHeaderOption("$UD_PATCHER_GLOBALMODSSETTINGS")        ; Global Modifiers Settings
     UD_ModGlobalProbabilityMult_S = AddSliderOption("$UD_PATCHER_MODSPROBMULT", UDCDmain.UDPatcher.UD_ModGlobalProbabilityMult, "{2}", UD_LockMenu_flag)        ; Probability multiplier
     UD_ModGlobalSeverityShift_S = AddSliderOption("$UD_PATCHER_MODSSEVSHIFT", UDCDmain.UDPatcher.UD_ModGlobalSeverityShift, "{2}", UD_LockMenu_flag)            ; Severity shift
-    UD_ModGlobalSeverityDispMult_S = AddSliderOption("$UD_PATCHER_MODSSEVDISP", UDCDmain.UDPatcher.UD_ModGlobalSeverityDispMult, "{2}", UD_LockMenu_flag)      ; Severity dispersion multiplier
+    UD_ModGlobalSeverityDispMult_S = AddSliderOption("$UD_PATCHER_MODSSEVDISP", UDCDmain.UDPatcher.UD_ModGlobalSeverityDispMult, "{2}", UD_LockMenu_flag)       ; Severity dispersion multiplier
     
     SetCursorPosition(12)
     SetCursorFillMode(LEFT_TO_RIGHT)
@@ -1927,6 +1929,9 @@ Function OnOptionSelectCustomMods(int option)
     if(option == UD_ModifierDescription_T)
         UD_Modifier loc_mod = UDmain.UDMOM.GetModifierFromStorage(UD_ModifierStorageSelected, UD_ModifierSelected)
         ShowMessage(loc_mod.Description, false, "$Close")
+    ElseIf(option == UD_ModValidate_T)
+        UDCDmain.UDPatcher.ValidateAllPresets()
+        ShowMessage("$UD_PATCHER_VALIDATE_END", false, "$Close")
     ElseIf(option == UD_ModifierNoModsDesc_T)
         ShowMessage("$UD_CUSTOMMOD_ERROR_NOMODS_INFO", False, "$Close")
     ElseIf(option == UD_ModifierNoPPDesc_T)
@@ -4221,6 +4226,8 @@ Function ModifierPageInfo(int option)
         SetInfoText("$UD_PATCHER_MODSMIN_INFO")
     ElseIf option == UD_ModsMax_S
         SetInfoText("$UD_PATCHER_MODSMAX_INFO")
+    ElseIf option == UD_ModValidate_T
+        SetInfoText("$UD_PATCHER_VALIDATE_INFO")
     ElseIf option == UD_Modifier_AddToTest_T
         SetInfoText("$UD_CUSTOMMOD_ADDTOTEST_INFO")
     ElseIf option == UD_ModGlobalProbabilityMult_S
