@@ -1195,12 +1195,10 @@ EndFunction
         asMsg   - Error message information
 /;
 Function Warning(String asMsg)
-    if UD_WarningAllowed
-        string loc_msg = "[UD,WARNING,T="+Utility.GetCurrentRealTime()+"]: " + asMsg
-        debug.trace(loc_msg)
-        if ConsoleUtilInstalled ;print to console
-            ConsoleUtil.PrintMessage(loc_msg)
-        endif
+    string loc_msg = "[UD,WARNING,T="+Utility.GetCurrentRealTime()+"]: " + asMsg
+    debug.trace(loc_msg)
+    if UD_WarningAllowed && ConsoleUtilInstalled ;print to console
+        ConsoleUtil.PrintMessage(loc_msg)
     endif
 EndFunction
 

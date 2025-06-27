@@ -1,5 +1,15 @@
 ScriptName UD_ModifierStorage extends Quest
 
+UnforgivingDevicesMain _udmain
+UnforgivingDevicesMain Property UDmain Hidden
+    UnforgivingDevicesMain Function Get()
+        if !_udmain
+            _udmain = UnforgivingDevicesMain.GetUDMain()
+        endif
+        return _udmain
+    EndFunction
+EndProperty
+
 UD_ModifierManager_Script _udmom
 UD_ModifierManager_Script Property UDMOM
     UD_ModifierManager_Script Function Get()
@@ -22,6 +32,7 @@ Event OnUpdate()
 EndEvent
 
 Function UpdateList()
+    UDmain.Info(Self + "::UpdateList() Updating modifiers lists.")
     UD_ModifierList = Utility.CreateStringArray(0)
     Int loc_i = 0
     Int loc_n = Self.GetNumAliases()

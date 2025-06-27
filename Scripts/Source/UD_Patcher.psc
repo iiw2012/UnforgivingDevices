@@ -386,7 +386,7 @@ Function ProcessModifiers(UD_CustomDevice_RenderScript akDevice)
                     ; If the modifier have tags, we add them to the corresponding arrays to filter out all subsequent modifiers
                     loc_device_mods_tags = PapyrusUtil.MergeStringArray(loc_device_mods_tags, loc_mod.Tags)
                     loc_wearer_mods_tags = PapyrusUtil.MergeStringArray(loc_wearer_mods_tags, loc_mod.Tags)
-                    loc_modnum += UD_Native.iRange(loc_pre.OccupiedSlots, 0, 99)
+                    loc_modnum += iRange(loc_pre.OccupiedSlots, 0, 99)
                     ; remove used modifier from the source array
                     loc_valid_pres = PapyrusUtil.RemoveAlias(loc_valid_pres, loc_pre)
                 Else
@@ -401,7 +401,7 @@ Function ProcessModifiers(UD_CustomDevice_RenderScript akDevice)
     EndIf
 
     Bool loc_break = False
-    Int loc_modcap = UD_Native.RandomInt(UD_ModsMin, UD_ModsMax)
+    Int loc_modcap = RandomInt(UD_ModsMin, UD_ModsMax)
 
     While !loc_break
 
@@ -465,7 +465,7 @@ Function ProcessModifiers(UD_CustomDevice_RenderScript akDevice)
             If loc_a_pres.Length > 0 && loc_a_probs_sum > 0.0
                 loc_i = 0
                 While loc_i < loc_a_probs.Length && loc_pre == None
-                    loc_rnd = UD_Native.RandomFloat(0.0, 100.0)
+                    loc_rnd = RandomFloat(0.0, 100.0)
                     If loc_rnd < loc_a_probs[loc_i]
                         loc_pre = loc_a_pres[loc_i] As UD_Patcher_ModPreset
                     EndIf
@@ -481,9 +481,9 @@ Function ProcessModifiers(UD_CustomDevice_RenderScript akDevice)
             If loc_pre == None && loc_w_probs.Length > 0 && loc_w_probs_sum > 0.0 && loc_modnum < loc_modcap
                 ; 
                 If loc_w_probs_sum > 100.0
-                    loc_rnd = UD_Native.RandomFloat(0.0, loc_w_probs_sum)
+                    loc_rnd = RandomFloat(0.0, loc_w_probs_sum)
                 Else
-                    loc_rnd = UD_Native.RandomFloat(0.0, 100.0)
+                    loc_rnd = RandomFloat(0.0, 100.0)
                 EndIf
                 If UDCDmain.UDmain.TraceAllowed()
                     UDCDmain.UDmain.Log("UD_Patcher::ProcessModifiers() Testing modifiers with weighted prob.: " + FormatFloat(loc_rnd, 1) + " ? " + FormatFloat(loc_w_probs_sum, 1), 3)
@@ -512,7 +512,7 @@ Function ProcessModifiers(UD_CustomDevice_RenderScript akDevice)
                 loc_wearer_mods_tags = PapyrusUtil.MergeStringArray(loc_wearer_mods_tags, loc_mod.Tags)
                 ; remove used modifier from the source array
                 loc_valid_pres = PapyrusUtil.RemoveAlias(loc_valid_pres, loc_pre)
-                loc_modnum += UD_Native.iRange(loc_pre.OccupiedSlots, 0, 99)
+                loc_modnum += iRange(loc_pre.OccupiedSlots, 0, 99)
             EndIf
 
             If loc_modnum >= UD_ModsMax
@@ -816,13 +816,13 @@ Function CheckResist(UD_CustomDevice_RenderScript device)
 EndFunction
 
 Function ValidatePreset(UD_Patcher_ModPreset akModPreset)
-    Int loc_size1 = UD_Native.GetStringParamAll(akModPreset.DataStr_Easy).Length
-    Int loc_size2 = UD_Native.GetStringParamAll(akModPreset.DataStr_Ground).Length
-    Int loc_size3 = UD_Native.GetStringParamAll(akModPreset.DataStr_Hard).Length
+    Int loc_size1 = GetStringParamAll(akModPreset.DataStr_Easy).Length
+    Int loc_size2 = GetStringParamAll(akModPreset.DataStr_Ground).Length
+    Int loc_size3 = GetStringParamAll(akModPreset.DataStr_Hard).Length
 
     String loc_log_caption = "UD_Patcher::ValidatePreset() [" + akModPreset.GetModifier().NameAlias + " " + akModPreset.DisplayName + "] "
 
-    UDCDmain.UDmain.Info(loc_log_caption + "Validating...")
+    UDCDmain.UDmain.Info(loc_log_caption + "Validating... [" + akModPreset.DataStr_Easy + "], [" + akModPreset.DataStr_Ground + "], [" + akModPreset.DataStr_Hard + "]")
 
     If loc_size1 != loc_size2 || loc_size3 != loc_size2
         UDCDmain.UDmain.Warning(loc_log_caption + "Different number of parameters in configs for different difficulty: " + loc_size1 + ", " + loc_size2 + ", " + loc_size3)
