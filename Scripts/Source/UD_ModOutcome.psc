@@ -50,11 +50,16 @@ String      Property Description            Auto
 /;
 Int         Property DataStrOffset              = 7     AutoReadOnly Hidden
 
-;/  Group: Outcome Processing
+;/  Group: Overrides
 ===========================================================================================
 ===========================================================================================
 ===========================================================================================
 /;
+
+String Function GetDataStrTypes()
+    Return ""
+EndFunction
+
 Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm2, Form akForm3)
 EndFunction
 
@@ -62,11 +67,6 @@ Bool Function MinigameAllowed(UD_Modifier_Combo akModifier, UD_CustomDevice_Rend
     Return True
 EndFunction
 
-;/  Group: Overrides
-===========================================================================================
-===========================================================================================
-===========================================================================================
-/;
 ; Handlers to implement additional logic that is tied to the device lifecycle. 
 ; 
 Function OnDeviceLocked(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm2, Form akForm3)

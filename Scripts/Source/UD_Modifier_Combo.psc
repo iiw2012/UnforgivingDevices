@@ -30,6 +30,13 @@ import UD_Native
 ===========================================================================================
 ===========================================================================================
 /;
+
+String Function GetDataStrTypes()
+    ; NOT IMPLEMENTED
+    UDMain.Warning(Self + "::GetDataStrTypes() Should not be called in this context!")
+    Return ""
+EndFunction
+
 Bool Function ValidateModifier(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     Bool loc_result = True
     UD_ModTrigger loc_trigger = GetTrigger(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)

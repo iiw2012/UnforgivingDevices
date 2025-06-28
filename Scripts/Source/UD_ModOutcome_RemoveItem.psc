@@ -28,6 +28,10 @@ import UD_Native
 ===========================================================================================
 /;
 
+String Function GetDataStrTypes()
+    Return "I,I"
+EndFunction
+
 Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm2, Form akForm3)
     Form loc_item = UD_Modifier.GetRandomForm(akForm2, akForm3)
         

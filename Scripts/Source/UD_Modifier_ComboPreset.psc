@@ -27,12 +27,31 @@ import UD_Native
 UD_ModTrigger Property ModTrigger Auto
 UD_ModOutcome Property ModOutcome Auto
 
-
 ;/  Group: Overrides
 ===========================================================================================
 ===========================================================================================
 ===========================================================================================
 /;
+
+String Function GetDataStrTypes()
+    If ModTrigger.GetDataStrTypes() == "" && ModOutcome.GetDataStrTypes() == ""
+        Return ""
+    EndIf
+    String loc_str = ModTrigger.GetDataStrTypes()
+    String[] loc_all = GetStringParamAll(loc_str)
+    Int loc_num = GetStringParamAll(loc_str).Length
+    If loc_num == 1 && loc_all[0] == ""
+    ; function returns an array with one empty element if there are no parameters in the string
+        loc_num = 0
+    EndIf
+    While loc_num < ModOutcome.DataStrOffset
+        loc_str += ","
+        loc_num += 1
+    EndWhile
+    loc_str += ModOutcome.GetDataStrTypes()
+    Return loc_str
+EndFunction
+
 UD_ModTrigger Function GetTrigger(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     Return ModTrigger
 EndFunction

@@ -39,6 +39,11 @@ String Property ChangeToAllowedMessage Auto
 ===========================================================================================
 ===========================================================================================
 /;
+
+String Function GetDataStrTypes()
+    Return "S,F,I,S,F"
+EndFunction
+
 Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm2, Form akForm3)
     String loc_init = GetStringParamString(aiDataStr, DataStrOffset + 0, "B")
     Float loc_duration = MultFloat(GetStringParamFloat(aiDataStr, DataStrOffset + 1, 0.0), akModifier.MultOutputQuantities)

@@ -33,6 +33,13 @@ import UD_Native
 ===========================================================================================
 ===========================================================================================
 /;
+
+String Function GetDataStrTypes()
+    ; NOT IMPLEMENTED
+    UDMain.Warning(Self + "::GetDataStrTypes() Should not be called in this context!")
+    Return ""
+EndFunction
+
 UD_ModTrigger Function GetTrigger(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     Return akForm4 as UD_ModTrigger
 EndFunction

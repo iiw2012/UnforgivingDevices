@@ -25,6 +25,10 @@ import UD_Native
 ===========================================================================================
 /;
 
+String Function GetDataStrTypes()
+    Return "I"
+EndFunction
+
 Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm2, Form akForm3)
     Quest loc_quest = None
     loc_quest = UD_Modifier.GetRandomForm(akForm2) as Quest

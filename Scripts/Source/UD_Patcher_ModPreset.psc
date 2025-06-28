@@ -204,10 +204,11 @@ EndFunction
 /;
 String Function GetDataStr(Float afGlobalSeverityShift = 0.0, Float afGlobalSeverityDispersionMult = 1.0)
     Int i = 0
+    String loc_types = GetDataStrTypes()
     Int loc_size = UD_Native.GetStringParamAll(DataStr_Ground).Length
     String loc_datastr = ""
     While i < loc_size
-        String loc_type = GetStringParamString(DataStr_Types, i, "")
+        String loc_type = GetStringParamString(loc_types, i, "")
         String loc_rnd_str = ""
         If GetStringParamString(DataStr_Ground, i, "") != ""
             Float loc_rnd = BiasedRandom3(afGlobalSeverityShift, afGlobalSeverityDispersionMult)
@@ -366,6 +367,14 @@ EndFunction
 ===========================================================================================
 /;
 
+String Function GetDataStrTypes()
+    String loc_types = GetModifier().GetDataStrTypes()
+    If loc_types == ""
+        loc_types = Self.DataStr_Types
+    EndIf
+    Return loc_types
+EndFunction
+
 ;/  Function: CheckWearerCompatibility
 
     Checks the actor against the requirements of the preset.
@@ -471,7 +480,6 @@ Int Function CheckTagsCompatibility(String[] aasDeviceModsTags, String[] aasWear
 
     Return 1                    ; OK
 EndFunction
-
 
 Float Function GetProbability(UD_CustomDevice_RenderScript akDevice, Float afGlobalProbabilityMult)
     Float loc_prob = BaseProbability

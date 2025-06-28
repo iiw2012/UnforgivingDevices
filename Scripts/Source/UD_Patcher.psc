@@ -819,6 +819,7 @@ Function ValidatePreset(UD_Patcher_ModPreset akModPreset)
     Int loc_size1 = GetStringParamAll(akModPreset.DataStr_Easy).Length
     Int loc_size2 = GetStringParamAll(akModPreset.DataStr_Ground).Length
     Int loc_size3 = GetStringParamAll(akModPreset.DataStr_Hard).Length
+    String loc_types = akModPreset.GetDataStrTypes()
 
     String loc_log_caption = "UD_Patcher::ValidatePreset() [" + akModPreset.GetModifier().NameAlias + " " + akModPreset.DisplayName + "] "
 
@@ -830,7 +831,7 @@ Function ValidatePreset(UD_Patcher_ModPreset akModPreset)
 
     Int i = 0
     While i < loc_size2
-        String loc_type = GetStringParamString(akModPreset.DataStr_Types, i, "")
+        String loc_type = GetStringParamString(loc_types, i, "")
         String loc_s_val_0 = GetStringParamString(akModPreset.DataStr_Ground, i, "")
         String loc_s_val_min = GetStringParamString(akModPreset.DataStr_Easy, i, "")
         String loc_s_val_max = GetStringParamString(akModPreset.DataStr_Hard, i, "")

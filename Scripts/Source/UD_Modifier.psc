@@ -124,7 +124,6 @@ Float       Property MultVerboseness            = 1.0       Auto Hidden
 
 Int         Property PrintFormsMax              = 3         AutoReadOnly Hidden
 
-
 Float Function GetOutputFloat(String aiDataStr, Int aiIndex)
     Return MultFloat(UD_Native.GetStringParamFloat(aiDataStr, 0, 0.0), MultInputQuantities)
 EndFunction
@@ -146,6 +145,10 @@ EndFunction
 ===========================================================================================
 ===========================================================================================
 /;
+
+String Function GetDataStrTypes()
+    Return ""
+EndFunction
 
 Bool Function ValidateModifier(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     Return True

@@ -23,6 +23,16 @@ import UD_Native
 
 Spell Property EvolveExplosion Auto
 
+;/  Group: Overrides
+===========================================================================================
+===========================================================================================
+===========================================================================================
+/;
+
+String Function GetDataStrTypes()
+    Return ""
+EndFunction
+
 Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm2, Form akForm3)
     Actor loc_actor = akDevice.GetWearer()  
     Armor loc_device = UD_Modifier.GetRandomForm(akForm2, akForm3) as Armor
