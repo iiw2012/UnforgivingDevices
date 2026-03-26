@@ -475,7 +475,18 @@ Bool Function UnlockDeviceByKeyword(actor akActor, keyword zad_DeviousDevice, bo
     endif    
     
     Armor idevice = GetWornDevice(akActor, zad_DeviousDevice)
-    
+    if !idevice
+        if UDmain.TraceAllowed()
+            UDmain.Log("UnlockDeviceByKeyword:  Exact match didn't work, but we can still try the fuzzy match!")
+        endif
+        idevice = GetWornDeviceFuzzyMatch(akActor, zad_DeviousDevice)
+        if idevice
+            if UDmain.TraceAllowed()
+                UDmain.Log("UnlockDeviceByKeyword:  Fuzzy match worked! Device found: " + idevice)
+            endif
+        endif
+    endif
+
     if !idevice
         UDmain.Error("UnlockDeviceByKeyword("+GetActorName(akActor)+","+zad_DeviousDevice+") - returned idevice is none")
         return false
@@ -686,7 +697,7 @@ EndFunction
 Function ShockActorPatched(actor akActor,int aiArousalUpdate = 25,float afHealth = 0.0, bool abCanKill = false)
     bool loc_loaded = akActor.Is3DLoaded()
     if IsPlayer(akActor)
-        NotifyPlayer("You squirms uncomfortably as electricity runs through your body!")
+        NotifyPlayer("You squirm uncomfortably as electricity runs through your body!")
     Elseif UDmain.ActorIsFollower(akActor) && loc_loaded
         NotifyNPC(akActor.GetLeveledActorBase().GetName()+" squirms uncomfortably as electricity runs through her.")
     EndIf
@@ -771,37 +782,37 @@ EndFunction
 Function ProcessPlayerControls(bool abCheckMinigame = true)
 EndFunction
 
-function stripweapons(actor akActor, bool abUnequiponly = true)
-    int i = 10
-    
-    Form loc_lefthand   = none
-    Form loc_righthand  = none
-    
-    While i > 0
-        i -= 1
-        loc_lefthand = akActor.GetEquippedObject(0)
-        if loc_lefthand
-            akActor.unequipItem(loc_lefthand, false, true)
-        endif
-        if loc_lefthand as Spell
-            akActor.UnequipSpell(loc_lefthand as Spell,0)
-        endif
-        
-        loc_righthand = akActor.GetEquippedObject(1)
-        if loc_righthand
-            akActor.unequipItem(loc_righthand, false, true)
-        endif
-        if loc_righthand as Spell
-            akActor.UnequipSpell(loc_righthand as Spell,0)
-        endif
-        if loc_lefthand || loc_righthand || akActor.IsWeaponDrawn()
-            akActor.SheatheWeapon()
-            Utility.Wait(0.1)
-        else
-            return
-        endif
-    EndWhile
-endfunction
+;function stripweapons(actor akActor, bool abUnequiponly = true)
+;    int i = 10
+;    
+;    Form loc_lefthand   = none
+;    Form loc_righthand  = none
+;    
+;    While i > 0
+;        i -= 1
+;        loc_lefthand = akActor.GetEquippedObject(0)
+;        if loc_lefthand
+;            akActor.unequipItem(loc_lefthand, false, true)
+;        endif
+;        if loc_lefthand as Spell
+;            akActor.UnequipSpell(loc_lefthand as Spell,0)
+;        endif
+;        
+;        loc_righthand = akActor.GetEquippedObject(1)
+;        if loc_righthand
+;            akActor.unequipItem(loc_righthand, false, true)
+;        endif
+;        if loc_righthand as Spell
+;            akActor.UnequipSpell(loc_righthand as Spell,0)
+;        endif
+;        if loc_lefthand || loc_righthand || akActor.IsWeaponDrawn()
+;            akActor.SheatheWeapon()
+;            Utility.Wait(0.1)
+;        else
+;            return
+;        endif
+;    EndWhile
+;endfunction
 
 Function RepopulateNpcs()
     if repopulateMutex ; Avoid this getting hit too quickly while comparing times

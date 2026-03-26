@@ -76,9 +76,9 @@ bool Function struggleMinigame(int type = -1, Bool abSilent = False)
     else
         unlockRestrain()
         if WearerIsPlayer()
-            UDmain.Print("You succefully forced out " + deviceInventory.getName(),1)
+            UDmain.Print("You succefully forced out " + deviceInventory.getName()+ "!",1)
         elseif WearerIsFollower()
-            UDmain.Print(getWearerName() + "s "+ getDeviceName() +" got removed!",1)
+            UDmain.Print(getWearerName() + "'s "+ getDeviceName() +" got removed!",1)
         endif
     endif
     return true
@@ -90,9 +90,9 @@ bool Function struggleMinigameWH(Actor akHelper,int aiType = -1)
     else
         unlockRestrain()
         if WearerIsPlayer()
-            UDmain.Print("With help of "+ getHelperName() +", you succefully forced out " + deviceInventory.getName() + " !",1)
+            UDmain.Print("With help of "+ getHelperName() +", you succefully forced out " + deviceInventory.getName() + "!",1)
         elseif WearerIsFollower()
-            UDmain.Print(getWearerName() + "s "+ getDeviceName() +" got removed!",1)
+            UDmain.Print(getWearerName() + "'s "+ getDeviceName() +" got removed!",1)
         endif
     endif
     return true
@@ -203,7 +203,6 @@ Bool Function forceOutPlugMinigameWH(Actor akHelper,Bool abSilent = False)
     if minigamePostcheck(abSilent)
         ;register native meters
         if PlayerIsPresent()
-            UDmain.Info("Setting callback")
             UDmain.UDWC.Meter_RegisterNative("device-main",1,0,100.0,true)
             
             UD_Native.RegisterDeviceCallback(VMHandle1,VMHandle2,DeviceRendered,UDCDMain.SpecialKey_Keycode,"_ForceOutMG_SKPress")

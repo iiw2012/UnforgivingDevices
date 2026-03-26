@@ -1,20 +1,14 @@
-Scriptname UD_ParalelProcess extends Quest
+Scriptname UD_ParalelProcess extends UD_ModuleBase
 
 import UnforgivingDevicesMain
 import UD_NPCInteligence
 import UD_Native
 
 UDCustomDeviceMain Property UDCDmain auto
-UnforgivingDevicesMain Property UDmain auto
 
 zadlibs_UDPatch Property libsp
     zadlibs_UDPatch Function get()
         return UDmain.libs as zadlibs_UDPatch
-    EndFunction
-EndProperty
-UD_ExpressionManager Property UDEM
-    UD_ExpressionManager Function get()
-        return UDmain.UDEM
     EndFunction
 EndProperty
 UD_OrgasmManager Property UDOM
@@ -25,17 +19,11 @@ EndProperty
 
 Bool Property Ready auto
 
-Event OnInit()
+Event OnSetup()
     registerEvents()
-
-    if UDmain.TraceAllowed()
-        UDmain.Log("UD_ParalelProcess ready!",0)
-    endif
-    
-    Ready = True
 EndEvent
 
-Function Update()
+Function OnGameReload()
     UnregisterForAllModEvents()
     RegisterEvents()
 EndFunction
@@ -45,7 +33,6 @@ EndFunction
 ;==============================
 Function RegisterEvents()
     RegisterForModEvent(    "UDOrgasmParalel"        , "Receive_Orgasm"                )
-    
 EndFunction
 
 ;==============================
@@ -125,7 +112,7 @@ Function Receive_Orgasm(Form fActor,int abWairForReceive)
     endif
     bool    loc_close                   = UDmain.ActorInCloseRange(akActor)
     bool    loc_is3Dloaded              = akActor.Is3DLoaded() || loc_isplayer
-    int     loc_orgasmExhaustion        = UDOM.GetOrgasmExhaustion(akActor) + 1
+    int     loc_orgasmExhaustion        = UD_OrgasmManager.GetOrgasmExhaustion(akActor) + 1
     bool    loc_cond                    = loc_is3Dloaded && loc_close
 
     ;===========================
@@ -145,9 +132,9 @@ Function Receive_Orgasm(Form fActor,int abWairForReceive)
     bool loc_applytears = false
     if loc_force == 0
         if loc_isplayer
-            UDmain.Print("You have brought yourself to orgasm",2)
+            UDmain.Print("You have brought yourself to orgasm.",2)
         elseif loc_cond
-            UDmain.Print(getActorName(akActor) + " have brought "+GetPronounceSelf(akActor)+" to orgasm",3)
+            UDmain.Print(getActorName(akActor) + " has brought "+GetPronounceSelf(akActor)+" to orgasm.",3)
         endif
     elseif loc_force == 1
         if loc_isplayer
@@ -159,30 +146,30 @@ Function Receive_Orgasm(Form fActor,int abWairForReceive)
         if loc_orgasmExhaustion >= 6
             loc_applytears = true
             if loc_isplayer
-                UDmain.Print("You are losing your mind")
+                UDmain.Print("You are losing your mind.")
             elseif loc_cond
-                UDmain.Print("Orgasms are breaking " + getActorName(akActor) + "s mind")
+                UDmain.Print("Orgasms are breaking " + getActorName(akActor) + "'s mind.")
             endif
         elseif loc_orgasmExhaustion >= 4
             loc_applytears = true
             if loc_isplayer
-                UDmain.Print("Stimulations are making you orgasm nonstop")
+                UDmain.Print("Stimulations are making you orgasm nonstop.")
             elseif loc_cond
-                UDmain.Print(getActorName(akActor) + " are orgasming nonstop",3)
+                UDmain.Print(getActorName(akActor) + " is orgasming nonstop.",3)
             endif
         elseif loc_orgasmExhaustion >= 3
             loc_applytears = true
             if loc_isplayer
-                UDmain.Print("Constants orgasms barely let you catch a breath")
+                UDmain.Print("Constants orgasms barely let you catch a breath.")
             elseif loc_cond
-                UDmain.Print(getActorName(akActor) + " can barely catch a breath from nonstop climax",3)
+                UDmain.Print(getActorName(akActor) + " can barely catch a breath from nonstop orgasms.",3)
             endif
         elseif RandomInt(1,99) < 15 
             loc_applytears = true
             if loc_isplayer
-                UDmain.Print("Tears run down your cheeks as you are forced to orgasm",2)
+                UDmain.Print("Tears run down your cheeks as you are forced to orgasm.",2)
             elseif loc_cond
-                UDmain.Print("Tears run down " + getActorName(akActor) + "s cheeks as they are forced to orgasm",3)
+                UDmain.Print("Tears run down " + getActorName(akActor) + "'s cheeks as they are forced to orgasm.",3)
             endif
         else
             if loc_isplayer

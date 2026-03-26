@@ -112,11 +112,6 @@ Weapon Property UD_BestWeapon Hidden
         _BestWeapon = akWeapon
     EndFunction
 EndProperty
-float Property AgilitySkill         = 0.0   auto hidden
-float Property StrengthSkill        = 0.0   auto hidden
-float Property MagickSkill          = 0.0   auto hidden
-float Property CuttingSkill         = 0.0   auto hidden
-float Property SmithingSkill        = 0.0   auto hidden
 
 float Property ArousalSkillMult     = 1.0   auto hidden
 
@@ -134,15 +129,10 @@ State UpdatePaused
     EndFunction
     Function DeviceUpdate(UD_CustomDevice_RenderScript akDevice,Float afTimePassed)
     EndFunction
-    Function UpdateSkills()
-    EndFunction
 EndState
 
 Function GameUpdate()
     If isUsed()
-        if !IsPlayer()
-            UDOM.RemoveAbilities(GetActor())
-        endif
         _OrgasmGameUpdate()
         CheckVibrators()
     endif
@@ -159,11 +149,6 @@ EndFunction
 ;update other variables
 Function UpdateSlot(Bool abUpdateSkill = true)
     ArousalSkillMult = UDCDmain.getArousalSkillMult(getActor())
-    if abUpdateSkill && (isPlayer() || isFollower())
-        ;only update skills if actor is player or follower
-        ;TODO: Add switch to allow users to also update skills for other NPCs
-        UpdateSkills()
-    endif
     if !GetActor().wornhaskeyword(libs.zad_deviousHeavyBondage)
         _handRestrain = none ;unreference device
     endif
@@ -201,10 +186,13 @@ Function endDeviceManipulation()
 EndFunction
 
 Event OnInit()
-    UD_equipedCustomDevices = UDCDMain.MakeNewDeviceSlots()
-    UD_ActiveVibrators      = UDCDMain.MakeNewDeviceSlots()
     Ready = True
 EndEvent
+
+Function Setup()
+    UD_equipedCustomDevices = UDCDMain.MakeNewDeviceSlots()
+    UD_ActiveVibrators      = UDCDMain.MakeNewDeviceSlots()
+EndFunction
 
 Event OnPlayerLoadGame()
 EndEvent
@@ -232,7 +220,11 @@ Function _ValidateOutfit()
 EndFunction
 
 UD_CustomDevice_RenderScript Function GetUserSelectedDevice()
+    startDeviceManipulation()
+
     String[] loc_devicesString
+
+    removeUnlocked(false)
 
     If UDCDMain.UD_DeviceListGroups
         loc_devicesString = getDeviceGroupsPremade()
@@ -248,16 +240,16 @@ UD_CustomDevice_RenderScript Function GetUserSelectedDevice()
         loc_deviceIndx = UDmain.GetUserListInput(loc_devicesString, abPremade = True)
     EndIf
     
+    UD_CustomDevice_RenderScript loc_res = none
     if loc_deviceIndx < UD_equipedCustomDevices.Length && loc_deviceIndx >= 0
         UD_CustomDevice_RenderScript loc_device = UD_equipedCustomDevices[loc_deviceIndx]
         If loc_device != None
             UD_LastSelectedDevice = loc_device
-;            ReorderSlots(loc_device)
         EndIf
-        return loc_device
-    else
-        return none
+        loc_res = loc_device
     endif
+    endDeviceManipulation()
+    return loc_res
 EndFunction
 
 String[] Function getSlotsStringA()
@@ -520,10 +512,7 @@ Function unregisterSlot()
     endif
     StorageUtil.UnSetIntValue(getActor(), "UD_ManualRegister")
     _iScriptState = 0
-    if IsPlayer()
-        UDOM.RemoveAbilities(getActor())
-    else
-        CleanArousalUpdate()
+    if !IsPlayer()
         CleanOrgasmUpdate()
     endif
     UnregisterAllItemEvents(True)
@@ -584,13 +573,6 @@ Function SortVibrators(bool mutex = true)
     endif
 EndFunction
 
-;removes bullshit
-Function QuickFix()
-    sortSlots()
-    removeCopies()
-    removeUnusedDevices()
-EndFunction
-
 String Function _GetNPCSlotFixText()
     String loc_res = ""
     
@@ -615,12 +597,12 @@ Function fix()
     String loc_str = _GetNPCSlotFixText()
     Int loc_res = UDMain.UDMMM.ShowMessageBoxMenu(UDCDmain.UDCD_NPCM.UD_FixMenu_MSG, UDMain.UDMMM.NoValues, loc_str, UDMain.UDMMM.NoButtons, UDMain.UDMTF.HasHtmlMarkup(), False)
     if loc_res == 0 ;general fix
-        UDmain.Print("[UD] Starting general fixes")
+        UDmain.Print("[UD] Starting general fixes.")
         UDCDMain.ResetFetchFunction()
-        sortSlots()
-        removeCopies()
-        removeUnusedDevices()
-        removeLostRenderDevices()
+        sortSlots(true)
+        removeCopies(true)
+        removeUnusedDevices(true)
+        removeLostRenderDevices(true)
 
         UDCDmain.EnableActor(getActor())
 
@@ -648,7 +630,9 @@ Function fix()
         ; fix current devices
         int i = UD_equipedCustomDevices.length
         while i
-            UD_equipedCustomDevices[i].StopMinigame()
+            if UD_equipedCustomDevices[i]
+                UD_equipedCustomDevices[i].StopMinigame()
+            endif
             i -= 1
         endwhile
         _DeviceManipMutex = false
@@ -670,11 +654,7 @@ Function fix()
                 OrgasmSystem.RemoveOrgasmChange(GetActor(),loc_list[loc_ores])
             endif
         endif
-        if IsPlayer()
-            GetActor().DispelSpell(UDmain.UDlibs.ArousalCheckAbilitySpell)
-            GetActor().DispelSpell(UDmain.UDlibs.OrgasmCheckAbilitySpell)
-        endif
-        UDmain.Print("[UD] Orgasm variables reseted!")
+        UDmain.Print("[UD] Orgasm variables reset!")
     elseif loc_res == 2 ;reset expression
         libs.ExpLibs.ResetExpressionRaw(getActor(),100)
     elseif loc_res == 3 ;unequip slot
@@ -742,12 +722,14 @@ Function CheckVibrators()
     endwhile
 EndFunction
 
-Function removeLostRenderDevices()
+Function removeLostRenderDevices(bool abMutex)
     ;if !isPlayer()
     ;    UDmain.Print("removeLostRenderDevices doesn't work for NPCs. Skipping!",1)
     ;endif
     
-    startDeviceManipulation()
+    if abMutex
+      startDeviceManipulation()
+    endif
     if UDmain.TraceAllowed()
         UDmain.Log("removeLostRenderDevices("+getSlotedNPCName()+")")
     endif
@@ -768,11 +750,11 @@ Function removeLostRenderDevices()
             UDmain.Print("Lost device found: " + loc_InvDevice.getName() + " removed!")
         else
             if !getDeviceByRender(loc_RenDevice)
-                UDmain.Print("Found unregistred device "+loc_InvDevice.getName()+" , registering")
+                UDmain.Print("Found unregistred device "+loc_InvDevice.getName()+" , registering.")
                 UD_CustomDevice_RenderScript loc_device = UDCDmain.getDeviceScriptByRender(GetActor(),loc_RenDevice)
                 if loc_device
                     RegisterDevice(loc_device,false)
-                    UDmain.Print(loc_device.getDeviceHeader() + " registered")
+                    UDmain.Print(loc_device.getDeviceHeader() + " registered.")
                 else
                     UDmain.Print("Can't get device. Aborting.")
                 endif
@@ -792,7 +774,9 @@ Function removeLostRenderDevices()
         endif
         _currentSlotedActor.removeItem(loc_toRemove[loc_toRemoveNum],1,true)
     endwhile
-    endDeviceManipulation()
+    if abMutex
+      endDeviceManipulation()
+    endif
 EndFunction
 
 bool Function registerDevice(UD_CustomDevice_RenderScript oref,bool mutex = true)
@@ -800,7 +784,7 @@ bool Function registerDevice(UD_CustomDevice_RenderScript oref,bool mutex = true
         UDmain.Log("Starting slot device register for " + oref.getDeviceHeader() )
     endif
     if GetDeviceSlotIndx(oref) > 0
-        UDmain.Error("registerDevice("+oref.getDeviceHeader()+") is already registered")
+        UDmain.Error("registerDevice("+oref.getDeviceHeader()+") is already registered.")
         return false
     endif
     if mutex
@@ -850,11 +834,11 @@ bool Function RegisterVibrator(UD_CustomDevice_RenderScript akVib)
     endif
     if !(akVib as UD_CustomVibratorBase_RenderScript)
         ;device is not vibrator, return -1
-        UDmain.Error(self+"::RegisterVibrator("+akVib+") failed because device is not vibrator")
+        UDmain.Error(self+"::RegisterVibrator("+akVib+") failed because device is not vibrator.")
         return False
     endif
     if UD_ActiveVibrators.Find(akVib) > 0
-        UDmain.Error("RegisterVibrator("+akVib.getDeviceHeader()+") - Vibrator is already registered")
+        UDmain.Error("RegisterVibrator("+akVib.getDeviceHeader()+") - Vibrator is already registered.")
         return false
     endif
     startVibratorManipulation()
@@ -876,7 +860,6 @@ int Function unregisterDevice(UD_CustomDevice_RenderScript oref,int i = 0,bool s
     if mutex
         startDeviceManipulation()
     endif
-    Bool loc_sort = False
     If oref == UD_LastSelectedDevice
         UD_LastSelectedDevice = None
     EndIf
@@ -884,35 +867,21 @@ int Function unregisterDevice(UD_CustomDevice_RenderScript oref,int i = 0,bool s
     while (i < UD_equipedCustomDevices.length) && UD_equipedCustomDevices[i]
         if UD_equipedCustomDevices[i] == oref
             UD_equipedCustomDevices[i] = none
-            _iUsedSlots-=1
             res += 1
-        ElseIf res > 0 && UD_equipedCustomDevices[i - res] == None
-        ; immediately move all elements after the deleted one
-            UD_equipedCustomDevices[i - res] = UD_equipedCustomDevices[i]
-            UD_equipedCustomDevices[i] = None
-        Else
-        ; ???
-            ; This is intended behaviour when device is not first element in array and i = 0. Why print warning ???
-            ;UDmain.Warning(Self + "::unregisterDevice() Something wrong with UD_equipedCustomDevices array. Unexpected element value.")
-            loc_sort = True
         endif
         i+=1
     endwhile
+    
+    ; Only sort slots if at least one device is unregistered and there are still used slots
+    if res > 0 && sort
+        sortSlots(false)
+    endif
+    
+    GetModifierTags_Update()
+    
     if mutex
         endDeviceManipulation()
     endif
-    ;if isScriptRunning() && _iUsedSlots == 0
-        ;resetScriptState()
-    ;    return res
-    ;endif    
-    
-    ; Only sort slots if at least one device is unregistered and there are still used slots
-    if loc_sort
-        sortSlots(mutex)
-    endif
-
-    GetModifierTags_Update()
-    
     return res
 EndFunction
 
@@ -941,7 +910,7 @@ int Function unregisterDeviceByInv(Armor invDevice,int i = 0,bool sort = True,bo
     UD_CustomDevice_RenderScript loc_device = getDeviceByInventory(invDevice)
     
     if !loc_device
-        UDmain.Error("unregisterDeviceByInv("+getSlotedNPCName()+","+invDevice.getName()+") failed!! No registered device found")
+        UDmain.Error("unregisterDeviceByInv("+getSlotedNPCName()+","+invDevice.getName()+") failed!! No registered device found.")
         return res
     endif
     
@@ -954,7 +923,7 @@ int Function unregisterDeviceByRend(Armor rendDevice,int i = 0,bool sort = True,
     UD_CustomDevice_RenderScript loc_device = getDeviceByRender(rendDevice)
     
     if !loc_device
-        UDmain.Error("unregisterDeviceByRend("+getSlotedNPCName()+","+rendDevice+") failed!! No registered device found")
+        UDmain.Error("unregisterDeviceByRend("+getSlotedNPCName()+","+rendDevice+") failed!! No registered device found.")
         return res
     endif
     
@@ -1016,27 +985,29 @@ bool FUnction deviceAlreadyRegisteredRender(Armor deviceRendered)
     return false
 EndFunction
 
-Function removeAllDevices()
-    ;startDeviceManipulation()
+Function removeAllDevices(Bool abMutex = true)
     StorageUtil.SetIntValue(getActor(), "UD_blockSlotUpdate",1)
+    
     while UD_equipedCustomDevices[0]
         if UD_equipedCustomDevices[0].isUnlocked
             Utility.waitMenuMode(0.2)
             if UD_equipedCustomDevices[0].isUnlocked
-                removeCopies()
-                removeUnusedDevices()
-                removeLostRenderDevices()
+                removeCopies(true)
+                removeUnusedDevices(true)
+                removeLostRenderDevices(true)
+                sortSlots(true)
             endif
-        endif    
+        endif
         UD_equipedCustomDevices[0].unlockRestrain()
     endwhile
-    ;regainDevices()
+    
     StorageUtil.UnSetIntValue(getActor(), "UD_blockSlotUpdate")
-    ;endDeviceManipulation()
 EndFunction
 
-Function removeUnusedDevices()
-    startDeviceManipulation()
+Function removeUnusedDevices(bool abMutex = true)
+    if abMutex
+      startDeviceManipulation()
+    endif
     int i = 0
     while (i < UD_equipedCustomDevices.length) && UD_equipedCustomDevices[i]
         UD_CustomDevice_RenderScript loc_device = UD_equipedCustomDevices[i]
@@ -1057,9 +1028,10 @@ Function removeUnusedDevices()
         endif
         i+=1
     endwhile
-    endDeviceManipulation()
-    
-    sortSlots()
+    sortSlots(false)
+    if abMutex
+      endDeviceManipulation()
+    endif
 EndFunction
 
 int Function numberOfUnusedDevices()
@@ -1100,16 +1072,36 @@ int Function getCopiesOfDevice(UD_CustomDevice_RenderScript oref)
     return res
 EndFunction
 
-Function removeCopies()
-    ;startDeviceManipulation()
+Function removeCopies(bool abMutex = true)
+    if abMutex
+      startDeviceManipulation()
+    endif
     int i = 0
     while (i < UD_equipedCustomDevices.length) && UD_equipedCustomDevices[i]
         if i < _iUsedSlots - 1
-            unregisterDevice(UD_equipedCustomDevices[i],i + 1)
+            unregisterDevice(UD_equipedCustomDevices[i],i + 1,true,false)
         endif
         i+=1
     endwhile
-    ;endDeviceManipulation()
+    if abMutex
+      endDeviceManipulation()
+    endif
+EndFunction
+
+Function removeUnlocked(Bool abMutex = true)
+    if abMutex
+      startDeviceManipulation()
+    endif
+    int i = 0
+    while (i < UD_equipedCustomDevices.length) && UD_equipedCustomDevices[i]
+        if UD_equipedCustomDevices[i].isUnlocked
+            unregisterDevice(UD_equipedCustomDevices[i],i,true,false)
+        endif
+        i+=1
+    endwhile
+    if abMutex
+      endDeviceManipulation()
+    endif
 EndFunction
 
 int Function numberOfCopies()
@@ -1342,7 +1334,7 @@ Function showDebugMenu(int slot_id)
                     
                     UD_equipedCustomDevices[slot_id].patchDevice()
                 else
-                    UDmain.Print("Cant repatch device as device is not patched")
+                    UDmain.Print("Can't repatch device as device is not patched.")
                 endif
                 return
             elseif loc_res == 3 ;unlock
@@ -1909,24 +1901,6 @@ Actor Function getActor()
     return self.getActorReference()
 EndFunction
 
-int Function removeWrongWearerDevices()
-    ;startDeviceManipulation()
-    int res = 0
-    int i = 0
-    Actor _currentSlotedActor = getActor()
-    while (i < UD_equipedCustomDevices.length) && UD_equipedCustomDevices[i]
-        if (UD_equipedCustomDevices[i].getWearer() != _currentSlotedActor) || UD_equipedCustomDevices[i].isUnlocked
-            res += unregisterDevice(UD_equipedCustomDevices[i],i,False)
-        endif
-        i+=1
-    endwhile
-    ;endDeviceManipulation()
-    if res > 0
-        sortSlots()
-    endif
-    return res
-EndFunction
-
 Function resetValues()
     _iScriptState = 1
 EndFunction
@@ -1943,22 +1917,11 @@ Function regainDevices()
     endwhile
     _regainMutex = True
     
-    ;super complex shit
-    ;int removedDevices = removeWrongWearerDevices()
-    
-    ;Armor[] loc_devices = zadNativeFunctions.GetDevices(_currentSlotedActor,1,true)
-    ;UDmain.Info("Registering " + loc_devices.length + " devices")
     
     int loc_registered = UD_Native.RegisterDeviceScripts(_currentSlotedActor)
     _iUsedSlots = loc_registered
 
     UDmain.Info("Registered " + loc_registered + " devices")
-    ;wait for all devices to get registered
-    ;float loc_timeout = 3.0
-    ;while (_iUsedSlots != loc_toregister) && (loc_timeout > 0.0)
-    ;    Utility.waitMenuMode(0.1)
-    ;    loc_timeout -= 0.1
-    ;endwhile
     
     _regainMutex = False
 EndFunction
@@ -1966,15 +1929,6 @@ EndFunction
 Weapon Function GetBestWeapon()
     return UD_Native.GetSharpestWeapon(getActor())
 EndFunction
-
-Function UpdateSkills()
-    AgilitySkill    = UDmain.UDSKILL.getActorAgilitySkills(getActor())
-    StrengthSkill   = UDmain.UDSKILL.getActorStrengthSkills(getActor())
-    MagickSkill     = UDmain.UDSKILL.getActorMagickSkills(getActor())
-    CuttingSkill    = UDmain.UDSKILL.getActorCuttingSkills(getActor())
-    SmithingSkill   = UDmain.UDSKILL.getActorSmithingSkills(getActor())
-EndFunction
-
 
 ;===============================================================================
 ;===============================================================================
@@ -2102,7 +2056,7 @@ Function ProccesLockMutex()
     
     if UDmain.IsAnyMenuOpenRT() && loc_time >= UDmain.UDGV.UD_MutexTimeout && !IsPlayer()
         if UDmain.TraceAllowed()
-            UDmain.Log(self+"::ProccesLockMutex() - Timeout on NPC, waiting for menu to close and try again",2)
+            UDmain.Log(self+"::ProccesLockMutex() - Timeout on NPC, waiting for menu to close and try again.",2)
         endif
         Utility.wait(0.01)
         loc_time = 0.0
@@ -2136,7 +2090,7 @@ Function ProccesUnlockMutex()
     
     if UDmain.IsAnyMenuOpenRT() && loc_time >= UDmain.UDGV.UD_MutexTimeout && !IsPlayer()
         if UDmain.TraceAllowed()
-            UDmain.Log(self+"::ProccesUnlockMutex() - Timeout on NPC, waiting for menu to close and try again",2)
+            UDmain.Log(self+"::ProccesUnlockMutex() - Timeout on NPC, waiting for menu to close and try again.",2)
         endif
         Utility.wait(0.01)
         loc_time = 0.0
@@ -2163,22 +2117,43 @@ EndFunction
 Float _dfArousal = 0.0
 
 Function InitArousalUpdate()
-    ;GetActor().AddToFaction(UDOM.ArousalCheckLoopFaction)
 EndFunction
 
+float _ArousalAccumulator = 0.0
+float _SlaArousal = 0.0
+float _SlaArousal2 = 0.0
 Function UpdateArousal(Int aiUpdateTime)
-    ;Actor   loc_actor       = GetActor()
-    ;if loc_actor
-    ;    ;libs.Aroused.SetActorExposure(loc_actor, Round(OrgasmSystem.GetOrgasmVariable(loc_actor,8)))
-    ;    ;UDOM.UpdateArousal(loc_actor ,Round(OrgasmSystem.GetOrgasmVariable(8)))
-    ;else
-    ;    UDmain.Error(self + "::Cant update arousal  because sloted actor is none!")
-    ;endif
-EndFunction
-
-Function CleanArousalUpdate()
-    if GetActor()
-        ;GetActor().RemoveFromFaction(UDOM.ArousalCheckLoopFaction)
+    if OrgasmSystem.UseArousalFallback()
+      Actor   loc_actor       = GetActor()
+        if loc_actor
+            ;Arousal rate is in default in value per second
+            float loc_arousal = aiUpdateTime*OrgasmSystem.GetOrgasmVariable(loc_actor,9)*OrgasmSystem.GetOrgasmVariable(loc_actor,10)
+            _ArousalAccumulator += loc_arousal
+            int loc_arousalInt = Math.Floor(_ArousalAccumulator)
+            if loc_arousalInt != 0
+                _ArousalAccumulator -= loc_arousalInt
+                if libs.Aroused.GetVersion() >= 30100005 && libs.Aroused.GetVersion() < 40000000
+                  ; SLA Arousal is installed
+                  float loc_arousalsum = OrgasmSystem.GetOrgasmVariable(loc_actor,8)
+                  _SlaArousal = fRange(_SlaArousal + loc_arousalInt,0.0,100.0)
+                  float loc_diff = _SlaArousal - loc_arousalsum
+                  ; Try to aproximate the result
+                  _SlaArousal2 += loc_diff ; It just works
+                  int handle = ModEvent.Create("slaSetArousalEffect")
+                  ModEvent.PushForm(handle, loc_actor)
+                  ModEvent.PushString(handle, "UnforgivingDevices")
+                  ModEvent.PushFloat(handle, _SlaArousal2)   ; Init value = Value we want
+                  ModEvent.PushInt(handle, 0)       ; Timed function = None
+                  ModEvent.PushFloat(handle, 0)     ; Parameter
+                  ModEvent.PushFloat(handle, 0.0)   ; Stop at this value
+                  ModEvent.Send(handle)
+                else
+                  UDOM.UpdateArousal(loc_actor ,loc_arousalInt)
+                endif
+            endif
+        else
+            UDmain.Error(self + "::UpdateArousal() - Cant update arousal  because sloted actor is none!")
+        endif
     endif
 EndFunction
 
@@ -2302,9 +2277,9 @@ Int _ActorConstraints = -1
 
 FUnction UpdateOrgasmHornyAnimation()
     Actor akActor = GetActor()
-    if !_actorinminigame 
+    if !_actorinminigame
         bool loc_orgasmResisting = akActor.isInFaction(UDOM.OrgasmResistFaction)
-        if (_hornyAnimTimer == 0) && UDCONF.UD_HornyAnimation && (OrgasmSystem.GetOrgasmVariable(akActor,1) > 0.5*OrgasmSystem.GetOrgasmVariable(akActor,4)*OrgasmSystem.GetOrgasmVariable(akActor,3)) && !loc_orgasmResisting && !akActor.IsInCombat() ;orgasm progress is increasing
+        if (_hornyAnimTimer == 0) && UDCONF.UD_HornyAnimation && (OrgasmSystem.GetOrgasmVariable(akActor,1) > 0.5*OrgasmSystem.GetOrgasmVariable(akActor,4)*OrgasmSystem.GetOrgasmVariable(akActor,3)) && !loc_orgasmResisting && !akActor.IsInCombat() && !akActor.IsSneaking() && !akActor.IsSwimming() ;orgasm progress is increasing
             if !UDmain.UDAM.IsAnimating(akActor) ;start horny animation for UD_HornyAnimationDuration
                 if RandomInt(0,99) <= 10 + Round(10*(fRange(OrgasmSystem.GetOrgasmProgress(akActor),0.0,50.0)/50.0))
                     ; Requesting and selecting animation

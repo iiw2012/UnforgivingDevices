@@ -61,7 +61,7 @@ Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDe
     EndIf
     
     if loc_gold > 0 && RandomFloat(0.0, 100.0) < 100.0 * akModifier.MultVerboseness
-        PrintNotification(akDevice, ;/changed/; "and filled your purse with " + loc_currency.GetName())
+        PrintNotification(akDevice, ;/changed/; "and filled your purse with " + loc_currency.GetName() + ".")
         loc_actor.addItem(loc_currency, loc_gold)
     endif
     

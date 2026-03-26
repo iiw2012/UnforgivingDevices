@@ -1,6 +1,7 @@
 Scriptname UD_CustomPanelGag_RenderScript extends UD_CustomGag_RenderScript  
 
 import UD_Native
+import UnforgivingDevicesMain
 
 float Property UD_RemovePlugDifficulty = 100.0 auto
 ;MiscObject Property UD_GagPanelPlug Auto
@@ -101,15 +102,15 @@ bool Function removePlugMinigame(Bool abSilent = False)
     resetMinigameValues()
     
     setMinigameOffensiveVar(False,0.0,0.0,True)
-    setMinigameWearerVar(True,UD_base_stat_drain*0.8)
+    setMinigameWearerVar(True,UD_base_stat_drain*0.8 + getMaxActorValue(GetWearer(),"Stamina",0.035))
     setMinigameEffectVar(True,True,1.0)
     setMinigameWidgetVar(True, True, False, 0xc5f513, 0x8df513, -1, "icon-meter-pull")
     setMinigameMinStats(0.7)
     
     float mult = 1.0
     if haveHelper()
-        setMinigameHelperVar(True,UD_base_stat_drain*0.8)
-        setMinigameEffectHelperVar(True,True,1.2)    
+        setMinigameHelperVar(True,UD_base_stat_drain*0.6 + getMaxActorValue(GetHelper(),"Stamina",0.025))
+        setMinigameEffectHelperVar(True,True,1.2)
         mult += 0.25
         if HelperFreeHands(True,True)
             mult += 0.15
@@ -173,15 +174,15 @@ Function plugGag(bool silent = false)
             if WearerIsPlayer()
                 UDmain.Print(getHelperName() +" inserted plug into your " + getDeviceName() + "!",1)
             elseif WearerIsFollower() && HelperIsPlayer()
-                UDmain.Print("You inserted the plug in "+getWearerName()+"s "+ getDeviceName(),1)
+                UDmain.Print("You inserted the plug in "+getWearerName()+"'s "+ getDeviceName(),1)
             elseif WearerIsFollower()
-                UDmain.Print(getHelperName() + " inserted plug into the "+getWearerName()+"s "+ getDeviceName(),1)
+                UDmain.Print(getHelperName() + " inserted plug into the "+getWearerName()+"'s "+ getDeviceName(),1)
             endif
         else
             if WearerIsPlayer()
-                UDmain.Print("You insert the plug into the panel gag",1)
+                UDmain.Print("You insert the plug into the panel gag.",1)
             elseif WearerIsFollower()
-                UDmain.Print(getWearerName()+" inserts the plug into the "+ getDeviceName(),1)
+                UDmain.Print(getWearerName()+" inserts the plug into the "+ getDeviceName()+ ".",1)
             endif
         endif
     endif
@@ -194,17 +195,17 @@ Function unplugGag(bool silent = false)
     if !silent
         if haveHelper()
             if WearerIsPlayer()
-                UDmain.Print("With " + getHelperName() +"s help you managed to remove the plug from the panel gag.",1)
+                UDmain.Print("With " + getHelperName() +"'s help you managed to remove the plug from the panel gag.",1)
             elseif WearerIsFollower() && HelperIsPlayer()
-                UDmain.Print("You helped  "+getWearerName()+" to remove the plug from the "+ getDeviceName(),1)
+                UDmain.Print("You helped  "+getWearerName()+" remove the plug from the "+ getDeviceName()+ ".",1)
             elseif WearerIsFollower()
-                UDmain.Print(getHelperName() + " helped "+getWearerName()+" to remove the plug from the "+ getDeviceName(),1)
+                UDmain.Print(getHelperName() + " helped "+getWearerName()+" remove the plug from the "+ getDeviceName()+ ".",1)
             endif
         else
             if WearerIsPlayer()
-                UDmain.Print("You removed the plug from the "+ getDeviceName() +"!",1)
+                UDmain.Print("You removed the plug from the "+ getDeviceName() +".",1)
             elseif WearerIsFollower()
-                UDmain.Print(getWearerName()+" removed the plug from the "+ getDeviceName(),1)
+                UDmain.Print(getWearerName()+" removed the plug from the "+ getDeviceName()+ ".",1)
             endif
         endif
     endif
@@ -235,7 +236,7 @@ Function activateDevice()
     if WearerIsPlayer()
         UDmain.Print("Your panel gag plugs itself!",1)
     elseif WearerIsFollower()
-        UDmain.Print(getWearerName() + "s " + getDeviceName()+" plugs itself!",2)        
+        UDmain.Print(getWearerName() + "'s " + getDeviceName()+" plugs itself!",2)        
     endif
     addPlug()
 EndFunction

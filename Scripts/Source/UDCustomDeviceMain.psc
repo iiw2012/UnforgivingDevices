@@ -1,6 +1,6 @@
 ;   File: UDCustomDeviceMain
 ;   Contains all functionality which is relevant to Custom Devices
-Scriptname UDCustomDeviceMain extends Quest  conditional
+Scriptname UDCustomDeviceMain extends UD_ModuleBase  conditional
 
 import UnforgivingDevicesMain
 import UD_NPCInteligence
@@ -8,7 +8,7 @@ import UD_CustomDevice_RenderScript
 import UD_Native
 
 Spell Property SwimPenaltySpell auto
-UnforgivingDevicesMain Property UDmain auto
+
 UD_ParalelProcess Property UDPP hidden
     UD_ParalelProcess Function Get()
         return UDmain.UDPP
@@ -78,7 +78,7 @@ bool    Property UD_UseDDdifficulty                 = True  auto hidden
 bool    Property UD_UseWidget                       = True  auto hidden
 int     Property UD_GagPhonemModifier               = 50    auto hidden
 Int     Property UD_StruggleDifficulty              = 1     auto hidden
-float   Property UD_BaseDeviceSkillIncrease         = 35.0  auto hidden
+float   Property UD_BaseDeviceSkillIncrease         = 1.0   auto hidden
 float   Property UD_CooldownMultiplier              = 1.0   auto hidden
 Bool    Property UD_AutoCrit                        = False auto hidden
 Int     Property UD_AutoCritChance                  = 80    auto hidden
@@ -112,6 +112,9 @@ Int     Property UD_DeviceLvlLocks                  = 5     auto hidden
 ;example: if UD_VibrationMultiplier = 0.1 and vibration strength will be 100, orgasm rate will be 100*0.1 = 10 O/s 
 float   Property UD_VibrationMultiplier             = 0.10  auto hidden
 float   Property UD_ArousalMultiplier               = 0.05  auto hidden
+
+int     Property UD_ExperienceGainBase              = 15  auto hidden
+float   Property UD_ExperienceGainExp               = 0.8  auto hidden
 
 UD_PlayerSlotScript Property UD_PlayerSlot auto
 
@@ -186,66 +189,20 @@ Formlist        Property UD_QuestKeywords                   auto
 FormList        Property UD_HeavyBondageKeywords            auto
 
 Bool            Property UD_EquipMutex              = False auto hidden
-Bool            Property Ready                      = False auto hidden
 
-Event OnInit()
-    if CheckSubModules()
-        registerEvents()
-        ready = True
-        registerForSingleUpdate(5.0)
-        if UDmain.TraceAllowed()
-            UDmain.Log("UDCustomDeviceMain ready!",0)
-        endif
-    else
-        ready = False
-    endif
+Event OnSetup()
+    registerEvents()
     RegisterForSingleUpdateGameTime(1.0)
 EndEvent
 
-Bool Function CheckSubModules()
-    Bool    loc_cond = False
-    Int     loc_elapsedTime = 0
-    while !loc_cond && loc_elapsedTime < 15
-        loc_cond = True
-        loc_cond = loc_cond && UDPatcher.ready
-        loc_cond = loc_cond && UDEM.ready
-        
-        loc_elapsedTime += 1
-        Utility.WaitMenuMode(1.0)
-    endwhile
-    
-    ;check for fatal error
-    if !loc_cond
-        UDmain.ShowMessageBoxSafe("!!FATAL ERROR!!\nError loading Unforgiving devices. One or more of the modules are not ready. Please contact developers on LL or GitHub")
-        
-        String loc_modules = "--MODULES--\n"
-        loc_modules += "UDPatcher="+UDPatcher.ready + "\n"
-        loc_modules += "UDEM="+UDEM.ready + "\n"
-        UDmain.ShowMessageBox(loc_modules)
-        
-        ;Dumb info to console, use GInfo to skip ConsoleUtil installation check
-        GInfo("!!FATAL ERROR!! = Error loading Unforgiving devices. One or more of the modules are not ready. Please contact developrs on LL or GitHub")
-        GInfo("UDPatcher="+UDPatcher.ready)
-        GInfo("UDEM="+UDEM.ready)
-        
-        return False
-    endif
-    return true
-EndFunction
-
-Function Update()
-    RegisterForSingleUpdate(2*UD_UpdateTime)
-    
+Function OnGameReload()
     _activateDevicePackage = none
     _startVibFunctionPackage = none
-    
     ResetUI()
     registerAllEvents()
-    
-    ;CheckHardcoreDisabler(UDmain.Player)
-    
     SetArousalPerks()
-
+    UpdateQuestKeywords()
+    UpdateGenericKeys()
 EndFunction
 
 ;dedicated switches to hide options from menu
@@ -1108,7 +1065,7 @@ bool Function activateDevice(UD_CustomDevice_RenderScript akCustomDevice)
             UD_CustomDevice_RenderScript[] loc_device_arr = getActiveDevices(akCustomDevice.getWearer())
             UD_CustomDevice_RenderScript loc_device = loc_device_arr[RandomInt(0,loc_num - 1)]
             if akCustomDevice.WearerIsPlayer()
-                UDmain.Print("Your " + akCustomDevice.getDeviceName() + " activates " + loc_device.getDeviceName() + " !!", 2)
+                UDmain.Print("Your " + akCustomDevice.getDeviceName() + " activates " + loc_device.getDeviceName() + "!", 2)
             endif
             akCustomDevice = loc_device
         else
@@ -1151,17 +1108,11 @@ EndFunction
 ;=======================================
 ;//////////////////////////////////////;
 
-float Property UD_UpdateTime = 5.0 auto
 float LastUpdateTime = 0.0
 bool loc_init = false
-;update the devices once per UD_UpdateTime
 Event onUpdate()
     if !loc_init
-        ;LoadConfig()
         RegisterGlobalKeys()
-        if UDmain.DebugMod
-            UDmain.Player.addItem(UDlibs.AbadonPlug,1)
-        endif
         loc_init = true
     endif
 EndEvent
@@ -1203,8 +1154,12 @@ Int     Property UD_CritEffect          = 2             auto hidden
 Bool    Property UD_MandatoryCrit       = False         auto hidden
 Float   Property UD_CritDurationAdjust  = 0.0           auto hidden
 
-Event StruggleCritCheck(UD_CustomDevice_RenderScript device, int chance, string strArg, float difficulty)
+Float Function StruggleCritCheck(UD_CustomDevice_RenderScript device, int chance, string strArg, float difficulty)
     string meter
+    Float loc_res = 0.0
+    Float loc_crittime = fRange(difficulty + UD_CritDurationAdjust,0.25,5.0)
+    Float loc_ElapsedTime = 0.0
+    
     if RandomInt(1,100) <= chance
         if strArg != "NPC" && strArg != "Auto"
             if strArg == "random"
@@ -1222,17 +1177,17 @@ Event StruggleCritCheck(UD_CustomDevice_RenderScript device, int chance, string 
             else
                 device.critFailure() ;failure
             endif
-            return
+            return 0.0
         elseif strArg == "NPC"
-            if RandomInt() > 30 ;npc reacted
+            if RandomInt() > 10 ;npc reacted
                 float randomResponceTime = RandomFloat(0.4,0.95) ;random reaction time
                 if randomResponceTime <= difficulty
                     device.critDevice() ;succes
                 else
                     device.critFailure() ;failure
                 endif
+                return 0.0
             endif
-            return 
         endif
         
         selected_crit_meter = meter
@@ -1257,9 +1212,12 @@ Event StruggleCritCheck(UD_CustomDevice_RenderScript device, int chance, string 
                 UDlibs.RedCrit.RemoteCast(UDmain.Player,UDmain.Player,UDmain.Player)
             endif
         endif
-
-        Utility.wait(fRange(difficulty + UD_CritDurationAdjust,0.25,2.0))
-
+        
+        while (loc_ElapsedTime < loc_crittime) && crit
+          Utility.wait(0.1)
+          loc_ElapsedTime = fRange(loc_ElapsedTime + 0.1,0.0,loc_crittime)
+        endwhile
+        
         if UD_MandatoryCrit
             if crit
                 crit = False
@@ -1268,7 +1226,8 @@ Event StruggleCritCheck(UD_CustomDevice_RenderScript device, int chance, string 
         endif
         crit = False
     endif
-EndEvent
+    return loc_ElapsedTime
+EndFunction
 
 bool Function registeredKeyPressed(Int KeyCode)
     if KeyCode == Stamina_meter_Keycode
@@ -1590,9 +1549,9 @@ int Function addHelperXP(Actor akHelper, int aiXP)
         loc_nextXP      -= _CalculateHelperXpRequired(loc_nextLVL)
         loc_nextLVL     += 1
         if IsPlayer(akHelper)
-            UDmain.Print("Your Helper skill level increased to " + loc_nextLVL + " !")
+            UDmain.Print("Your helper level increased to " + loc_nextLVL + "!")
         elseif AllowNPCMessage(akHelper)
-            UDmain.Print(GetActorName(akHelper) + "'s helper level have increased to " + loc_nextLVL + " !")
+            UDmain.Print(GetActorName(akHelper) + "'s helper level increased to " + loc_nextLVL + "!")
         endif
     endwhile
     StorageUtil.SetIntValue(akHelper,"UDNPCXP",loc_nextXP)
@@ -1765,7 +1724,7 @@ Function PlayerImprovise()
     float loc_currenttime = Utility.GetCurrentGameTime()
     if _ImprovisedCooldown > loc_currenttime
         ; Not ready yet, do nothing
-        UDmain.Print("You dont have any ideas yet. You should wait some more time")
+        UDmain.Print("You dont have any ideas yet. You should wait some more time.")
         return
     endif
     
@@ -1774,7 +1733,7 @@ Function PlayerImprovise()
     ; Currently only one option
     if UDmain.Player.getItemCount(Lockpick) <= 0
         UDmain.Player.AddItem(Lockpick,RandomInt(5,10),true)
-        UDmain.Print("You improvised and created some makeshift lockpicks from things you could find around")
+        UDmain.Print("You improvised and created some makeshift lockpicks from things you could find lying around.")
         loc_cooldownHours = 1.0
     endif
     
@@ -1970,25 +1929,12 @@ String Function _GetActorDetailsMenuText(Actor akActor)
     Int loc_str
     Int loc_mag
     Int loc_cut
-    if IsRegistered(akActor)
-        UD_CustomDevice_NPCSlot loc_slot = GetNPCSlot(akActor)
-        if loc_slot
-            loc_agi = Round(loc_slot.AgilitySkill)
-            loc_str = Round(loc_slot.StrengthSkill)
-            loc_mag = Round(loc_slot.MagickSkill)
-            loc_cut = Round(loc_slot.CuttingSkill)
-        else
-            loc_agi = Round(UDmain.UDSKILL.getAgilitySkill(akActor))
-            loc_str = Round(UDmain.UDSKILL.getStrengthSkill(akActor))
-            loc_mag = Round(UDmain.UDSKILL.getMagickSkill(akActor))
-            loc_cut = Round(UDmain.UDSKILL.getCuttingSkill(akActor))
-        endif
-    else
-        loc_agi = Round(UDmain.UDSKILL.getAgilitySkill(akActor))
-        loc_str = Round(UDmain.UDSKILL.getStrengthSkill(akActor))
-        loc_mag = Round(UDmain.UDSKILL.getMagickSkill(akActor))
-        loc_cut = Round(UDmain.UDSKILL.getCuttingSkill(akActor))
-    endif
+
+    loc_agi = Round(UDmain.UDSKILL.getSkill(akActor,"AGIL"))
+    loc_str = Round(UDmain.UDSKILL.getSkill(akActor,"STRN"))
+    loc_mag = Round(UDmain.UDSKILL.getSkill(akActor,"MAGK"))
+    loc_cut = Round(UDmain.UDSKILL.getSkill(akActor,"CUTT"))
+
 
     loc_res += UDMTF.Text(UDMTF.InlineIfString(IsPlayer(akActor), "Your ", "Their ") + "agility skill is " + _GetActorSkillString(loc_agi, True) + ".")
     loc_res += UDMTF.LineBreak()
@@ -2064,25 +2010,12 @@ Bool Function ShowActorDetailsMenu(Actor akActor)
             loc_res += UDMTF.FontBegin(aiFontSize = UDMTF.FontSize, asColor = UDMTF.TextColorDefault)
             loc_res += UDMTF.TableBegin(aiLeftMargin = 40, aiColumn1Width = 150)
             loc_res += UDMTF.HeaderSplit()
-            if IsRegistered(akActor)
-                UD_CustomDevice_NPCSlot loc_slot = GetNPCSlot(akActor)
-                if loc_slot
-                    loc_res += UDMTF.TableRowDetails("Agility skill:", Round(loc_slot.AgilitySkill), UDMTF.PercentToRainbow(Round(loc_slot.AgilitySkill)))
-                    loc_res += UDMTF.TableRowDetails("Strength skill:", Round(loc_slot.StrengthSkill), UDMTF.PercentToRainbow(Round(loc_slot.StrengthSkill)))
-                    loc_res += UDMTF.TableRowDetails("Magicka skill:", Round(loc_slot.MagickSkill), UDMTF.PercentToRainbow(Round(loc_slot.MagickSkill)))
-                    loc_res += UDMTF.TableRowDetails("Cutting skill:", Round(loc_slot.CuttingSkill), UDMTF.PercentToRainbow(Round(loc_slot.CuttingSkill)))
-                else
-                    loc_res += UDMTF.TableRowDetails("Agility skill:", Round(UDmain.UDSKILL.getAgilitySkill(akActor)), UDMTF.PercentToRainbow(Round(UDmain.UDSKILL.getAgilitySkill(akActor))))
-                    loc_res += UDMTF.TableRowDetails("Strength skill:", Round(UDmain.UDSKILL.getStrengthSkill(akActor)), UDMTF.PercentToRainbow(Round(UDmain.UDSKILL.getStrengthSkill(akActor))))
-                    loc_res += UDMTF.TableRowDetails("Magicka skill:", Round(UDmain.UDSKILL.getMagickSkill(akActor)), UDMTF.PercentToRainbow(Round(UDmain.UDSKILL.getMagickSkill(akActor))))
-                    loc_res += UDMTF.TableRowDetails("Cutting skill:", Round(UDmain.UDSKILL.getCuttingSkill(akActor)), UDMTF.PercentToRainbow(Round(UDmain.UDSKILL.getCuttingSkill(akActor))))
-                endif
-            else
-                loc_res += UDMTF.TableRowDetails("Agility skill:", Round(UDmain.UDSKILL.getAgilitySkill(akActor)), UDMTF.PercentToRainbow(Round(UDmain.UDSKILL.getAgilitySkill(akActor))))
-                loc_res += UDMTF.TableRowDetails("Strength skill:", Round(UDmain.UDSKILL.getStrengthSkill(akActor)), UDMTF.PercentToRainbow(Round(UDmain.UDSKILL.getStrengthSkill(akActor))))
-                loc_res += UDMTF.TableRowDetails("Magicka skill:", Round(UDmain.UDSKILL.getMagickSkill(akActor)), UDMTF.PercentToRainbow(Round(UDmain.UDSKILL.getMagickSkill(akActor))))
-                loc_res += UDMTF.TableRowDetails("Cutting skill:", Round(UDmain.UDSKILL.getCuttingSkill(akActor)), UDMTF.PercentToRainbow(Round(UDmain.UDSKILL.getCuttingSkill(akActor))))
-            endif
+
+            loc_res += UDMTF.TableRowDetails("Agility skill:", Round(UDmain.UDSKILL.getSkill(akActor,"AGIL")), UDMTF.PercentToRainbow(Round(UDmain.UDSKILL.getSkill(akActor,"AGIL"))))
+            loc_res += UDMTF.TableRowDetails("Strength skill:", Round(UDmain.UDSKILL.getSkill(akActor,"STRN")), UDMTF.PercentToRainbow(Round(UDmain.UDSKILL.getSkill(akActor,"STRN"))))
+            loc_res += UDMTF.TableRowDetails("Magicka skill:", Round(UDmain.UDSKILL.getSkill(akActor,"MAGK")), UDMTF.PercentToRainbow(Round(UDmain.UDSKILL.getSkill(akActor,"MAGK"))))
+            loc_res += UDMTF.TableRowDetails("Cutting skill:", Round(UDmain.UDSKILL.getSkill(akActor,"CUTT")), UDMTF.PercentToRainbow(Round(UDmain.UDSKILL.getSkill(akActor,"CUTT"))))
+
             
             loc_res += UDMTF.FooterSplit()
             loc_res += UDMTF.TableEnd()
@@ -2202,8 +2135,6 @@ EndFunction
 ;=======================================
 ;//////////////////////////////////////;
 ;-Used to return absolute and relative skill values which are used by some minigames
-
-Int Property UD_SkillEfficiency = 1 auto ;% increase per one skill point
 
 ;/  Function: getActorCuttingWeaponMultiplier
 
@@ -3563,9 +3494,14 @@ Function addExhaustion(Actor akActor, float afMult = 1.0)
     endif
     if (UDmain.UDGV.UDG_MinigameExhaustion.Value == 1)
         Float loc_Exponent = Math.pow(UD_MinigameExhExponential, getMinigameExhaustion(akActor))
-        UDlibs.StruggleExhaustionSpell.SetNthEffectMagnitude(0, UD_StruggleExhaustionMagnitude*UD_MinigameExhMagnitudeMult*RandomFloat(0.75,1.25))
-        UDlibs.StruggleExhaustionSpell.SetNthEffectDuration(0, Round(UD_StruggleExhaustionDuration*UD_MinigameExhDurationMult*afMult*RandomFloat(0.75,1.25)*loc_Exponent))
-        UDlibs.StruggleExhaustionSpell.cast(akActor)
+        
+        Float loc_magnitude = UD_StruggleExhaustionMagnitude*UD_MinigameExhMagnitudeMult*RandomFloat(0.75,1.25)
+        Int loc_duration    = Round(UD_StruggleExhaustionDuration*UD_MinigameExhDurationMult*afMult*RandomFloat(0.75,1.25)*loc_Exponent)
+        if loc_magnitude > 0.0 && loc_duration > 0
+          UDlibs.StruggleExhaustionSpell.SetNthEffectMagnitude(0, loc_magnitude)
+          UDlibs.StruggleExhaustionSpell.SetNthEffectDuration(0, loc_duration)
+          UDlibs.StruggleExhaustionSpell.cast(akActor)
+        endif
     endif
 EndFunction
 
@@ -3824,7 +3760,7 @@ int Function ManifestDevices(Actor akActor,string asSource ,int aiChance,int aiN
     if loc_array
         if loc_array.length > 0
             if IsPlayer(akActor)
-                UDmain.Print(asSource + " suddenly locks you in bondage restraint!",1)
+                UDmain.Print(asSource + " suddenly locks you in bondage restraints!",1)
                 ;/
                 string loc_str = "Devices locked: \n"
                 int i = 0
@@ -3835,7 +3771,7 @@ int Function ManifestDevices(Actor akActor,string asSource ,int aiChance,int aiN
                 ShowMessageBox(loc_str)
                 /;
             elseif AllowNPCMessage(akActor)
-                UDmain.Print(GetActorName(akActor) + "s "+ asSource +" suddenly locks them in bondage restraint!",3)
+                UDmain.Print(GetActorName(akActor) + "'s "+ asSource +" suddenly locks them in bondage restraints!",3)
             endif
         endif
     endif
@@ -3870,7 +3806,7 @@ int Function ManifestDevicesFromArray(Actor akActor, String asSource, Form[] akF
     if loc_array
         if loc_array.length > 0
             if IsPlayer(akActor)
-                UDmain.Print(asSource + " suddenly locks you in bondage restraint!",1)
+                UDmain.Print(asSource + " suddenly locks you in bondage restraints!",1)
                 ;/
                 string loc_str = "Devices locked: \n"
                 int i = 0
@@ -3881,7 +3817,7 @@ int Function ManifestDevicesFromArray(Actor akActor, String asSource, Form[] akF
                 ShowMessageBox(loc_str)
                 /;
             elseif AllowNPCMessage(akActor)
-                UDmain.Print(GetActorName(akActor) + "s "+ asSource +" suddenly locks them in bondage restraint!",3)
+                UDmain.Print(GetActorName(akActor) + "'s "+ asSource +" suddenly locks them in bondage restraints!",3)
             endif
         endif
     endif
@@ -4011,4 +3947,155 @@ String Function GetConditionString(Int aiCondition)
     else
         return "Destroyed"
     endif
+EndFunction
+
+Function OnSaveJSON(String strFile)
+    JsonUtil.SetIntValue(strFile, "Stamina_meter_Keycode", Stamina_meter_Keycode)
+    JsonUtil.SetIntValue(strFile, "StruggleKey_Keycode", StruggleKey_Keycode)
+    JsonUtil.SetIntValue(strFile, "Magicka_meter_Keycode", Magicka_meter_Keycode)
+    JsonUtil.SetIntValue(strFile, "SpecialKey_Keycode", SpecialKey_Keycode)
+    JsonUtil.SetIntValue(strFile, "PlayerMenu_KeyCode", PlayerMenu_KeyCode)
+    JsonUtil.SetIntValue(strFile, "ActionKey_Keycode", ActionKey_Keycode)
+    JsonUtil.SetIntValue(strFile, "NPCMenu_Keycode", NPCMenu_Keycode)
+    JsonUtil.SetIntValue(strFile, "UseDDdifficulty", UD_UseDDdifficulty as Int)
+    JsonUtil.SetIntValue(strFile, "UseWidget", UD_UseWidget as Int)
+    JsonUtil.SetIntValue(strFile, "GagPhonemModifier", UD_GagPhonemModifier)
+    JsonUtil.SetIntValue(strFile, "StruggleDifficulty", UD_StruggleDifficulty)
+    JsonUtil.SetIntValue(strFile, "AutoCrit", UD_AutoCrit as Int)
+    JsonUtil.SetIntValue(strFile, "AutoCritChance", UD_AutoCritChance)
+    JsonUtil.SetFloatValue(strFile, "VibrationMultiplier", UD_VibrationMultiplier)
+    JsonUtil.SetFloatValue(strFile, "ArousalMultiplier", UD_ArousalMultiplier)
+    JsonUtil.SetIntValue(strFile, "LockpicksPerMinigame", UD_LockpicksPerMinigame as Int)
+    JsonUtil.SetFloatValue(strFile, "CooldownMultiplier", UD_CooldownMultiplier)
+    JsonUtil.SetIntValue(strFile, "CritEffect", UD_CritEffect)
+    JsonUtil.SetIntValue(strFile, "HardcoreMode", UD_HardcoreMode as Int)
+    JsonUtil.SetIntValue(strFile, "AllowArmTie", UD_AllowArmTie as Int)
+    JsonUtil.SetIntValue(strFile, "AllowLegTie", UD_AllowLegTie as Int)
+    JsonUtil.SetIntValue(strFile, "MinigameHelpCD", UD_MinigameHelpCd)
+    JsonUtil.SetIntValue(strFile, "MinigameHelpCD_PerLVL", Round(UD_MinigameHelpCD_PerLVL))
+    JsonUtil.SetIntValue(strFile, "MinigameHelpXPBase", UD_MinigameHelpXPBase)
+    JsonUtil.SetFloatValue(strFile, "DeviceLvlHealth", UD_DeviceLvlHealth*100)
+    JsonUtil.SetFloatValue(strFile, "DeviceLvlLockpick", UD_DeviceLvlLockpick)
+    JsonUtil.SetIntValue(strFile, "DeviceLvlLocks", UD_DeviceLvlLocks)
+    JsonUtil.SetIntValue(strFile, "PreventMasterLock", UD_PreventMasterLock as Int)
+    JsonUtil.SetIntValue(strFile, "MandatoryCrit", UD_MandatoryCrit as Int)
+    JsonUtil.SetFloatValue(strFile, "CritDurationAdjust", UD_CritDurationAdjust)
+    JsonUtil.SetIntValue(strFile, "KeyDurability", UD_KeyDurability)
+    JsonUtil.SetIntValue(strFile, "HardcoreAccess", UD_HardcoreAccess as Int)
+    JsonUtil.SetFloatValue(strFile, "MinigameDrainMult", UD_MinigameDrainMult)
+    JsonUtil.SetFloatValue(strFile, "InitialDrainDelay", UD_InitialDrainDelay)
+    JsonUtil.SetFloatValue(strFile, "MinigameExhDurationMult", UD_MinigameExhDurationMult)
+    JsonUtil.SetFloatValue(strFile, "MinigameExhMagnitudeMult", UD_MinigameExhMagnitudeMult)
+    JsonUtil.SetIntValue(strFile, "LockpickMinigameDuration", UD_LockpickMinigameDuration)
+    JsonUtil.SetFloatValue(strFile, "MinigameExhExponential", UD_MinigameExhExponential)
+    JsonUtil.SetIntValue(strFile, "MinigameExhNoStruggleMax", UD_MinigameExhNoStruggleMax as Int)
+    JsonUtil.SetIntValue(strFile, "MinigameLockpickSkillAdjust", UD_MinigameLockpickSkillAdjust)
+    JsonUtil.SetFloatValue(strFile, "BaseDeviceSkillIncrease", UD_BaseDeviceSkillIncrease)
+    JsonUtil.SetIntValue(strFile, "ExperienceGain", UD_ExperienceGainBase)
+    JsonUtil.SetFloatValue(strFile, "ExperienceExp", UD_ExperienceGainExp)
+EndFunction
+Function OnLoadJSON(String strFile)
+    UnregisterGlobalKeys()
+    Stamina_meter_Keycode = JsonUtil.GetIntValue(strFile, "Stamina_meter_Keycode", Stamina_meter_Keycode)
+    StruggleKey_Keycode = JsonUtil.GetIntValue(strFile, "StruggleKey_Keycode", StruggleKey_Keycode)
+    Magicka_meter_Keycode = JsonUtil.GetIntValue(strFile, "Magicka_meter_Keycode", Magicka_meter_Keycode)
+    SpecialKey_Keycode = JsonUtil.GetIntValue(strFile, "SpecialKey_Keycode", SpecialKey_Keycode)
+    PlayerMenu_KeyCode = JsonUtil.GetIntValue(strFile, "PlayerMenu_KeyCode", PlayerMenu_KeyCode)
+    ActionKey_Keycode = JsonUtil.GetIntValue(strFile, "ActionKey_Keycode", ActionKey_Keycode)
+    NPCMenu_Keycode = JsonUtil.GetIntValue(strFile, "NPCMenu_Keycode", NPCMenu_Keycode)
+    RegisterGlobalKeys()
+    
+    UD_UseDDdifficulty = JsonUtil.GetIntValue(strFile, "UseDDdifficulty", UD_UseDDdifficulty as Int)
+    UD_UseWidget = JsonUtil.GetIntValue(strFile, "UseWidget", UD_UseWidget as Int)
+    UD_GagPhonemModifier = JsonUtil.GetIntValue(strFile, "GagPhonemModifier", UD_GagPhonemModifier)
+    UD_StruggleDifficulty = JsonUtil.GetIntValue(strFile, "StruggleDifficulty", UD_StruggleDifficulty)
+    UD_AutoCrit = JsonUtil.GetIntValue(strFile, "AutoCrit", UD_AutoCrit as Int)
+    UD_AutoCritChance              = JsonUtil.GetIntValue(strFile, "AutoCritChance", UD_AutoCritChance)
+    UD_VibrationMultiplier         = JsonUtil.GetFloatValue(strFile, "VibrationMultiplier", UD_VibrationMultiplier)
+    UD_ArousalMultiplier           = JsonUtil.GetFloatValue(strFile, "ArousalMultiplier", UD_ArousalMultiplier)
+    UD_LockpicksPerMinigame        = JsonUtil.GetIntValue(strFile, "LockpicksPerMinigame", UD_LockpicksPerMinigame)
+    UD_CooldownMultiplier          = JsonUtil.GetFloatValue(strFile, "CooldownMultiplier", UD_CooldownMultiplier)
+    UD_CritEffect                  = JsonUtil.GetIntValue(strFile, "CritEffect", UD_CritEffect)
+    UD_HardcoreMode                = JsonUtil.GetIntValue(strFile, "HardcoreMode", UD_HardcoreMode as Int)
+    UD_AllowArmTie                 = JsonUtil.GetIntValue(strFile, "AllowArmTie", UD_AllowArmTie as Int)
+    UD_AllowLegTie                 = JsonUtil.GetIntValue(strFile, "AllowLegTie", UD_AllowLegTie as Int)
+    UD_MinigameHelpCd              = JsonUtil.GetIntValue(strFile, "MinigameHelpCD",UD_MinigameHelpCd)
+    UD_MinigameHelpCD_PerLVL       = JsonUtil.GetIntValue(strFile, "MinigameHelpCD_PerLVL", Round(UD_MinigameHelpCD_PerLVL))
+    UD_MinigameHelpXPBase          = JsonUtil.GetIntValue(strFile, "MinigameHelpXPBase", UD_MinigameHelpXPBase)
+    UD_DeviceLvlHealth             = JsonUtil.GetFloatValue(strFile, "DeviceLvlHealth", UD_DeviceLvlHealth*100)/100
+    UD_DeviceLvlLockpick           = JsonUtil.GetFloatValue(strFile, "DeviceLvlLockpick", UD_DeviceLvlLockpick)
+    UD_DeviceLvlLocks              = JsonUtil.GetIntValue(strFile, "DeviceLvlLocks", UD_DeviceLvlLocks)
+    UD_PreventMasterLock           = JsonUtil.GetIntValue(strFile, "PreventMasterLock", UD_PreventMasterLock as Int)
+    UD_MandatoryCrit               = JsonUtil.GetIntValue(strFile, "MandatoryCrit", UD_MandatoryCrit as Int)
+    UD_CritDurationAdjust          = JsonUtil.GetFloatValue(strFile, "CritDurationAdjust", UD_CritDurationAdjust)
+    UD_KeyDurability               = JsonUtil.GetIntValue(strFile, "KeyDurability", UD_KeyDurability)
+    UD_HardcoreAccess              = JsonUtil.GetIntValue(strFile, "HardcoreAccess", UD_HardcoreAccess as Int)
+    UD_MinigameDrainMult           = JsonUtil.GetFloatValue(strFile, "MinigameDrainMult", UD_MinigameDrainMult)
+    UD_InitialDrainDelay           = JsonUtil.GetFloatValue(strFile, "InitialDrainDelay", UD_InitialDrainDelay)
+    UD_MinigameExhDurationMult     = JsonUtil.GetFloatValue(strFile, "MinigameExhDurationMult", UD_MinigameExhDurationMult)
+    UD_MinigameExhMagnitudeMult    = JsonUtil.GetFloatValue(strFile, "MinigameExhMagnitudeMult", UD_MinigameExhMagnitudeMult)
+    UD_LockpickMinigameDuration    = JsonUtil.GetIntValue(strFile, "LockpickMinigameDuration", UD_LockpickMinigameDuration)
+    UD_MinigameExhExponential      = JsonUtil.GetFloatValue(strFile, "MinigameExhExponential", UD_MinigameExhExponential)
+    UD_MinigameExhNoStruggleMax   = JsonUtil.GetIntValue(strFile, "MinigameExhNoStruggleMax", UD_MinigameExhNoStruggleMax)
+    UD_MinigameLockpickSkillAdjust = JsonUtil.GetIntValue(strFile, "MinigameLockpickSkillAdjust", UD_MinigameLockpickSkillAdjust)
+    UD_BaseDeviceSkillIncrease = JsonUtil.GetFloatValue(strFile, "BaseDeviceSkillIncrease", UD_BaseDeviceSkillIncrease)
+    UD_ExperienceGainBase = JsonUtil.GetIntValue(strFile, "ExperienceGainBase", UD_ExperienceGainBase)
+    UD_ExperienceGainExp = JsonUtil.GetFloatValue(strFile, "ExperienceExp", UD_ExperienceGainExp)
+EndFunction
+Function OnResetToDefault()
+    UnregisterGlobalKeys()
+    if !Game.UsingGamepad()
+        Stamina_meter_Keycode  = 32
+        StruggleKey_Keycode    = 52
+        Magicka_meter_Keycode  = 30
+        SpecialKey_Keycode     = 31
+        PlayerMenu_KeyCode     = 40
+        ActionKey_Keycode      = 18
+        NPCMenu_Keycode        = 39
+    else
+        Stamina_meter_Keycode  = 275
+        StruggleKey_Keycode    = 275
+        Magicka_meter_Keycode  = 274
+        SpecialKey_Keycode     = 276
+        PlayerMenu_KeyCode     = 268
+        NPCMenu_Keycode        = 269
+        ActionKey_Keycode      = 279
+    endif
+    RegisterGlobalKeys()
+    
+    UD_UseDDdifficulty         = true
+    UD_UseWidget               = true
+    UD_GagPhonemModifier       = 50
+    UD_StruggleDifficulty      = 1
+    UD_AutoCrit = false
+    UD_AutoCritChance          = 80
+    UD_VibrationMultiplier     = 0.1
+    UD_ArousalMultiplier       = 0.025
+    UD_LockpicksPerMinigame    = 2
+    UD_CooldownMultiplier      = 1.0
+    UD_CritEffect              = 2
+    UD_HardcoreMode            = false
+    UD_AllowArmTie             = true
+    UD_AllowLegTie             = true
+    UD_MinigameHelpCd          = 60
+    UD_MinigameHelpCD_PerLVL   = 10
+    UD_MinigameHelpXPBase      = 35
+    UD_DeviceLvlHealth         = 0.025
+    UD_DeviceLvlLockpick       = 0.5
+    UD_DeviceLvlLocks          = 5
+    UD_PreventMasterLock       = False
+    UD_MandatoryCrit           = False
+    UD_CritDurationAdjust      = 0.0
+    UD_KeyDurability           = 5
+    UD_HardcoreAccess          = False
+    UD_MinigameDrainMult       = 1.0
+    UD_InitialDrainDelay       = 0
+    UD_MinigameExhDurationMult = 1.0
+    UD_MinigameExhMagnitudeMult= 1.0
+    UD_MinigameExhExponential  = 1.0
+    UD_MinigameExhNoStruggleMax= 2
+    UD_BaseDeviceSkillIncrease = 1.0
+    UD_MinigameLockpickSkillAdjust = 2
+    UD_ExperienceGainBase = 15
+    UD_ExperienceGainExp = 0.8
 EndFunction
