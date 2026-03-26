@@ -39,6 +39,7 @@ Int UD_ModReset_T
 
 Int UD_ModsMin_S
 Int UD_ModsMax_S
+Int UD_ModValidate_T
 Int UD_ModGlobalProbabilityMult_S
 Int UD_ModGlobalSeverityShift_S
 Int UD_ModGlobalSeverityDispMult_S
@@ -47,6 +48,7 @@ Int UD_Modifier_AddToTest_T
 int UD_ModifierMultiplier1_S
 int UD_ModifierMultiplier2_S
 int UD_ModifierMultiplier3_S
+Int UD_ModifierMultiplier4_S
 int UD_ModifierPatchPowerMultiplier_S
 int UD_ModifierPatchChanceMultiplier_S
 int UD_ModifierDescription_T
@@ -91,6 +93,7 @@ Function PageReset(Bool abLockMenu)
     AddHeaderOption("$UD_PATCHER_MODSNUMTOADD")       ; Number of Modifiers to Add
     UD_ModsMin_S = AddSliderOption("$UD_PATCHER_MODSMIN", UDCDmain.UDPatcher.UD_ModsMin, "{0}", UD_LockMenu_flag)                   ; No less than
     UD_ModsMax_S = AddSliderOption("$UD_PATCHER_MODSMAX", UDCDmain.UDPatcher.UD_ModsMax, "{0}", UD_LockMenu_flag)                   ; No more than
+    UD_ModValidate_T = AddTextOption("$UD_PATCHER_VALIDATE", "$-PRESS-", FlagSwitch(true))
     
     SetCursorPosition(3)
     SetCursorFillMode(TOP_TO_BOTTOM)
@@ -161,9 +164,10 @@ Function PageReset(Bool abLockMenu)
     UD_ModifierMultiplier1_S = AddSliderOption("$UD_CUSTOMMOD_MULTPROB", loc_mod.MultProbabilities, "{1} x", UD_LockMenu_flag)          ; Probabilities multiplier
     UD_ModifierMultiplier2_S = AddSliderOption("$UD_CUSTOMMOD_MULTIN", loc_mod.MultInputQuantities, "{1} x", UD_LockMenu_flag)          ; Input multiplier
     UD_ModifierMultiplier3_S = AddSliderOption("$UD_CUSTOMMOD_MULTOUT", loc_mod.MultOutputQuantities, "{1} x", UD_LockMenu_flag)        ; Output multiplier
+    UD_ModifierMultiplier4_S = AddSliderOption("$UD_CUSTOMMOD_MULTVERB", loc_mod.MultVerboseness, "{1} x", UD_LockMenu_flag)            ; Verboseness
     UD_Modifier_AddToTest_T = addToggleOption("$UD_CUSTOMMOD_ADDTOTEST", loc_mod.NameAlias == UDCDmain.UDPatcher.UD_ModAddToTest, FlagSwitchOr(FlagSwitch(loc_presets_names.Length > 0), UD_LockMenu_flag))         ; add to test in the next Patcher call
 
-    SetCursorPosition(28)
+    SetCursorPosition(30)
     SetCursorFillMode(LEFT_TO_RIGHT)
     AddHeaderOption("$UD_CUSTOMMOD_PPSCONFIG")            ; Patcher Presets Configuration
     AddHeaderOption("")
@@ -211,26 +215,29 @@ Function PageReset(Bool abLockMenu)
 EndFunction
 
 Function PageOptionSelect(Int aiOption)
-    if(aiOption == UD_ModifierDescription_T)
+    if aiOption == UD_ModifierDescription_T
         UD_Modifier loc_mod = UDmain.UDMOM.GetModifierFromStorage(UD_ModifierStorageSelected, UD_ModifierSelected)
         ShowMessage(loc_mod.Description, false, "$Close")
-    ElseIf(aiOption == UD_ModifierNoModsDesc_T)
+    ElseIf aiOption == UD_ModValidate_T
+        UDCDmain.UDPatcher.ValidateAllPresets()
+        ShowMessage("$UD_PATCHER_VALIDATE_END", false, "$Close")
+    ElseIf aiOption == UD_ModifierNoModsDesc_T
         ShowMessage("$UD_CUSTOMMOD_ERROR_NOMODS_INFO", False, "$Close")
-    ElseIf(aiOption == UD_ModifierNoPPDesc_T)
+    ElseIf aiOption == UD_ModifierNoPPDesc_T
         ShowMessage("$UD_CUSTOMMOD_ERROR_NOPPS_INFO", false, "$Close")
-    ElseIf(aiOption == UD_ModifierVarEasyDesc_T)
+    ElseIf aiOption == UD_ModifierVarEasyDesc_T
         UD_Modifier loc_mod = UDmain.UDMOM.GetModifierFromStorage(UD_ModifierStorageSelected, UD_ModifierSelected)
         UD_Patcher_ModPreset loc_mod_pp = loc_mod.GetPatcherPreset(UD_ModifierPatchSelected)
         ; set of argument is not complete, could break the function
         String loc_msg = loc_mod.GetDetails(None, loc_mod_pp.DataStr_Easy, None, None, None, None, None)
         UDMMM.ShowMessageBox(loc_msg, UDMTF.HasHtmlMarkup())
-    ElseIf(aiOption == UD_ModifierVarNormDesc_T)
+    ElseIf aiOption == UD_ModifierVarNormDesc_T
         UD_Modifier loc_mod = UDmain.UDMOM.GetModifierFromStorage(UD_ModifierStorageSelected, UD_ModifierSelected)
         UD_Patcher_ModPreset loc_mod_pp = loc_mod.GetPatcherPreset(UD_ModifierPatchSelected)
         ; set of argument is not complete, could break the function
         String loc_msg = loc_mod.GetDetails(None, loc_mod_pp.DataStr_Ground, None, None, None, None, None)
         UDMMM.ShowMessageBox(loc_msg, UDMTF.HasHtmlMarkup())
-    ElseIf(aiOption == UD_ModifierVarHardDesc_T)
+    ElseIf aiOption == UD_ModifierVarHardDesc_T
         UD_Modifier loc_mod = UDmain.UDMOM.GetModifierFromStorage(UD_ModifierStorageSelected, UD_ModifierSelected)
         UD_Patcher_ModPreset loc_mod_pp = loc_mod.GetPatcherPreset(UD_ModifierPatchSelected)
         ; set of argument is not complete, could break the function
@@ -288,6 +295,12 @@ Function PageOptionSliderOpen(Int aiOption)
     ElseIf (aiOption == UD_ModifierMultiplier3_S)
         UD_Modifier loc_mod = UDmain.UDMOM.GetModifierFromStorage(UD_ModifierStorageSelected, UD_ModifierSelected)
         SetSliderDialogStartValue(loc_mod.MultOutputQuantities)
+        SetSliderDialogDefaultValue(1.0)
+        SetSliderDialogRange(0.0, 100.0)
+        SetSliderDialogInterval(0.1)
+    ElseIf (aiOption == UD_ModifierMultiplier4_S)
+        UD_Modifier loc_mod = UDmain.UDMOM.GetModifierFromStorage(UD_ModifierStorageSelected, UD_ModifierSelected)
+        SetSliderDialogStartValue(loc_mod.MultVerboseness)
         SetSliderDialogDefaultValue(1.0)
         SetSliderDialogRange(0.0, 100.0)
         SetSliderDialogInterval(0.1)
@@ -353,6 +366,10 @@ Function PageOptionSliderAccept(Int aiOption, Float afValue)
         UD_Modifier loc_mod = UDmain.UDMOM.GetModifierFromStorage(UD_ModifierStorageSelected, UD_ModifierSelected)
         loc_mod.MultOutputQuantities  = afValue
         SetSliderOptionValue(UD_ModifierMultiplier3_S, afValue, "{1} x")
+    ElseIf (aiOption == UD_ModifierMultiplier4_S)
+        UD_Modifier loc_mod = UDmain.UDMOM.GetModifierFromStorage(UD_ModifierStorageSelected, UD_ModifierSelected)
+        loc_mod.MultVerboseness = afValue
+        SetSliderOptionValue(UD_ModifierMultiplier4_S, afValue, "{1} x")
     ElseIf aiOption == UD_ModsMin_S
         UDCDmain.UDPatcher.UD_ModsMin = Round(afValue)
         SetSliderOptionValue(UD_ModsMin_S, afValue, "{0}")
@@ -403,6 +420,7 @@ Function PageOptionMenuOpen(int aiOption)
         SetMenuDialogDefaultIndex(0)
     EndIf
 EndFunction
+
 Function PageOptionMenuAccept(int aiOption, int aiIndex)
     If aiOption == UD_ModifierList_M
         UD_ModifierSelected = aiIndex
@@ -425,16 +443,20 @@ Function PageOptionMenuAccept(int aiOption, int aiIndex)
 EndFunction
 
 Function PageInfo(int aiOption)
-    if(aiOption == UD_ModifierMultiplier1_S)
+    if aiOption == UD_ModifierMultiplier1_S
         SetInfoText("$UD_CUSTOMMOD_MULTPROB_INFO")
-    ElseIf(aiOption == UD_ModifierMultiplier2_S)
+    ElseIf aiOption == UD_ModifierMultiplier2_S
         SetInfoText("$UD_CUSTOMMOD_MULTIN_INFO")
-    ElseIf(aiOption == UD_ModifierMultiplier3_S)
+    ElseIf aiOption == UD_ModifierMultiplier3_S
         SetInfoText("$UD_CUSTOMMOD_MULTOUT_INFO")
+    ElseIf aiOption == UD_ModifierMultiplier4_S
+        SetInfoText("$UD_CUSTOMMOD_MULTVERB_INFO")
     ElseIf aiOption == UD_ModsMin_S
         SetInfoText("$UD_PATCHER_MODSMIN_INFO")
     ElseIf aiOption == UD_ModsMax_S
         SetInfoText("$UD_PATCHER_MODSMAX_INFO")
+    ElseIf aiOption == UD_ModValidate_T
+        SetInfoText("$UD_PATCHER_VALIDATE_INFO")
     ElseIf aiOption == UD_Modifier_AddToTest_T
         SetInfoText("$UD_CUSTOMMOD_ADDTOTEST_INFO")
     ElseIf aiOption == UD_ModGlobalProbabilityMult_S
