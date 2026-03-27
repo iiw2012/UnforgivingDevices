@@ -2538,9 +2538,16 @@ Event OnItemAdded(Form akBaseItem, int aiItemCount, ObjectReference akItemRefere
     If UDmain.TraceAllowed()
         UDmain.Log("UD_CustomDevice_NPCSlot::OnItemAdded() akBaseItem = " + akBaseItem + " Owner = " + akItemReference.GetActorOwner() + ", Faction = " + akItemReference.GetFactionOwner(), 3)
     EndIf
+    If akSourceContainer == UDCDMain.TransfereContainer_ObjRef
+    ; to skip manipulations within the mod (see ItemIsOffLimits function)
+        Return
+    EndIf
     Faction loc_owner_faction = akItemReference.GetFactionOwner()
     ActorBase loc_owner_actor = akItemReference.GetActorOwner()
-    Bool loc_stolen = (loc_owner_actor != None && loc_owner_actor != GetActorRef().GetActorBase()) || (loc_owner_faction != None && !GetActorRef().IsInFaction(loc_owner_faction))
+    
+    ; Bool loc_stolen = (loc_owner_actor != None && loc_owner_actor != GetActorRef().GetActorBase()) || (loc_owner_faction != None && !GetActorRef().IsInFaction(loc_owner_faction))
+    Bool loc_stolen = ItemIsOffLimits(akBaseItem, akItemReference)
+    
     Int loc_i = 0
     While UD_equipedCustomDevices[loc_i]
         Udmain.UDMOM.Procces_UpdateModifiers_ItemAdded(UD_equipedCustomDevices[loc_i], akBaseItem, aiItemCount, akSourceContainer, loc_stolen)
@@ -2549,12 +2556,33 @@ Event OnItemAdded(Form akBaseItem, int aiItemCount, ObjectReference akItemRefere
 EndEvent
 
 Event OnItemRemoved(Form akBaseItem, int aiItemCount, ObjectReference akItemReference, ObjectReference akDestContainer)
+    If akDestContainer == UDCDMain.TransfereContainer_ObjRef
+    ; to skip manipulations within the mod (see ItemIsOffLimits function)
+        Return
+    EndIf
     Int loc_i = 0
     While UD_equipedCustomDevices[loc_i]
         Udmain.UDMOM.Procces_UpdateModifiers_ItemRemoved(UD_equipedCustomDevices[loc_i], akBaseItem, aiItemCount, akDestContainer)
         loc_i += 1
-    EndWhile    
+    EndWhile
 EndEvent
+
+; code from https://forums.nexusmods.com/topic/9557203-le-help-with-a-script-to-get-the-values-of-stolen-items/
+Bool Function ItemIsOffLimits(Form akBaseItem, ObjectReference akItemReference)
+
+    ; Move item to a helper container in a custom cell
+    ObjectReference loc_ref = GetReference()
+    loc_ref.RemoveItem(akBaseItem, 1, True, UDCDMain.TransfereContainer_ObjRef) 
+    ; Drop the item in the world to get an ObjectReference we can check
+    ObjectReference loc_item_in_the_world = UDCDMain.TransfereContainer_ObjRef.DropObject(akBaseItem, 1) 
+    Bool loc_stolen = loc_item_in_the_world.IsOffLimits()   
+    ; Add the item back to its original location
+    UDCDMain.TransfereContainer_ObjRef.AddItem(loc_item_in_the_world, 1, True)
+    ; using an intermediate container again to make it easier to skip unnecessary hook calls
+    UDCDMain.TransfereContainer_ObjRef.RemoveItem(akBaseItem, 1, True, loc_ref)
+    
+    Return loc_stolen
+EndFunction
 
 ;===============================================================================
 ;===============================================================================
