@@ -40,10 +40,6 @@ Spell Property ManifestExplosion Auto
 ===========================================================================================
 /;
 
-String Function GetDataStrTypes()
-    Return "I,S,S"
-EndFunction
-
 Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm2, Form akForm3)
     Int loc_count = MultInt(GetStringParamInt(aiDataStr, DataStrOffset + 0, 1), akModifier.MultOutputQuantities)
     Int loc_remain = loc_count

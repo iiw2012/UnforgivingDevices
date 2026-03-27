@@ -3,8 +3,18 @@
 /;  
 Scriptname UD_Patcher_ModPreset extends ReferenceAlias Hidden
 
-import UnforgivingDevicesMain
 import UD_Native
+import UD_MenuTextFormatter
+
+UnforgivingDevicesMain _udmain
+UnforgivingDevicesMain Property UDmain Hidden
+    UnforgivingDevicesMain Function Get()
+        if !_udmain
+            _udmain = UnforgivingDevicesMain.GetUDMain()
+        endif
+        return _udmain
+    EndFunction
+EndProperty
 
 ;/  Variable: DisplayName
     Name of the preset visible on the MCM page
@@ -31,6 +41,18 @@ String      Property DataStr_Hard                       Auto
     Types of the parameters in configurations
 /;
 String      Property DataStr_Types                      Auto
+
+;/  Variable: DataStr
+    An array containing the argument value configurations.
+    Each array element can either be empty (for a missing argument) or have a format of the following: 
+        <type letter>: val1 (> val2 (> val3))
+    For example:
+        "D: 10.0 > 15.0 > 50.0"
+        "S: L"
+        "I: 1 > 3"
+    val1, val2, val3 - points used for interpolation when generating a configuration for a specific device
+/;
+String[]    Property DataStr                            Auto
 
 ;/  Variable: Form1_Variants
     List of possible values for the DataForm1 when adding a modifier with the Patcher.
@@ -179,6 +201,44 @@ Float Function BiasedRandom3(Float afGlobalMuShift = 0.0, Float afGlobalSigmaMul
     EndWhile
 EndFunction
 
+Float Function _InterpolateBy1PointFloat(Float afPos, Float afPoint1)
+    Return afPoint1
+EndFunction
+
+String Function _InterpolateBy1PointString(Float afPos, String asPoint1)
+    Return asPoint1
+EndFunction
+
+Float Function _InterpolateBy2PointFloat(Float afPos, Float afPoint1, Float afPoint2)
+    Return ((afPos + 1.0) / 2.0) * (afPoint2 - afPoint1) + afPoint1
+EndFunction
+
+String Function _InterpolateBy2PointString(Float afPos, String asPoint1, String asPoint2)
+    If afPos <= 0.0 
+        Return asPoint1
+    Else
+        Return asPoint2
+    EndIf
+EndFunction
+
+Float Function _InterpolateBy3PointFloat(Float afPos, Float afPoint1, Float afPoint2, Float afPoint3)
+    If afPos < 0
+        Return afPos * (afPoint2 - afPoint1) + afPoint2
+    Else
+        Return afPos * (afPoint3 - afPoint2) + afPoint2
+    EndIf
+EndFunction
+
+String Function _InterpolateBy3PointString(Float afPos, String asPoint1, String asPoint2, String asPoint3)
+    If afPos <= -0.33 
+        Return asPoint1    
+    ElseIf afPos <= 0.33 
+        Return asPoint2
+    Else
+        Return asPoint3
+    EndIf
+EndFunction
+
 ;/  Function: GetModifier
 
     Returns modifier for this patcher preset. The preset is bound to the same alias as the modifier
@@ -203,8 +263,11 @@ EndFunction
         String with parameters
 /;
 String Function GetDataStr(Float afGlobalSeverityShift = 0.0, Float afGlobalSeverityDispersionMult = 1.0)
+    If DataStr.Length > 0
+        Return GetDataStrFromArray(afGlobalSeverityShift, afGlobalSeverityDispersionMult)
+    EndIf
     Int i = 0
-    String loc_types = GetDataStrTypes()
+    String loc_types = DataStr_Types
     Int loc_size = UD_Native.GetStringParamAll(DataStr_Ground).Length
     String loc_datastr = ""
     While i < loc_size
@@ -246,6 +309,57 @@ String Function GetDataStr(Float afGlobalSeverityShift = 0.0, Float afGlobalSeve
         EndIf
         loc_datastr += loc_rnd_str + ","
         i += 1
+    EndWhile
+    
+    Return loc_datastr
+EndFunction
+
+String Function GetDataStrFromArray(Float afGlobalSeverityShift = 0.0, Float afGlobalSeverityDispersionMult = 1.0)
+    Int loc_i = 0
+    String loc_datastr = ""
+    Int loc_size = DataStr.Length
+    
+    While loc_i < loc_size
+        String loc_arg_str = ""
+        String loc_arg = TrimSubstr(DataStr[loc_i], " ")
+        If StringUtil.GetLength(loc_arg) > 0
+            String loc_type = StringUtil.GetNthChar(loc_arg, 0)
+            If StringUtil.Find("INDFS", loc_type) >= 0
+                String[] loc_points = StringUtil.Split(StringUtil.Substring(loc_arg, 2), ">")
+                Float loc_rnd = BiasedRandom3(afGlobalSeverityShift, afGlobalSeverityDispersionMult)
+                If loc_points.Length == 0
+                    UDMain.Warning(Self + "::GetDataStrFromArray() No values were found in the configuration string for the argument #" + loc_i + " : '" + loc_arg + "'")
+                ElseIf loc_points.Length == 1 
+                    If loc_type == "F" || loc_type == "D" 
+                        loc_arg_str = FormatFloat(_InterpolateBy1PointFloat(loc_rnd, loc_points[0] As Float), 2)
+                    ElseIf loc_type == "I" || loc_type == "N" 
+                        loc_arg_str = (_InterpolateBy1PointFloat(loc_rnd, loc_points[0] As Float) As Int) As String
+                    ElseIf loc_type == "S" 
+                        loc_arg_str = TrimSubstr(_InterpolateBy1PointString(loc_rnd, loc_points[0]), " ")
+                    EndIf
+                ElseIf loc_points.Length == 2
+                    If loc_type == "F" || loc_type == "D" 
+                        loc_arg_str = FormatFloat(_InterpolateBy2PointFloat(loc_rnd, loc_points[0] As Float, loc_points[1] As Float), 2)
+                    ElseIf loc_type == "I" || loc_type == "N" 
+                        loc_arg_str = (_InterpolateBy2PointFloat(loc_rnd, loc_points[0] As Float, loc_points[1] As Float) As Int) As String
+                    ElseIf loc_type == "S" 
+                        loc_arg_str = TrimSubstr(_InterpolateBy2PointString(loc_rnd, loc_points[0], loc_points[1]), " ")
+                    EndIf
+                ElseIf loc_points.Length >= 3
+                    If loc_type == "F" || loc_type == "D" 
+                        loc_arg_str = FormatFloat(_InterpolateBy3PointFloat(loc_rnd, loc_points[0] As Float, loc_points[1] As Float, loc_points[2] As Float), 2)
+                    ElseIf loc_type == "I" || loc_type == "N" 
+                        loc_arg_str = (_InterpolateBy3PointFloat(loc_rnd, loc_points[0] As Float, loc_points[1] As Float, loc_points[2] As Float) As Int) As String
+                    ElseIf loc_type == "S" 
+                        loc_arg_str = TrimSubstr(_InterpolateBy3PointString(loc_rnd, loc_points[0], loc_points[1], loc_points[2]), " ")
+                    EndIf
+                EndIf
+            Else
+                UDMain.Warning(Self + "::GetDataStrFromArray() Unknown argument type #" + loc_i + " : '" + loc_arg + "'")            
+            EndIf
+        EndIf
+        loc_datastr += loc_arg_str + ","
+        loc_i += 1
     EndWhile
     
     Return loc_datastr
@@ -367,12 +481,68 @@ EndFunction
 ===========================================================================================
 /;
 
-String Function GetDataStrTypes()
-    String loc_types = GetModifier().GetDataStrTypes()
-    If loc_types == ""
-        loc_types = Self.DataStr_Types
-    EndIf
-    Return loc_types
+;/  Function: ValidatePreset
+
+    Checks preset configuration for errors and print them to console
+/;
+Function ValidatePreset()
+    String loc_log_caption = "UD_Patcher_ModPreset::ValidatePreset() [" + Self.GetModifier().NameAlias + " " + Self.DisplayName + "] "
+
+    Int loc_i = 0
+    String loc_datastr = ""
+    Int loc_size = DataStr.Length
+    
+    While loc_i < loc_size
+        String loc_arg_str = ""
+        String loc_arg = TrimSubstr(DataStr[loc_i], " ")
+        If StringUtil.GetLength(loc_arg) > 0
+            String loc_type = StringUtil.GetNthChar(loc_arg, 0)
+            If StringUtil.Find("INDFS", loc_type) >= 0
+                String[] loc_points = StringUtil.Split(StringUtil.Substring(loc_arg, 2), ">")
+                If loc_points.Length == 0
+                    UDMain.Warning(loc_log_caption + "Parameter #" + loc_i + " has no values: '" + loc_arg + "'")
+                ElseIf loc_points.Length > 3
+                    UDMain.Warning(loc_log_caption + "Parameter #" + loc_i + " has too many values: '" + loc_arg + "'")
+                Else
+                    If loc_type == "F" || loc_type == "D" 
+                        If GetStringParamFloat(loc_points[0], 0, -10000) == -10000
+                            UDmain.Warning(loc_log_caption + "Parameter #" + loc_i + "'s first value can't be converted to 'Float': '" + loc_arg + "'")
+                        EndIf
+                    ElseIf loc_type == "I" || loc_type == "N" 
+                        If GetStringParamInt(loc_points[0], 0, -10000) == -10000
+                            UDmain.Warning(loc_log_caption + "Parameter #" + loc_i + "'s first value can't be converted to 'Int': '" + loc_arg + "'")
+                        EndIf
+                    EndIf
+                    If loc_points.Length > 1
+                        If loc_type == "F" || loc_type == "D" 
+                            If GetStringParamFloat(loc_points[1], 0, -10000) == -10000
+                                UDmain.Warning(loc_log_caption + "Parameter #" + loc_i + "'s second value can't be converted to 'Float': '" + loc_arg + "'")
+                            EndIf
+                        ElseIf loc_type == "I" || loc_type == "N" 
+                            If GetStringParamInt(loc_points[1], 0, -10000) == -10000
+                                UDmain.Warning(loc_log_caption + "Parameter #" + loc_i + "'s second value can't be converted to 'Int': '" + loc_arg + "'")
+                            EndIf
+                        EndIf
+                    EndIf
+                    If loc_points.Length > 2
+                        If loc_type == "F" || loc_type == "D" 
+                            If GetStringParamFloat(loc_points[2], 0, -10000) == -10000
+                                UDmain.Warning(loc_log_caption + "Parameter #" + loc_i + "'s third value can't be converted to 'Float': '" + loc_arg + "'")
+                            EndIf
+                        ElseIf loc_type == "I" || loc_type == "N" 
+                            If GetStringParamInt(loc_points[2], 0, -10000) == -10000
+                                UDmain.Warning(loc_log_caption + "Parameter #" + loc_i + "'s third value can't be converted to 'Int': '" + loc_arg + "'")
+                            EndIf
+                        EndIf
+                    EndIf
+                EndIf
+            Else
+                UDMain.Warning(loc_log_caption + "Parameter #" + loc_i + " has unknown argument type: '" + loc_arg + "'")
+            EndIf
+        EndIf
+        loc_i += 1
+    EndWhile
+    
 EndFunction
 
 ;/  Function: CheckWearerCompatibility

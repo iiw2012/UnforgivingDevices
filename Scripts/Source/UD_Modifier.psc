@@ -146,10 +146,6 @@ EndFunction
 ===========================================================================================
 /;
 
-String Function GetDataStrTypes()
-    Return ""
-EndFunction
-
 Bool Function ValidateModifier(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     Return True
 EndFunction

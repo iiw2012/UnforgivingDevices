@@ -1091,7 +1091,7 @@ EndFunction
     Returns:
         Number of encountered substrings
 /;
-Int Function CountSubstr(String asStr, String asSubstr)
+Int Function CountSubstr(String asStr, String asSubstr) global
     Int loc_start = 0
     Int loc_res = 0
     Int loc_delta = StringUtil.GetLength(asSubstr)
@@ -1119,7 +1119,7 @@ EndFunction
     Returns:
         The resulting string
 /;
-String Function TrimSubstr(String asStr, String asSubstr, Bool abBegining = True, Bool abEnding = True)
+String Function TrimSubstr(String asStr, String asSubstr, Bool abBegining = True, Bool abEnding = True) global
     String loc_res = asStr
     Int loc_delta = StringUtil.GetLength(asSubstr)
     Int loc_pos
@@ -1155,7 +1155,7 @@ EndFunction
     Returns:
         The resulting string
 /;
-String Function RemoveSubstr(String asStr, String asSubstr)
+String Function RemoveSubstr(String asStr, String asSubstr) global
     String loc_res = asStr
     Int loc_delta = StringUtil.GetLength(asSubstr)
     Int loc_pos = StringUtil.Find(loc_res, asSubstr)
@@ -1182,7 +1182,7 @@ EndFunction
     Returns:
         The resulting string
 /;
-String Function ReplaceSubstr(String asStr, String asFind, String asReplace)
+String Function ReplaceSubstr(String asStr, String asFind, String asReplace) global
     String loc_res = asStr
     Int loc_delta = StringUtil.GetLength(asFind)
     Int loc_pos = StringUtil.Find(loc_res, asFind)
@@ -1208,7 +1208,7 @@ EndFunction
     Returns:
         The resulting string
 /;
-String Function RemoveDuplicates(String asStr, String asSubstr)
+String Function RemoveDuplicates(String asStr, String asSubstr) global
     String loc_res = asStr
     Int loc_delta = StringUtil.GetLength(asSubstr)
     Int loc_pos = StringUtil.Find(loc_res, asSubstr)

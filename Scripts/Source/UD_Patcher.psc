@@ -827,67 +827,7 @@ Function _CheckResist(UD_CustomDevice_RenderScript device)
 EndFunction
 
 Function ValidatePreset(UD_Patcher_ModPreset akModPreset)
-    Int loc_size1 = GetStringParamAll(akModPreset.DataStr_Easy).Length
-    Int loc_size2 = GetStringParamAll(akModPreset.DataStr_Ground).Length
-    Int loc_size3 = GetStringParamAll(akModPreset.DataStr_Hard).Length
-    String loc_types = akModPreset.GetDataStrTypes()
-
-    String loc_log_caption = "UD_Patcher::ValidatePreset() [" + akModPreset.GetModifier().NameAlias + " " + akModPreset.DisplayName + "] "
-
-    UDCDmain.UDmain.Info(loc_log_caption + "Validating... [" + akModPreset.DataStr_Easy + "], [" + akModPreset.DataStr_Ground + "], [" + akModPreset.DataStr_Hard + "]")
-
-    If loc_size1 != loc_size2 || loc_size3 != loc_size2
-        UDCDmain.UDmain.Warning(loc_log_caption + "Different number of parameters in configs for different difficulty: " + loc_size1 + ", " + loc_size2 + ", " + loc_size3)
-    EndIf
-
-    Int i = 0
-    While i < loc_size2
-        String loc_type = GetStringParamString(loc_types, i, "")
-        String loc_s_val_0 = GetStringParamString(akModPreset.DataStr_Ground, i, "")
-        String loc_s_val_min = GetStringParamString(akModPreset.DataStr_Easy, i, "")
-        String loc_s_val_max = GetStringParamString(akModPreset.DataStr_Hard, i, "")
-
-        If loc_type != "" || loc_s_val_min != "" || loc_s_val_0 != "" || loc_s_val_max != ""
-            If loc_s_val_min == ""
-                UDCDmain.UDmain.Warning(loc_log_caption + "Parameter #" + i + " not set for 'Easy' configuration.")
-            EndIf
-            If loc_s_val_0 == ""
-                UDCDmain.UDmain.Warning(loc_log_caption + "Parameter #" + i + " not set for 'Ground' configuration.")
-            EndIf
-            If loc_s_val_max == ""
-                UDCDmain.UDmain.Warning(loc_log_caption + "Parameter #" + i + " not set for 'Hard' configuration.")
-            EndIf
-            If loc_type == ""
-                UDCDmain.UDmain.Warning(loc_log_caption + "Parameter #" + i + " type is not specified.")
-            EndIf
-        EndIf
-
-        If loc_type == "I" 
-            If GetStringParamInt(akModPreset.DataStr_Easy, i, -10000) == -10000
-                UDCDmain.UDmain.Warning(loc_log_caption + "Parameter #" + i + " in 'Easy' can't be converted to 'Int'")
-            EndIf
-            If GetStringParamInt(akModPreset.DataStr_Ground, i, -10000) == -10000
-                UDCDmain.UDmain.Warning(loc_log_caption + "Parameter #" + i + " in 'Ground' can't be converted to 'Int'")
-            EndIf
-            If GetStringParamInt(akModPreset.DataStr_Hard, i, -10000) == -10000
-                UDCDmain.UDmain.Warning(loc_log_caption + "Parameter #" + i + " in 'Hard' can't be converted to 'Int'")
-            EndIf
-        EndIf
-
-        If loc_type == "F" 
-            If GetStringParamFloat(akModPreset.DataStr_Easy, i, -10000.0) == -10000.0
-                UDCDmain.UDmain.Warning(loc_log_caption + "Parameter #" + i + " in 'Easy' can't be converted to 'Float'")
-            EndIf
-            If GetStringParamFloat(akModPreset.DataStr_Ground, i, -10000.0) == -10000.0
-                UDCDmain.UDmain.Warning(loc_log_caption + "Parameter #" + i + " in 'Ground' can't be converted to 'Float'")
-            EndIf
-            If GetStringParamFloat(akModPreset.DataStr_Hard, i, -10000.0) == -10000.0
-                UDCDmain.UDmain.Warning(loc_log_caption + "Parameter #" + i + " in 'Hard' can't be converted to 'Float'")
-            EndIf
-        EndIf
-        i += 1
-    EndWhile
-    
+    akModPreset.ValidatePreset()
 EndFunction
 
 Function ValidateAllPresets()

@@ -52,10 +52,6 @@ String      Property Description            Auto
 ===========================================================================================
 /;
 
-String Function GetDataStrTypes()
-    Return ""
-EndFunction
-
 Bool Function ValidateTrigger(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
     Return True
 EndFunction

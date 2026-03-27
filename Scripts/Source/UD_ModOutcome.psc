@@ -56,10 +56,6 @@ Int         Property DataStrOffset              = 7     AutoReadOnly Hidden
 ===========================================================================================
 /;
 
-String Function GetDataStrTypes()
-    Return ""
-EndFunction
-
 Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm2, Form akForm3)
 EndFunction
 
