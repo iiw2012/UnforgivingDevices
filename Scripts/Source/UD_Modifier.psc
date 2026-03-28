@@ -169,11 +169,7 @@ String Function GetParamStr(String asDataStr, Int aiPos, String asDefault = "", 
 EndFunction
 
 Bool Function GetParamBln(String asDataStr, Int aiPos, Bool abDefault = False, String asMultType = "")
-    Int loc_def = 0
-    If abDefault 
-        loc_def = 1
-    EndIf
-    Return UD_Native.GetStringParamInt(asDataStr, aiPos, loc_def) > 0
+    Return UD_Native.GetStringParamInt(asDataStr, aiPos, abDefault As Int) > 0
 EndFunction
 
 Function SetParamInt(UD_CustomDevice_RenderScript akDevice, Int aiPos, Int aiNewValue)
@@ -192,7 +188,7 @@ Function SetParamBln(UD_CustomDevice_RenderScript akDevice, Int aiPos, Bool abNe
     If abNewValue
         akDevice.editStringModifier(NameAlias, aiPos, "1")
     Else
-        akDevice.editStringModifier(NameAlias, aiPos, "1")
+        akDevice.editStringModifier(NameAlias, aiPos, "0")
     EndIf
 EndFunction
 
