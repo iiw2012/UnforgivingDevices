@@ -41,11 +41,11 @@ String Property ChangeToAllowedMessage Auto
 /;
 
 Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm2, Form akForm3)
-    String loc_init = GetStringParamString(aiDataStr, DataStrOffset + 0, "B")
-    Float loc_duration = MultFloat(GetStringParamFloat(aiDataStr, DataStrOffset + 1, 0.0), akModifier.MultOutputQuantities)
-    Bool loc_repeat = GetStringParamInt(aiDataStr, DataStrOffset + 2, 0) > 0
-    String loc_state = GetStringParamString(aiDataStr, DataStrOffset + 3, "")
-    Float loc_ts = GetStringParamFloat(aiDataStr, DataStrOffset + 4, 0.0)
+    String loc_init     = GetParamStr(akModifier, aiDataStr, 0, "B")
+    Float loc_duration  = GetParamFlt(akModifier, aiDataStr, 1, 0.0, "Output")
+    Bool loc_repeat     = GetParamBln(akModifier, aiDataStr, 2, False)
+    String loc_state    = GetParamStr(akModifier, aiDataStr, 3, "")
+    Float loc_ts        = GetParamFlt(akModifier, aiDataStr, 4, 0.0)
 
     If loc_state != "" && !loc_repeat
     ; done it once already
@@ -61,10 +61,9 @@ Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDe
     Else
         loc_state = "B"
     EndIf
-
-    akDevice.editStringModifier(akModifier.NameAlias, DataStrOffset + 3, loc_state)
+    SetParamStr(akModifier, akDevice, 3, loc_state)
     If loc_duration > 0.0
-        akDevice.editStringModifier(akModifier.NameAlias, DataStrOffset + 4, FormatFloat(Utility.GetCurrentGameTime() * 24.0, 2))
+        SetParamFlt(akModifier, akDevice, 4, Utility.GetCurrentGameTime() * 24.0)
     EndIf
 
     ; print a message if the state has changed
@@ -85,17 +84,17 @@ Bool Function MinigameAllowed(UD_Modifier_Combo akModifier, UD_CustomDevice_Rend
     if akDevice.GetRealTimeLockedTime() > 0.5
         return true
     endif
-    String loc_init = GetStringParamString(aiDataStr, DataStrOffset + 0, "B")
-    Float loc_duration = MultFloat(GetStringParamFloat(aiDataStr, DataStrOffset + 1, 0.0), akModifier.MultOutputQuantities)
-    Bool loc_repeat = GetStringParamInt(aiDataStr, DataStrOffset + 2, 0) > 0
-    String loc_state = GetStringParamString(aiDataStr, DataStrOffset + 3, loc_init)
-    Float loc_ts = GetStringParamFloat(aiDataStr, DataStrOffset + 4, 0.0)
+    String loc_init     = GetParamStr(akModifier, aiDataStr, 0, "B")
+    Float loc_duration  = GetParamFlt(akModifier, aiDataStr, 1, 0.0, "Output")
+    Bool loc_repeat     = GetParamBln(akModifier, aiDataStr, 2, False)
+    String loc_state    = GetParamStr(akModifier, aiDataStr, 3, "")
+    Float loc_ts        = GetParamFlt(akModifier, aiDataStr, 4, 0.0)
 
     Float loc_time = Utility.GetCurrentGameTime() * 24.0
 
     If loc_ts > 0.0 && loc_duration > 0.0 && loc_time > loc_ts + loc_duration && loc_init != loc_state
     ; toggled back to initial state by duration
-        akDevice.editStringModifier(akModifier.NameAlias, DataStrOffset + 3, loc_init)
+        SetParamStr(akModifier, akDevice, 3, loc_state)
         loc_state = loc_init
     EndIf
 
@@ -113,16 +112,16 @@ EndFunction
 ===========================================================================================
 /;
 String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm2, Form akForm3)
-    String loc_init = GetStringParamString(aiDataStr, DataStrOffset + 0, "B")
-    Float loc_duration = MultFloat(GetStringParamFloat(aiDataStr, DataStrOffset + 1, 0.0), akModifier.MultOutputQuantities)
-    Bool loc_repeat = GetStringParamInt(aiDataStr, DataStrOffset + 2, 0) > 0
-    String loc_state = GetStringParamString(aiDataStr, DataStrOffset + 3, loc_init)
-    Float loc_ts = GetStringParamFloat(aiDataStr, DataStrOffset + 4, 0.0)
+    String loc_init     = GetParamStr(akModifier, aiDataStr, 0, "B")
+    Float loc_duration  = GetParamFlt(akModifier, aiDataStr, 1, 0.0, "Output")
+    Bool loc_repeat     = GetParamBln(akModifier, aiDataStr, 2, False)
+    String loc_state    = GetParamStr(akModifier, aiDataStr, 3, "")
+    Float loc_ts        = GetParamFlt(akModifier, aiDataStr, 4, 0.0)
     Float loc_time = Utility.GetCurrentGameTime() * 24.0
 
     If loc_ts > 0.0 && loc_duration > 0.0 && loc_time > loc_ts + loc_duration && loc_init != loc_state
     ; toggled back to initial state by duration
-        akDevice.editStringModifier(akModifier.NameAlias, DataStrOffset + 3, loc_init)
+        SetParamStr(akModifier, akDevice, 3, loc_init)
         loc_state = loc_init
     EndIf
 

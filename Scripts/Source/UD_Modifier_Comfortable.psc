@@ -2,7 +2,7 @@
     This device is extremely comfortable. You almost don't want to take it off.
 
     NameFull:   Comfortable
-    NameAlias:  COMF
+    NameAlias:  CMF
 
     Parameters in DataStr:
         [0]     Int         How comfortable is this device (0 - 100) in the mean of GetAiPriority()
@@ -28,6 +28,7 @@ import UD_Native
 /;
 String Function GetParamsTableRows(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     String loc_res = ""
-    loc_res += UDmain.UDMTF.TableRowDetails("Comfort:", MultInt(GetStringParamInt(aiDataStr, 0, 0), MultOutputQuantities))
+    ; TODO: The Output multiplier does not actually affect the modifier's behavior, since the parameter value is evaluated without the multiplier in the code
+    loc_res += UDmain.UDMTF.TableRowDetails("Comfort:", GetParamInt(aiDataStr, 0, 0, "Output"))
     Return loc_res
 EndFunction

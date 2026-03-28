@@ -46,11 +46,11 @@ Bool Function SpellHit(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScrip
     If afDamage <= 0.0
         Return False
     EndIf
-    Int loc_min_value = MultInt(GetStringParamInt(aiDataStr, 0, 0), akModifier.MultInputQuantities)
-    Float loc_prob_base = MultFloat(GetStringParamFloat(aiDataStr, 1, 100.0), akModifier.MultProbabilities)
-    Float loc_prob_delta = MultFloat(GetStringParamFloat(aiDataStr, 2, 0.0), akModifier.MultProbabilities)
-    Float loc_prob_acc = MultFloat(GetStringParamFloat(aiDataStr, 3, 0.0), akModifier.MultProbabilities)
-    Bool loc_repeat = GetStringParamInt(aiDataStr, 4, 0) > 0
+    Int loc_min_value       = GetParamInt(akModifier, aiDataStr, 0, 0,      "Input")
+    Float loc_prob_base     = GetParamFlt(akModifier, aiDataStr, 1, 100.0,  "Probability")
+    Float loc_prob_delta    = GetParamFlt(akModifier, aiDataStr, 2, 0.0,    "Probability")
+    Float loc_prob_acc      = GetParamFlt(akModifier, aiDataStr, 3, 0.0,    "Probability")
+    Bool loc_repeat         = GetParamBln(akModifier, aiDataStr, 4, False)
 
     If BaseTriggerIsActive(aiDataStr, 5) && RandomFloat(0.0, 100.0) < 5.0 * akModifier.MultVerboseness
         PrintNotification(akDevice, ;/ reacted /;"by absorbing and recharging from the spell that affects you.")
@@ -65,17 +65,20 @@ EndFunction
 ===========================================================================================
 /;
 String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
-    Int loc_min_value = MultInt(GetStringParamInt(aiDataStr, 0, 0), akModifier.MultInputQuantities)
-    Float loc_prob_base = MultFloat(GetStringParamFloat(aiDataStr, 1, 100.0), akModifier.MultProbabilities)
-    Float loc_prob_delta = MultFloat(GetStringParamFloat(aiDataStr, 2, 0.0), akModifier.MultProbabilities)
-    Float loc_prob_acc = MultFloat(GetStringParamFloat(aiDataStr, 3, 0.0), akModifier.MultProbabilities)
+    Int loc_min_value       = GetParamInt(akModifier, aiDataStr, 0, 0,      "Input")
+    Float loc_prob_base     = GetParamFlt(akModifier, aiDataStr, 1, 100.0,  "Probability")
+    Float loc_prob_delta    = GetParamFlt(akModifier, aiDataStr, 2, 0.0,    "Probability")
+    Float loc_prob_acc      = GetParamFlt(akModifier, aiDataStr, 3, 0.0,    "Probability")
+    Bool loc_repeat         = GetParamBln(akModifier, aiDataStr, 4, False)
+    Float loc_acc           = GetParamFlt(akModifier, aiDataStr, 5, 0.0)
+    
     String loc_res = ""
-    loc_res += UDmain.UDMTF.TableRowDetails("Threshold value:", loc_min_value + " dmg")
-    loc_res += UDmain.UDMTF.TableRowDetails("Base probability:", FormatFloat(loc_prob_base, 1) + "%")
-    loc_res += UDmain.UDMTF.TableRowDetails("Value weight:", FormatFloat(loc_prob_delta, 2) + "% per dmg point")
-    loc_res += UDmain.UDMTF.TableRowDetails("Accum weight:", FormatFloat(loc_prob_acc, 2) + "% total dmg")
-    loc_res += UDmain.UDMTF.TableRowDetails("Repeat:", InlineIfStr(GetStringParamInt(aiDataStr, 4, 0) > 0, "True", "False"))
-    loc_res += UDmain.UDMTF.TableRowDetails("Accumulator:", FormatFloat(GetStringParamFloat(aiDataStr, 5, 0.0), 0) + " dmg")
+    loc_res += UDmain.UDMTF.TableRowDetails("Threshold value:",     loc_min_value + " dmg")
+    loc_res += UDmain.UDMTF.TableRowDetails("Base probability:",    FormatFloat(loc_prob_base, 1) + "%")
+    loc_res += UDmain.UDMTF.TableRowDetails("Value weight:",        FormatFloat(loc_prob_delta, 2) + "% per dmg point")
+    loc_res += UDmain.UDMTF.TableRowDetails("Accum weight:",        FormatFloat(loc_prob_acc, 2) + "% total dmg")
+    loc_res += UDmain.UDMTF.TableRowDetails("Repeat:",              InlineIfStr(loc_repeat, "True", "False"))
+    loc_res += UDmain.UDMTF.TableRowDetails("Accumulator:",         FormatFloat(loc_acc, 0) + " dmg")
     loc_res += UDmain.UDMTF.Paragraph("(Accumulator contains the total magical damage recieved so far)", asAlign = "center")
     Return loc_res
 EndFunction

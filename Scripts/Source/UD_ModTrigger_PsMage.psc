@@ -30,7 +30,7 @@ import UD_Native
 ===========================================================================================
 /;
 Bool Function ActorAction(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Int aiActorAction, Int aiEquipSlot, Form akSource, String aiDataStr, Form akForm1)
-    Float loc_prob = MultFloat(GetStringParamFloat(aiDataStr, 0, 0.0), akModifier.MultProbabilities)
+    Float loc_prob = GetParamFlt(akModifier, aiDataStr, 0, 0.0, "Probability")
     If aiActorAction == 2
     ; Spell Fire
         If akSource as Spell
@@ -48,7 +48,7 @@ EndFunction
 
 Bool Function SkillIncreased(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asSkill, Int aiValue, String aiDataStr, Form akForm1)
     If asSkill == "Alteration" || asSkill == "Conjuration" || asSkill == "Destruction" || asSkill == "Illusion"
-        Float loc_prob = MultFloat(GetStringParamFloat(aiDataStr, 1, 0.0), akModifier.MultProbabilities)
+        Float loc_prob = GetParamFlt(akModifier, aiDataStr, 1, 0.0, "Probability")
         
         If RandomFloat(0.0, 100.0) < 30.0 * akModifier.MultVerboseness
             PrintNotification(akDevice, ;/ reacted /;"because of your actions. For a moment, you see the silhouette of a mage.")
@@ -65,11 +65,11 @@ EndFunction
 ===========================================================================================
 /;
 String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
-    Float loc_prob1 = MultFloat(GetStringParamFloat(aiDataStr, 0, 0.0), akModifier.MultProbabilities)
-    Float loc_prob2 = MultFloat(GetStringParamFloat(aiDataStr, 1, 0.0), akModifier.MultProbabilities)
+    Float loc_prob1 = GetParamFlt(akModifier, aiDataStr, 0, 0.0, "Probability")
+    Float loc_prob2 = GetParamFlt(akModifier, aiDataStr, 1, 0.0, "Probability")
     String loc_res = ""
-    loc_res += UDmain.UDMTF.TableRowDetails("Prob. on spell use:", FormatFloat(loc_prob1, 1) + "%")
-    loc_res += UDmain.UDMTF.TableRowDetails("Prob. on skill increase:", FormatFloat(loc_prob2, 1) + "%")
+    loc_res += UDmain.UDMTF.TableRowDetails("Prob. on spell use:",          FormatFloat(loc_prob1, 1) + "%")
+    loc_res += UDmain.UDMTF.TableRowDetails("Prob. on skill increase:",     FormatFloat(loc_prob2, 1) + "%")
     loc_res += UDmain.UDMTF.Paragraph("(Alteration, Conjuration, Destruction, Illusion)", asAlign = "center")
     Return loc_res
 EndFunction

@@ -91,12 +91,12 @@ Bool Function StatEvent(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScri
     ; in case the wearer picks lock in minigame
         Return False
     EndIf
-    If asStatName != GetStringParamString(aiDataStr, 0, "")
+    If asStatName != GetParamStr(akModifier, aiDataStr, 0, "")
         Return False
     EndIf
-    Int loc_min_value = MultInt(GetStringParamInt(aiDataStr, 1, 0), akModifier.MultInputQuantities)
-    Float loc_prob_base = MultFloat(GetStringParamFloat(aiDataStr, 2, 100.0), akModifier.MultProbabilities)
-    Bool loc_repeat = GetStringParamInt(aiDataStr, 3, 0) > 0
+    Int loc_min_value       = GetParamInt(akModifier, aiDataStr, 1, 0,      "Input")
+    Float loc_prob_base     = GetParamFlt(akModifier, aiDataStr, 2, 100.0,  "Probability")
+    Bool loc_repeat         = GetParamBln(akModifier, aiDataStr, 3, False)
 
     Bool loc_rare_events = PapyrusUtil.CountString(_FrequentEvents, asStatName) == 0
     If BaseTriggerIsActive(aiDataStr, 4) && RandomFloat(0.0, 100.0) < (2.0 * (1.0 + 9.0 * (loc_rare_events As Int))) * akModifier.MultVerboseness
@@ -117,14 +117,18 @@ EndFunction
 ===========================================================================================
 /;
 String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
-    Int loc_min_value = MultInt(GetStringParamInt(aiDataStr, 1, 0), akModifier.MultInputQuantities)
-    Float loc_prob_base = MultFloat(GetStringParamFloat(aiDataStr, 2, 100.0), akModifier.MultProbabilities)
+    String loc_stat         = GetParamStr(akModifier, aiDataStr, 0, "")
+    Int loc_min_value       = GetParamInt(akModifier, aiDataStr, 1, 0,      "Input")
+    Float loc_prob_base     = GetParamFlt(akModifier, aiDataStr, 2, 100.0,  "Probability")
+    Bool loc_repeat         = GetParamBln(akModifier, aiDataStr, 3, False)
+    Float loc_accum         = GetParamFlt(akModifier, aiDataStr, 4, 0.0)
+    
     String loc_res = ""
-    loc_res += UDmain.UDMTF.TableRowDetails("Stat name:", GetStringParamString(aiDataStr, 0, ""))
-    loc_res += UDmain.UDMTF.TableRowDetails("Minimum acc. value:", loc_min_value)
-    loc_res += UDmain.UDMTF.TableRowDetails("Base probability:", FormatFloat(loc_prob_base, 1) + "%")
-    loc_res += UDmain.UDMTF.TableRowDetails("Repeat:", InlineIfStr(GetStringParamInt(aiDataStr, 3, 0) > 0, "True", "False"))
-    loc_res += UDmain.UDMTF.TableRowDetails("Accumulator:", FormatFloat(GetStringParamFloat(aiDataStr, 4, 0.0), 0))
+    loc_res += UDmain.UDMTF.TableRowDetails("Stat name:",           loc_stat)
+    loc_res += UDmain.UDMTF.TableRowDetails("Minimum acc. value:",  loc_min_value)
+    loc_res += UDmain.UDMTF.TableRowDetails("Base probability:",    FormatFloat(loc_prob_base, 1) + "%")
+    loc_res += UDmain.UDMTF.TableRowDetails("Repeat:",              InlineIfStr(loc_repeat, "True", "False"))
+    loc_res += UDmain.UDMTF.TableRowDetails("Accumulator:",         FormatFloat(loc_accum, 0))
     loc_res += UDmain.UDMTF.Paragraph("(Accumulator contains stat change since the last trigger)", asAlign = "center")
     Return loc_res
 EndFunction

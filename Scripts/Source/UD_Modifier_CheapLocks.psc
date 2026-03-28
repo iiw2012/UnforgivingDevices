@@ -34,7 +34,7 @@ Function TimeUpdateHour(UD_CustomDevice_RenderScript akDevice, Float afGameHours
     if !akDevice.HaveUnlockableLocks()
         return
     endif
-    Float loc_chance_h = MultFloat(UD_Native.GetStringParamFloat(aiDataStr, 0, 0.0), MultProbabilities)
+    Float loc_chance_h = GetParamFlt(aiDataStr, 0, 0.0, "Probability")
     If loc_chance_h <= 0.0
         Return
     EndIf
@@ -53,12 +53,12 @@ Function WeaponHit(UD_CustomDevice_RenderScript akDevice, Weapon akWeapon, Float
     If akWeapon == None || afDamage < 0.0
         Return
     EndIf
-    Float loc_chance1 = MultFloat(UD_Native.GetStringParamFloat(aiDataStr, 1, 0.0), MultProbabilities)
-    Float loc_chance2 = MultFloat(UD_Native.GetStringParamFloat(aiDataStr, 2, 0.0), MultProbabilities)
+    Float loc_chance1 = GetParamFlt(aiDataStr, 1, 0.0, "Probability")
+    Float loc_chance2 = GetParamFlt(aiDataStr, 2, 0.0, "Probability")
     If loc_chance1 + loc_chance2 * afDamage <= 0.0
         Return
     EndIf
-    akDevice.AddJammedLock(MultInt(loc_chance1 + loc_chance2 * afDamage, MultOutputQuantities))
+    akDevice.AddJammedLock(UD_Native.Round((loc_chance1 + loc_chance2 * afDamage) * MultOutputQuantities))
 EndFunction
 
 ;/  Group: User Interface
@@ -68,8 +68,8 @@ EndFunction
 /;
 String Function GetParamsTableRows(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     String loc_res = ""
-    loc_res += UDmain.UDMTF.TableRowDetails("Chance per hour:", FormatFloat(MultFloat(UD_Native.GetStringParamFloat(aiDataStr, 0, 0.0), MultProbabilities), 2) + "%")
-    loc_res += UDmain.UDMTF.TableRowDetails("Chance per hit:", FormatFloat(MultFloat(UD_Native.GetStringParamFloat(aiDataStr, 1, 0.0), MultProbabilities), 2) + "%")
-    loc_res += UDmain.UDMTF.TableRowDetails("Chance per dmg:", FormatFloat(MultFloat(UD_Native.GetStringParamFloat(aiDataStr, 2, 0.0), MultProbabilities), 2) + "%")
+    loc_res += UDmain.UDMTF.TableRowDetails("Chance per hour:",     FormatFloat(GetParamFlt(aiDataStr, 0, 0.0, "Probability"), 2) + "%")
+    loc_res += UDmain.UDMTF.TableRowDetails("Chance per hit:",      FormatFloat(GetParamFlt(aiDataStr, 1, 0.0, "Probability"), 2) + "%")
+    loc_res += UDmain.UDMTF.TableRowDetails("Chance per dmg:",      FormatFloat(GetParamFlt(aiDataStr, 2, 0.0, "Probability"), 2) + "%")
     Return loc_res
 EndFunction

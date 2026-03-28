@@ -41,14 +41,14 @@ import UD_Native
 ===========================================================================================
 /;
 Bool Function Sleep(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Float afDuration, Bool abInterrupted, String aiDataStr, Form akForm1)
-    Int loc_ending = GetStringParamInt(aiDataStr, 3, 0)
+    Int loc_min_dur         = GetParamInt(akModifier, aiDataStr, 0, 0,      "Input")
+    Float loc_prob_base     = GetParamFlt(akModifier, aiDataStr, 1, 100.0,  "Probability")
+    Float loc_prob_accum    = GetParamFlt(akModifier, aiDataStr, 2, 0.0,    "Probability")
+    Int loc_ending          = GetParamInt(akModifier, aiDataStr, 3, 0)
+    Bool loc_repeat         = GetParamBln(akModifier, aiDataStr, 4, False)
     If (loc_ending == 2 && !abInterrupted) || (loc_ending == 1 && abInterrupted)
         Return False
     EndIf
-    Int loc_min_dur = MultInt(GetStringParamInt(aiDataStr, 0, 0), akModifier.MultInputQuantities)
-    Float loc_prob_base = MultFloat(GetStringParamFloat(aiDataStr, 1, 100.0), akModifier.MultProbabilities)
-    Float loc_prob_accum = MultFloat(GetStringParamFloat(aiDataStr, 2, 0.0), akModifier.MultProbabilities)
-    Bool loc_repeat = GetStringParamInt(aiDataStr, 4, 0) > 0
 
     If BaseTriggerIsActive(aiDataStr, 5) && RandomFloat(0.0, 100.0) < 30.0 * akModifier.MultVerboseness
         PrintNotification(akDevice, ;/ reacted /;"in response to your awakening from sleep.")
@@ -63,23 +63,24 @@ EndFunction
 ===========================================================================================
 /;
 String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
-    Int loc_min_dur = MultInt(GetStringParamInt(aiDataStr, 0, 0), akModifier.MultInputQuantities)
-    Float loc_prob_base = MultFloat(GetStringParamFloat(aiDataStr, 1, 100.0), akModifier.MultProbabilities)
-    Float loc_prob_accum = MultFloat(GetStringParamFloat(aiDataStr, 2, 0.0), akModifier.MultProbabilities)
+    Int loc_min_dur         = GetParamInt(akModifier, aiDataStr, 0, 0,      "Input")
+    Float loc_prob_base     = GetParamFlt(akModifier, aiDataStr, 1, 100.0,  "Probability")
+    Float loc_prob_accum    = GetParamFlt(akModifier, aiDataStr, 2, 0.0,    "Probability")
+    Int loc_ending          = GetParamInt(akModifier, aiDataStr, 3, 0)
+    Bool loc_repeat         = GetParamBln(akModifier, aiDataStr, 4, False)
     String loc_res = ""
-    Int loc_cond = GetStringParamInt(aiDataStr, 4, 0)
     String loc_frag = ""
-    If loc_cond == 0
+    If loc_ending == 0
         loc_frag = "Any"
-    ElseIf loc_cond == 1
+    ElseIf loc_ending == 1
         loc_frag = "Normal"
-    ElseIf loc_cond == 2
+    ElseIf loc_ending == 2
         loc_frag = "Interrupted"
     EndIf
-    loc_res += UDmain.UDMTF.TableRowDetails("Threshold value:", loc_min_dur + " hours")
-    loc_res += UDmain.UDMTF.TableRowDetails("Base probability:", FormatFloat(loc_prob_base, 1) + "%")
-    loc_res += UDmain.UDMTF.TableRowDetails("Accumulator weight:", FormatFloat(loc_prob_accum, 2) + "%")
-    loc_res += UDmain.UDMTF.TableRowDetails("Sleep condition:", loc_frag)
-    loc_res += UDmain.UDMTF.TableRowDetails("Repeat:", InlineIfStr(GetStringParamInt(aiDataStr, 4, 0) > 0, "True", "False"))
+    loc_res += UDmain.UDMTF.TableRowDetails("Threshold value:",         loc_min_dur + " hours")
+    loc_res += UDmain.UDMTF.TableRowDetails("Base probability:",        FormatFloat(loc_prob_base, 1) + "%")
+    loc_res += UDmain.UDMTF.TableRowDetails("Accumulator weight:",      FormatFloat(loc_prob_accum, 2) + "%")
+    loc_res += UDmain.UDMTF.TableRowDetails("Sleep condition:",         loc_frag)
+    loc_res += UDmain.UDMTF.TableRowDetails("Repeat:",                  InlineIfStr(loc_repeat, "True", "False"))
     Return loc_res
 EndFunction

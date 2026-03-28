@@ -41,10 +41,10 @@ Spell Property ManifestExplosion Auto
 /;
 
 Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm2, Form akForm3)
-    Int loc_count = MultInt(GetStringParamInt(aiDataStr, DataStrOffset + 0, 1), akModifier.MultOutputQuantities)
+    Int loc_count           = GetParamInt(akModifier, aiDataStr, 0, 1, "Output")
+    String loc_method_list2 = GetParamStr(akModifier, aiDataStr, 1, "L")
+    String loc_method_list3 = GetParamStr(akModifier, aiDataStr, 2, "")
     Int loc_remain = loc_count
-    String loc_method_list2 = GetStringParamString(aiDataStr, DataStrOffset + 1, "L")
-    String loc_method_list3 = GetStringParamString(aiDataStr, DataStrOffset + 2, "")
     String loc_method = loc_method_list2
     
     If loc_method_list2 == "L" || loc_method_list2 == "LIB"
@@ -103,9 +103,9 @@ EndFunction
 /;
 String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm2, Form akForm3)
     String loc_res = ""
-    Int loc_count = MultInt(GetStringParamInt(aiDataStr, DataStrOffset + 0, 1), akModifier.MultOutputQuantities)
-    String loc_method_list2 = GetStringParamString(aiDataStr, DataStrOffset + 1, "L")
-    String loc_method_list3 = GetStringParamString(aiDataStr, DataStrOffset + 2, "")
+    Int loc_count           = GetParamInt(akModifier, aiDataStr, 0, 1, "Output")
+    String loc_method_list2 = GetParamStr(akModifier, aiDataStr, 1, "L")
+    String loc_method_list3 = GetParamStr(akModifier, aiDataStr, 2, "")
 
     loc_res += UDmain.UDMTF.TableRowDetails("Number of devices:", loc_count)
     If loc_method_list2 != "" || akForm2

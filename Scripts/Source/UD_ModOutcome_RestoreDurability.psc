@@ -39,10 +39,10 @@ import UD_Native
 /;
 
 Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm2, Form akForm3)
-    Int loc_count = GetStringParamInt(aiDataStr, DataStrOffset + 0, 1)
-    String loc_method_list2 = GetStringParamString(aiDataStr, DataStrOffset + 1, "S")
-    Float loc_min = MultFloat(GetStringParamFloat(aiDataStr, DataStrOffset + 2), akModifier.MultOutputQuantities)
-    Float loc_max = MultFloat(GetStringParamFloat(aiDataStr, DataStrOffset + 3, loc_min), akModifier.MultOutputQuantities)
+    Int loc_count               = GetParamInt(akModifier, aiDataStr, 0, 1)
+    String loc_method_list2     = GetParamStr(akModifier, aiDataStr, 1, "S")
+    Float loc_min               = GetParamFlt(akModifier, aiDataStr, 2, 0.0,        "Output")
+    Float loc_max               = GetParamFlt(akModifier, aiDataStr, 3, loc_min,    "Output")
 
     UD_CustomDevice_RenderScript[] loc_devices = GetEquippedDevicesWithSelectionMethod(akDevice, loc_count, akForm2, loc_method_list2, akForm3, "")
 
@@ -68,15 +68,15 @@ EndFunction
 String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm2, Form akForm3)
     String loc_res = ""
     String loc_frag = "" 
-    String loc_method_list2 = GetStringParamString(aiDataStr, DataStrOffset + 1, "R")
-    Float loc_min = MultFloat(GetStringParamFloat(aiDataStr, DataStrOffset + 2), akModifier.MultOutputQuantities)
-    Float loc_max = MultFloat(GetStringParamFloat(aiDataStr, DataStrOffset + 3, loc_min), akModifier.MultOutputQuantities)
+    String loc_method_list2 = GetParamStr(akModifier, aiDataStr, 1, "S")
+    Float loc_min           = GetParamFlt(akModifier, aiDataStr, 2, 0.0,          "Output")
+    Float loc_max           = GetParamFlt(akModifier, aiDataStr, 3, loc_min,      "Output")
     If loc_method_list2 == "S"
         loc_frag = "SELF"
     ElseIf loc_method_list2 == "A"
         loc_frag = "ALL"
     Else
-        loc_frag = GetStringParamInt(aiDataStr, DataStrOffset + 0, 1)   
+        loc_frag = GetParamInt(akModifier, aiDataStr, 0, 1)   
     EndIf
     loc_res += UDmain.UDMTF.TableRowDetails("Number of devices:", loc_frag)
     If loc_method_list2 != "" || akForm2

@@ -38,10 +38,10 @@ import UD_Native
 ===========================================================================================
 /;
 Bool Function Orgasm(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
-    Int loc_min_value = MultInt(GetStringParamInt(aiDataStr, 0, 0), akModifier.MultInputQuantities)
-    Float loc_prob_base = MultFloat(GetStringParamFloat(aiDataStr, 1, 100.0), akModifier.MultProbabilities)
-    Float loc_prob_accum = MultFloat(GetStringParamFloat(aiDataStr, 2, 0.0), akModifier.MultProbabilities)
-    Bool loc_repeat = GetStringParamInt(aiDataStr, 3, 0) > 0
+    Int loc_min_value       = GetParamInt(akModifier, aiDataStr, 0, 0,          "Input")
+    Float loc_prob_base     = GetParamFlt(akModifier, aiDataStr, 1, 100.0,      "Probability")
+    Float loc_prob_accum    = GetParamFlt(akModifier, aiDataStr, 2, 0.0,        "Probability")
+    Bool loc_repeat         = GetParamBln(akModifier, aiDataStr, 3, False)
 
     If BaseTriggerIsActive(aiDataStr, 4) && RandomFloat(0.0, 100.0) < 30.0 * akModifier.MultVerboseness
         PrintNotification(akDevice, ;/ reacted /;"while you shudder in the spasms of orgasm.")
@@ -56,15 +56,16 @@ EndFunction
 ===========================================================================================
 /;
 String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
-    Int loc_min_value = MultInt(GetStringParamInt(aiDataStr, 0, 0), akModifier.MultInputQuantities)
-    Float loc_prob_base = MultFloat(GetStringParamFloat(aiDataStr, 1, 100.0), akModifier.MultProbabilities)
-    Float loc_prob_accum = MultFloat(GetStringParamFloat(aiDataStr, 2, 0.0), akModifier.MultProbabilities)
+    Int loc_min_value       = GetParamInt(akModifier, aiDataStr, 0, 0,          "Input")
+    Float loc_prob_base     = GetParamFlt(akModifier, aiDataStr, 1, 100.0,      "Probability")
+    Float loc_prob_accum    = GetParamFlt(akModifier, aiDataStr, 2, 0.0,        "Probability")
+    Bool loc_repeat         = GetParamBln(akModifier, aiDataStr, 3, False)
     String loc_res = ""
-    loc_res += UDmain.UDMTF.TableRowDetails("Threshold value:", loc_min_value)
-    loc_res += UDmain.UDMTF.TableRowDetails("Base probability:", FormatFloat(loc_prob_base, 1) + "%")
-    loc_res += UDmain.UDMTF.TableRowDetails("Accumulator weight:", FormatFloat(loc_prob_accum, 2) + "%")
-    loc_res += UDmain.UDMTF.TableRowDetails("Repeat:", InlineIfStr(GetStringParamInt(aiDataStr, 3, 0) > 0, "True", "False"))
-    loc_res += UDmain.UDMTF.TableRowDetails("Accumulator:", FormatFloat(GetStringParamFloat(aiDataStr, 4, 0.0), 0))
+    loc_res += UDmain.UDMTF.TableRowDetails("Threshold value:",         loc_min_value As String)
+    loc_res += UDmain.UDMTF.TableRowDetails("Base probability:",        FormatFloat(loc_prob_base, 1) + "%")
+    loc_res += UDmain.UDMTF.TableRowDetails("Accumulator weight:",      FormatFloat(loc_prob_accum, 2) + "%")
+    loc_res += UDmain.UDMTF.TableRowDetails("Repeat:",                  InlineIfStr(loc_repeat, "True", "False"))
+    loc_res += UDmain.UDMTF.TableRowDetails("Accumulator:",             FormatFloat(GetParamFlt(akModifier, aiDataStr, 4, 0.0), 0))
     loc_res += UDmain.UDMTF.Paragraph("(Accumulator contains the number of consecutive orgasms)", asAlign = "center")
     Return loc_res
 EndFunction

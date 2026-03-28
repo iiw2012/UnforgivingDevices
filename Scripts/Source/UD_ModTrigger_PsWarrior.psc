@@ -36,7 +36,7 @@ Bool Function ActorAction(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderSc
     If aiActorAction == 0
     ; weapon swing
     ; TODO PR195: check weapon type to exclude daggers and staffs
-        Float loc_prob = MultFloat(GetStringParamFloat(aiDataStr, 0, 0.0), akModifier.MultProbabilities)
+        Float loc_prob = GetParamFlt(akModifier, aiDataStr, 0, 0.0, "Probability")
 
         If RandomFloat(0.0, 100.0) < 30.0 * akModifier.MultVerboseness
             PrintNotification(akDevice, ;/ reacted /;"because of your actions. For a moment, you see the silhouette of a warrior.")
@@ -50,7 +50,7 @@ EndFunction
 Bool Function WeaponHit(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Weapon akWeapon, Float afDamage, String aiDataStr, Form akForm1)
     If akWeapon && akWeapon.GetWeaponType() <= 6
     ; melee or unarmed
-        Float loc_prob = MultFloat(GetStringParamFloat(aiDataStr, 2, 0.0), akModifier.MultProbabilities)
+        Float loc_prob = GetParamFlt(akModifier, aiDataStr, 2, 0.0, "Probability")
 
         If RandomFloat(0.0, 100.0) < 30.0 * akModifier.MultVerboseness
             PrintNotification(akDevice, ;/ reacted /;"because of your actions. For a moment, you see the silhouette of a warrior.")
@@ -63,7 +63,7 @@ EndFunction
 
 Bool Function SkillIncreased(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asSkill, Int aiValue, String aiDataStr, Form akForm1)
     If asSkill == "TwoHanded" || asSkill == "Block" || asSkill == "Smithing" || asSkill == "HeavyArmor"
-        Float loc_prob = MultFloat(GetStringParamFloat(aiDataStr, 1, 0.0), akModifier.MultProbabilities)
+        Float loc_prob = GetParamFlt(akModifier, aiDataStr, 1, 0.0, "Probability")
 
         If RandomFloat(0.0, 100.0) < 30.0 * akModifier.MultVerboseness
             PrintNotification(akDevice, ;/ reacted /;"because of your actions. For a moment, you see the silhouette of a warrior.")
@@ -80,13 +80,13 @@ EndFunction
 ===========================================================================================
 /;
 String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
-    Float loc_prob1 = MultFloat(GetStringParamFloat(aiDataStr, 0, 0.0), akModifier.MultProbabilities)
-    Float loc_prob2 = MultFloat(GetStringParamFloat(aiDataStr, 1, 0.0), akModifier.MultProbabilities)
-    Float loc_prob3 = MultFloat(GetStringParamFloat(aiDataStr, 2, 0.0), akModifier.MultProbabilities)
+    Float loc_prob1 = GetParamFlt(akModifier, aiDataStr, 0, 0.0, "Probability")
+    Float loc_prob2 = GetParamFlt(akModifier, aiDataStr, 1, 0.0, "Probability")
+    Float loc_prob3 = GetParamFlt(akModifier, aiDataStr, 2, 0.0, "Probability")
     String loc_res = ""
-    loc_res += UDmain.UDMTF.TableRowDetails("Prob. on weapon swing:", FormatFloat(loc_prob1, 1) + "%")
-    loc_res += UDmain.UDMTF.TableRowDetails("Prob. on skill increase:", FormatFloat(loc_prob2, 1) + "%")
+    loc_res += UDmain.UDMTF.TableRowDetails("Prob. on weapon swing:",       FormatFloat(loc_prob1, 1) + "%")
+    loc_res += UDmain.UDMTF.TableRowDetails("Prob. on skill increase:",     FormatFloat(loc_prob2, 1) + "%")
     loc_res += UDmain.UDMTF.Paragraph("(TwoHanded, Block, Smithing, HeavyArmor)", asAlign = "center")
-    loc_res += UDmain.UDMTF.TableRowDetails("Prob. on melee hit taken:", FormatFloat(loc_prob3, 1) + "%")
+    loc_res += UDmain.UDMTF.TableRowDetails("Prob. on melee hit taken:",    FormatFloat(loc_prob3, 1) + "%")
     Return loc_res
 EndFunction

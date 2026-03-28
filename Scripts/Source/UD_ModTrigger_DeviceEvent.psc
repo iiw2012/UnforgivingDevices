@@ -32,8 +32,8 @@ import UD_Native
 ===========================================================================================
 /;
 Bool Function DeviceLocked(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
-    Float loc_prob = MultFloat(GetStringParamFloat(aiDataStr, 1, 100.0), akModifier.MultProbabilities)
-    String loc_event = GetStringParamString(aiDataStr, 0, "")
+    String loc_event    = GetParamStr(akModifier, aiDataStr, 0, "")
+    Float loc_prob      = GetParamFlt(akModifier, aiDataStr, 1, 100.0, "Probability")
 
     If StringUtil.Find(loc_event, "DL") < 0
         Return False
@@ -47,8 +47,8 @@ Bool Function DeviceLocked(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderS
 EndFunction
 
 Bool Function DeviceUnlocked(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
-    Float loc_prob = MultFloat(GetStringParamFloat(aiDataStr, 1, 100.0), akModifier.MultProbabilities)
-    String loc_event = GetStringParamString(aiDataStr, 0, "")
+    String loc_event    = GetParamStr(akModifier, aiDataStr, 0, "")
+    Float loc_prob      = GetParamFlt(akModifier, aiDataStr, 1, 100.0, "Probability")
 
     If StringUtil.Find(loc_event, "DU") < 0
         Return False
@@ -61,8 +61,8 @@ Bool Function ConditionLoss(UD_Modifier_Combo akModifier, UD_CustomDevice_Render
     If aiCondition < 4
         Return False
     EndIf
-    Float loc_prob = MultFloat(GetStringParamFloat(aiDataStr, 1, 100.0), akModifier.MultProbabilities)
-    String loc_event = GetStringParamString(aiDataStr, 0, "")
+    String loc_event    = GetParamStr(akModifier, aiDataStr, 0, "")
+    Float loc_prob      = GetParamFlt(akModifier, aiDataStr, 1, 100.0, "Probability")
 
     If StringUtil.Find(loc_event, "DB") < 0
         Return False
@@ -77,9 +77,9 @@ EndFunction
 ===========================================================================================
 /;
 String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
-    Float loc_prob = MultFloat(GetStringParamFloat(aiDataStr, 1, 100.0), akModifier.MultProbabilities)
+    String loc_frag     = GetParamStr(akModifier, aiDataStr, 0, "")
+    Float loc_prob      = GetParamFlt(akModifier, aiDataStr, 1, 100.0, "Probability")
     String loc_res = ""
-    String loc_frag = GetStringParamString(aiDataStr, 0, "")
     If UDmain.UDMTF.HasHtmlMarkup()
         loc_frag = GetDeviceEventString(loc_frag, "<br/> \t\t")
     Else

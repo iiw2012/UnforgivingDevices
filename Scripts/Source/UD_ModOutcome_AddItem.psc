@@ -40,9 +40,9 @@ Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDe
 
     Form loc_item = UD_Modifier.GetRandomForm(akForm2, akForm3)
     If loc_item
-        Int loc_min = MultInt(GetStringParamInt(aiDataStr, DataStrOffset + 0, 1), akModifier.MultOutputQuantities)
-        Int loc_max = MultInt(GetStringParamInt(aiDataStr, DataStrOffset + 1, loc_min), akModifier.MultOutputQuantities)
-        Bool loc_use = GetStringParamInt(aiDataStr, DataStrOffset + 2, 0) > 0
+        Int loc_min     = GetParamInt(akModifier, aiDataStr, 0, 1,          "Output")
+        Int loc_max     = GetParamInt(akModifier, aiDataStr, 1, loc_min,    "Output")
+        Bool loc_use    = GetParamBln(akModifier, aiDataStr, 2, False)
         Actor loc_wearer = akDevice.GetWearer()
         Int loc_count = RandomInt(loc_min, loc_max)
         
@@ -78,8 +78,9 @@ EndFunction
 /;
 String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm2, Form akForm3)
     String loc_res = ""
-    Int loc_min = MultInt(GetStringParamInt(aiDataStr, DataStrOffset + 0, 1), akModifier.MultOutputQuantities)
-    Int loc_max = MultInt(GetStringParamInt(aiDataStr, DataStrOffset + 1, loc_min), akModifier.MultOutputQuantities)
+    Int loc_min     = GetParamInt(akModifier, aiDataStr, 0, 1,          "Output")
+    Int loc_max     = GetParamInt(akModifier, aiDataStr, 1, loc_min,    "Output")
+    Bool loc_use    = GetParamBln(akModifier, aiDataStr, 2, False)
 
     loc_res += UDmain.UDMTF.TableRowDetails("Number of items:", loc_min + " - " + loc_max)
     If akForm2
@@ -88,6 +89,6 @@ String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice
     If akForm3
         loc_res += akModifier.PrintFormListSelectionDetails(akForm3, "R")
     EndIf
-    loc_res += UDmain.UDMTF.TableRowDetails("Instant use:", InlineIfStr(GetStringParamInt(aiDataStr, DataStrOffset + 2, 0) > 0, "True", "False"))
+    loc_res += UDmain.UDMTF.TableRowDetails("Instant use:", InlineIfStr(loc_use, "True", "False"))
     Return loc_res
 EndFunction

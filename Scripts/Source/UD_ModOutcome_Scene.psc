@@ -31,7 +31,7 @@ Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDe
         loc_scene = loc_scene as UD_ModInjection_Scene
     EndIf
     If loc_scene
-        If GetStringParamInt(aiDataStr, DataStrOffset + 0, 0) > 0
+        If GetParamBln(akModifier, aiDataStr, 0, False)
             loc_scene.ForceStart()
         Else
             loc_scene.Start()
@@ -54,6 +54,6 @@ String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice
     If akForm3
         loc_res += akModifier.PrintFormListSelectionDetails(akForm3, "R")
     EndIf
-    loc_res += UDmain.UDMTF.TableRowDetails("Force:", InlineIfStr(GetStringParamInt(aiDataStr, DataStrOffset + 0, 0) > 0, "True", "False"))
+    loc_res += UDmain.UDMTF.TableRowDetails("Force:", InlineIfStr(GetParamBln(akModifier, aiDataStr, 0, False), "True", "False"))
     Return loc_res
 EndFunction

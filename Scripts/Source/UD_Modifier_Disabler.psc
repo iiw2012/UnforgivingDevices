@@ -55,7 +55,7 @@ EndFunction
 /;
 String Function GetParamsTableRows(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     String loc_res = ""
-    loc_res += UDmain.UDMTF.TableRowDetails("Disable fast travel:", UDmain.UDMTF.InlineIfString(GetStringParamInt(aiDataStr, 0, 0) != 0, "True", "False"))
-    loc_res += UDmain.UDMTF.TableRowDetails("Disable waiting:", UDmain.UDMTF.InlineIfString(GetStringParamInt(aiDataStr, 1, 0) != 0, "True", "False"))
+    loc_res += UDmain.UDMTF.TableRowDetails("Disable fast travel:", UDmain.UDMTF.InlineIfString(GetParamBln(aiDataStr, 0, False), "True", "False"))
+    loc_res += UDmain.UDMTF.TableRowDetails("Disable waiting:", UDmain.UDMTF.InlineIfString(GetParamBln(aiDataStr, 1, False), "True", "False"))
     Return loc_res
 EndFunction

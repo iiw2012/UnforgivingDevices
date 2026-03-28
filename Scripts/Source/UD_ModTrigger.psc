@@ -197,12 +197,36 @@ Function PrintNotification(UD_CustomDevice_RenderScript akDevice, String asCondi
     UDMain.Print(loc_effect + asCondition)
 EndFunction
 
-Int Function MultInt(Float afValue, Float afMult)
-    Return UD_Native.Round(afValue * afMult)
+Int Function GetParamInt(UD_Modifier akModifier, String asDataStr, Int aiPos, Int aiDefault = 0, String asMultType = "")
+    Return akModifier.GetParamInt(asDataStr, aiPos, aiDefault, asMultType)
 EndFunction
 
-Float Function MultFloat(Float afValue, Float afMult)
-    Return afValue * afMult
+Float Function GetParamFlt(UD_Modifier akModifier, String asDataStr, Int aiPos, Float afDefault = 0.0, String asMultType = "")
+    Return akModifier.GetParamFlt(asDataStr, aiPos, afDefault, asMultType)
+EndFunction
+
+String Function GetParamStr(UD_Modifier akModifier, String asDataStr, Int aiPos, String asDefault = "", String asMultType = "")
+    Return akModifier.GetParamStr(asDataStr, aiPos, asDefault, asMultType)
+EndFunction
+
+Bool Function GetParamBln(UD_Modifier akModifier, String asDataStr, Int aiPos, Bool abDefault = False, String asMultType = "")
+    Return akModifier.GetParamBln(asDataStr, aiPos, abDefault, asMultType)
+EndFunction
+
+Function SetParamInt(UD_Modifier akModifier, UD_CustomDevice_RenderScript akDevice, Int aiPos, Int aiNewValue)
+    akModifier.SetParamInt(akDevice, aiPos, aiNewValue)
+EndFunction
+
+Function SetParamFlt(UD_Modifier akModifier, UD_CustomDevice_RenderScript akDevice, Int aiPos, Float afNewValue)
+    akModifier.SetParamFlt(akDevice, aiPos, afNewValue)
+EndFunction
+
+Function SetParamStr(UD_Modifier akModifier, UD_CustomDevice_RenderScript akDevice, Int aiPos, String asNewValue)
+    akModifier.SetParamStr(akDevice, aiPos, asNewValue)
+EndFunction
+
+Function SetParamBln(UD_Modifier akModifier, UD_CustomDevice_RenderScript akDevice, Int aiPos, Bool abNewValue)
+    akModifier.SetParamBln(akDevice, aiPos, abNewValue)
 EndFunction
 
 ;/  Function: TriggerOnValueDelta

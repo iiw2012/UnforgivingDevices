@@ -35,9 +35,9 @@ import UD_Native
 /;
 
 Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm2, Form akForm3)
-    Int loc_count = MultInt(GetStringParamInt(aiDataStr, DataStrOffset + 0, 1), akModifier.MultOutputQuantities)
-    String loc_method_list2 = GetStringParamString(aiDataStr, DataStrOffset + 1, "S")
-    String loc_method_list3 = GetStringParamString(aiDataStr, DataStrOffset + 2, "")
+    Int loc_count               = GetParamInt(akModifier, aiDataStr, 0, 1, "Output")
+    String loc_method_list2     = GetParamStr(akModifier, aiDataStr, 1, "S")
+    String loc_method_list3     = GetParamStr(akModifier, aiDataStr, 2, "")
 
     UD_CustomDevice_RenderScript[] loc_devices = GetEquippedDevicesWithSelectionMethod(akDevice, loc_count, akForm2, loc_method_list2, akForm3, loc_method_list3)
 
@@ -66,9 +66,10 @@ EndFunction
 String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm2, Form akForm3)
     String loc_res = ""
     String loc_frag = ""
-    Int loc_count = MultInt(GetStringParamInt(aiDataStr, DataStrOffset + 0, 1), akModifier.MultOutputQuantities)
-    String loc_method_list2 = GetStringParamString(aiDataStr, DataStrOffset + 1, "R")
-    String loc_method_list3 = GetStringParamString(aiDataStr, DataStrOffset + 2, "")
+    Int loc_count               = GetParamInt(akModifier, aiDataStr, 0, 1, "Output")
+    String loc_method_list2     = GetParamStr(akModifier, aiDataStr, 1, "S")
+    String loc_method_list3     = GetParamStr(akModifier, aiDataStr, 2, "")
+
 
     If loc_method_list2 == "S" || loc_method_list2 == "SELF"
         loc_frag = "SELF"

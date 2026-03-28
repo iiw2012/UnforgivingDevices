@@ -139,12 +139,36 @@ Function PrintNotification(UD_CustomDevice_RenderScript akDevice, String asOutco
     UDMain.Print(loc_effect + asOutcome)
 EndFunction
 
-Int Function MultInt(Float afValue, Float afMult)
-    Return UD_Native.Round(afValue * afMult)
+Int Function GetParamInt(UD_Modifier akModifier, String asDataStr, Int aiPos, Int aiDefault = 0, String asMultType = "")
+    Return akModifier.GetParamInt(asDataStr, DataStrOffset + aiPos, aiDefault, asMultType)
 EndFunction
 
-Float Function MultFloat(Float afValue, Float afMult)
-    Return afValue * afMult
+Float Function GetParamFlt(UD_Modifier akModifier, String asDataStr, Int aiPos, Float afDefault = 0.0, String asMultType = "")
+    Return akModifier.GetParamFlt(asDataStr, DataStrOffset + aiPos, afDefault, asMultType)
+EndFunction
+
+String Function GetParamStr(UD_Modifier akModifier, String asDataStr, Int aiPos, String asDefault = "", String asMultType = "")
+    Return akModifier.GetParamStr(asDataStr, DataStrOffset + aiPos, asDefault, asMultType)
+EndFunction
+
+Bool Function GetParamBln(UD_Modifier akModifier, String asDataStr, Int aiPos, Bool abDefault = False, String asMultType = "")
+    Return akModifier.GetParamBln(asDataStr, DataStrOffset + aiPos, abDefault, asMultType)
+EndFunction
+
+Function SetParamInt(UD_Modifier akModifier, UD_CustomDevice_RenderScript akDevice, Int aiPos, Int aiNewValue)
+    akModifier.SetParamInt(akDevice, DataStrOffset + aiPos, aiNewValue)
+EndFunction
+
+Function SetParamFlt(UD_Modifier akModifier, UD_CustomDevice_RenderScript akDevice, Int aiPos, Float afNewValue)
+    akModifier.SetParamFlt(akDevice, DataStrOffset + aiPos, afNewValue)
+EndFunction
+
+Function SetParamStr(UD_Modifier akModifier, UD_CustomDevice_RenderScript akDevice, Int aiPos, String asNewValue)
+    akModifier.SetParamStr(akDevice, DataStrOffset + aiPos, asNewValue)
+EndFunction
+
+Function SetParamBln(UD_Modifier akModifier, UD_CustomDevice_RenderScript akDevice, Int aiPos, Bool abNewValue)
+    akModifier.SetParamBln(akDevice, DataStrOffset + aiPos, abNewValue)
 EndFunction
 
 UD_CustomDevice_RenderScript[] Function GetEquippedDevicesWithSelectionMethod(UD_CustomDevice_RenderScript akDevice, Int aiNumber, Form akForm1, String asSelectionMethod1 = "R", Form akForm2 = None, String asSelectionMethod2 = "", Form akForm3 = None, String asSelectionMethod3 = "")

@@ -281,9 +281,9 @@ String Function GetDataStr(Float afGlobalSeverityShift = 0.0, Float afGlobalSeve
                 Int loc_min = GetStringParamInt(DataStr_Easy, i, loc_zero)
                 Int loc_max = GetStringParamInt(DataStr_Hard, i, loc_zero)
                 If loc_rnd < 0
-                    loc_rnd_str = ((loc_rnd * (loc_zero - loc_min) + loc_zero) as Int) as String
+                    loc_rnd_str = UD_Native.Round(loc_rnd * (loc_zero - loc_min) + loc_zero) as String
                 Else
-                    loc_rnd_str = ((loc_rnd * (loc_max - loc_zero) + loc_zero) as Int) as String
+                    loc_rnd_str = UD_Native.Round(loc_rnd * (loc_max - loc_zero) + loc_zero) as String
                 EndIf
             ElseIf loc_type == "F"
                 Float loc_zero = GetStringParamFloat(DataStr_Ground, i, 0.0)
@@ -333,7 +333,7 @@ String Function GetDataStrFromArray(Float afGlobalSeverityShift = 0.0, Float afG
                     If loc_type == "F" || loc_type == "D" 
                         loc_arg_str = FormatFloat(_InterpolateBy1PointFloat(loc_rnd, loc_points[0] As Float), 2)
                     ElseIf loc_type == "I" || loc_type == "N" 
-                        loc_arg_str = (_InterpolateBy1PointFloat(loc_rnd, loc_points[0] As Float) As Int) As String
+                        loc_arg_str = UD_Native.Round(_InterpolateBy1PointFloat(loc_rnd, loc_points[0] As Float)) As String
                     ElseIf loc_type == "S" 
                         loc_arg_str = TrimSubstr(_InterpolateBy1PointString(loc_rnd, loc_points[0]), " ")
                     EndIf
@@ -341,7 +341,7 @@ String Function GetDataStrFromArray(Float afGlobalSeverityShift = 0.0, Float afG
                     If loc_type == "F" || loc_type == "D" 
                         loc_arg_str = FormatFloat(_InterpolateBy2PointFloat(loc_rnd, loc_points[0] As Float, loc_points[1] As Float), 2)
                     ElseIf loc_type == "I" || loc_type == "N" 
-                        loc_arg_str = (_InterpolateBy2PointFloat(loc_rnd, loc_points[0] As Float, loc_points[1] As Float) As Int) As String
+                        loc_arg_str = UD_Native.Round(_InterpolateBy2PointFloat(loc_rnd, loc_points[0] As Float, loc_points[1] As Float)) As String
                     ElseIf loc_type == "S" 
                         loc_arg_str = TrimSubstr(_InterpolateBy2PointString(loc_rnd, loc_points[0], loc_points[1]), " ")
                     EndIf
@@ -349,7 +349,7 @@ String Function GetDataStrFromArray(Float afGlobalSeverityShift = 0.0, Float afG
                     If loc_type == "F" || loc_type == "D" 
                         loc_arg_str = FormatFloat(_InterpolateBy3PointFloat(loc_rnd, loc_points[0] As Float, loc_points[1] As Float, loc_points[2] As Float), 2)
                     ElseIf loc_type == "I" || loc_type == "N" 
-                        loc_arg_str = (_InterpolateBy3PointFloat(loc_rnd, loc_points[0] As Float, loc_points[1] As Float, loc_points[2] As Float) As Int) As String
+                        loc_arg_str = UD_Native.Round(_InterpolateBy3PointFloat(loc_rnd, loc_points[0] As Float, loc_points[1] As Float, loc_points[2] As Float)) As String
                     ElseIf loc_type == "S" 
                         loc_arg_str = TrimSubstr(_InterpolateBy3PointString(loc_rnd, loc_points[0], loc_points[1], loc_points[2]), " ")
                     EndIf

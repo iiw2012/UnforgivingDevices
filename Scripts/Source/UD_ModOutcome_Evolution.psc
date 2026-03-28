@@ -38,8 +38,8 @@ Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDe
         If EvolveExplosion != None
             EvolveExplosion.Cast(loc_actor)
         EndIf
-        libs.LockDevice(loc_actor,loc_device)
-        UDmain.Print(akDevice.GetDeviceName() + " have evolved into " + loc_device.GetName() +"!")
+        libs.LockDevice(loc_actor, loc_device)
+        UDmain.Print(akDevice.GetDeviceName() + " have evolved into " + loc_device.GetName() + "!")
     endif
 EndFunction
 

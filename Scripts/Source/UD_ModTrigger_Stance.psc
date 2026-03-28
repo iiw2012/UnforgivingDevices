@@ -45,20 +45,19 @@ import UD_Native
 ===========================================================================================
 /;
 Bool Function TimeUpdateSeconds(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Float afGameHoursSinceLastCall, Float afRealSecondsSinceLastCall, String aiDataStr, Form akForm1)
-    Actor loc_actor =  akDevice.GetWearer()
-    String loc_stance = GetStringParamString(aiDataStr, 0, "")
-    Bool loc_reset = GetStringParamInt(aiDataStr, 3, 1) > 0
-    Bool loc_repeat = GetStringParamInt(aiDataStr, 4, 0) > 0
+    Actor loc_actor = akDevice.GetWearer()
+    String loc_stance       = GetParamStr(akModifier, aiDataStr, 0, "")
+    Float loc_min_value     = GetParamFlt(akModifier, aiDataStr, 1, 0.0, "Input")
+    Float loc_prob_accum    = GetParamFlt(akModifier, aiDataStr, 2, 0.0, "Probability")
+    Bool loc_reset          = GetParamBln(akModifier, aiDataStr, 3, True)
+    Bool loc_repeat         = GetParamBln(akModifier, aiDataStr, 4, False)
+    Float loc_accum         = GetParamFlt(akModifier, aiDataStr, 5, 0.0)
 
     If !BaseTriggerIsActive(aiDataStr, 5)
         Return False
     EndIf
 
     If IsInStance(loc_actor, loc_stance)
-        Float loc_min_value = MultFloat(GetStringParamFloat(aiDataStr, 1, 0.0), akModifier.MultInputQuantities)
-        Float loc_prob_accum = MultFloat(GetStringParamFloat(aiDataStr, 2, 0.0), akModifier.MultProbabilities)
-        Float loc_accum = GetStringParamFloat(aiDataStr, 5, 0.0)
-
         If loc_accum < 0.1 
         ; leading edge, make a note and skip the rest
             If UDmain.TraceAllowed()
@@ -76,9 +75,8 @@ Bool Function TimeUpdateSeconds(UD_Modifier_Combo akModifier, UD_CustomDevice_Re
         If UDmain.TraceAllowed()
             UDmain.Log("UD_ModTrigger_Stance::TimeUpdateSeconds() akModifier = " + akModifier + ", akDevice = " + akDevice + ", afRealSecondsSinceLastCall = " + FormatFloat(afRealSecondsSinceLastCall, 1) + ". Reseting accumulator.", 3)
         EndIf
-        Float loc_accum = GetStringParamFloat(aiDataStr, 5, 0.0)
         If loc_accum > 0.0
-            akDevice.editStringModifier(akModifier.NameAlias, 5, "0.0")
+            SetParamFlt(akModifier, akDevice, 5, 0.0)
         EndIf
     EndIf
 
@@ -91,25 +89,26 @@ EndFunction
 ===========================================================================================
 /;
 String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
-    Float loc_min_value = MultFloat(GetStringParamFloat(aiDataStr, 1, 0.0), akModifier.MultInputQuantities)
-    Float loc_prob_accum = MultFloat(GetStringParamFloat(aiDataStr, 2, 0.0), akModifier.MultProbabilities)
-    Bool loc_reset = GetStringParamInt(aiDataStr, 3, 1) > 0
-    Bool loc_repeat = GetStringParamInt(aiDataStr, 4, 0) > 0
-    Float loc_accum = GetStringParamFloat(aiDataStr, 5, 0.0)
+    String loc_stance       = GetParamStr(akModifier, aiDataStr, 0, "")
+    Float loc_min_value     = GetParamFlt(akModifier, aiDataStr, 1, 0.0, "Input")
+    Float loc_prob_accum    = GetParamFlt(akModifier, aiDataStr, 2, 0.0, "Probability")
+    Bool loc_reset          = GetParamBln(akModifier, aiDataStr, 3, True)
+    Bool loc_repeat         = GetParamBln(akModifier, aiDataStr, 4, False)
+    Float loc_accum         = GetParamFlt(akModifier, aiDataStr, 5, 0.0)
 
+    String loc_frag = loc_stance
     String loc_res = ""
-    String loc_frag = GetStringParamString(aiDataStr, 0, "")
     If UDmain.UDMTF.HasHtmlMarkup()
         loc_frag = GetStanceString(loc_frag, "<br/> \t\t")
     Else
         loc_frag = GetStanceString(loc_frag, ", ")
     EndIf
     loc_res += UDmain.UDMTF.TableRowDetails("Stance(s):", loc_frag)
-    loc_res += UDmain.UDMTF.TableRowDetails("Threshold duration:", FormatFloat(loc_min_value, 1) + " s")
-    loc_res += UDmain.UDMTF.TableRowDetails("Accumulator weight:", FormatFloat(loc_prob_accum, 2) + "%")
+    loc_res += UDmain.UDMTF.TableRowDetails("Threshold duration:",  FormatFloat(loc_min_value, 1) + " s")
+    loc_res += UDmain.UDMTF.TableRowDetails("Accumulator weight:",  FormatFloat(loc_prob_accum, 2) + "%")
     loc_res += UDmain.UDMTF.TableRowDetails("Reset on new stance:", InlineIfStr(loc_reset, "True", "False"))
-    loc_res += UDmain.UDMTF.TableRowDetails("Repeat:", InlineIfStr(loc_repeat, "True", "False"))
-    loc_res += UDmain.UDMTF.TableRowDetails("Accumulator:", FormatFloat(loc_accum, 1) + " s")
+    loc_res += UDmain.UDMTF.TableRowDetails("Repeat:",              InlineIfStr(loc_repeat, "True", "False"))
+    loc_res += UDmain.UDMTF.TableRowDetails("Accumulator:",         FormatFloat(loc_accum, 1) + " s")
     loc_res += UDmain.UDMTF.Paragraph("(Accumulator contains total duration)", asAlign = "center")
 
     Return loc_res
