@@ -30,11 +30,11 @@ import UD_Native
 ===========================================================================================
 ===========================================================================================
 /;
-Function TimeUpdateHour(UD_CustomDevice_RenderScript akDevice, Float afGameHoursSinceLastCall, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+Function TimeUpdateHour(UD_CustomDevice_RenderScript akDevice, Float afGameHoursSinceLastCall, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     if !akDevice.HaveUnlockableLocks()
         return
     endif
-    Float loc_chance_h = GetParamFlt(aiDataStr, 0, 0.0, "Probability")
+    Float loc_chance_h = GetParamFlt(asDataStr, 0, 0.0, "Probability")
     If loc_chance_h <= 0.0
         Return
     EndIf
@@ -49,12 +49,12 @@ Function TimeUpdateHour(UD_CustomDevice_RenderScript akDevice, Float afGameHours
     EndIf
 EndFunction
 
-Function WeaponHit(UD_CustomDevice_RenderScript akDevice, Weapon akWeapon, Float afDamage, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+Function WeaponHit(UD_CustomDevice_RenderScript akDevice, Weapon akWeapon, Float afDamage, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     If akWeapon == None || afDamage < 0.0
         Return
     EndIf
-    Float loc_chance1 = GetParamFlt(aiDataStr, 1, 0.0, "Probability")
-    Float loc_chance2 = GetParamFlt(aiDataStr, 2, 0.0, "Probability")
+    Float loc_chance1 = GetParamFlt(asDataStr, 1, 0.0, "Probability")
+    Float loc_chance2 = GetParamFlt(asDataStr, 2, 0.0, "Probability")
     If loc_chance1 + loc_chance2 * afDamage <= 0.0
         Return
     EndIf
@@ -66,10 +66,10 @@ EndFunction
 ===========================================================================================
 ===========================================================================================
 /;
-String Function GetParamsTableRows(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+String Function GetParamsTableRows(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     String loc_res = ""
-    loc_res += UDmain.UDMTF.TableRowDetails("Chance per hour:",     FormatFloat(GetParamFlt(aiDataStr, 0, 0.0, "Probability"), 2) + "%")
-    loc_res += UDmain.UDMTF.TableRowDetails("Chance per hit:",      FormatFloat(GetParamFlt(aiDataStr, 1, 0.0, "Probability"), 2) + "%")
-    loc_res += UDmain.UDMTF.TableRowDetails("Chance per dmg:",      FormatFloat(GetParamFlt(aiDataStr, 2, 0.0, "Probability"), 2) + "%")
+    loc_res += UDmain.UDMTF.TableRowDetails("Chance per hour:",     FormatFloat(GetParamFlt(asDataStr, 0, 0.0, "Probability"), 2) + "%")
+    loc_res += UDmain.UDMTF.TableRowDetails("Chance per hit:",      FormatFloat(GetParamFlt(asDataStr, 1, 0.0, "Probability"), 2) + "%")
+    loc_res += UDmain.UDMTF.TableRowDetails("Chance per dmg:",      FormatFloat(GetParamFlt(asDataStr, 2, 0.0, "Probability"), 2) + "%")
     Return loc_res
 EndFunction

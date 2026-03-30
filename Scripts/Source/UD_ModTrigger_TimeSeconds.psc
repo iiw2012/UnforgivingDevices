@@ -39,13 +39,13 @@ Sound       Property TickTackSound      Auto
 ===========================================================================================
 ===========================================================================================
 /;
-Bool Function TimeUpdateSeconds(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Float afGameHoursSinceLastCall, Float afRealSecondsSinceLastCall, String aiDataStr, Form akForm1)
-    Float loc_min_value     = GetParamFlt(akModifier, aiDataStr, 0, 0,      "Input")
-    Float loc_prob_base     = GetParamFlt(akModifier, aiDataStr, 1, 100.0,  "Probability")
-    Float loc_prob_acc      = GetParamFlt(akModifier, aiDataStr, 2, 0.0,    "Probability")
-    Bool loc_repeat         = GetParamBln(akModifier, aiDataStr, 3, False)
+Bool Function TimeUpdateSeconds(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Float afGameHoursSinceLastCall, Float afRealSecondsSinceLastCall, String asDataStr, Form akForm1)
+    Float loc_min_value     = GetParamFlt(akModifier, asDataStr, 0, 0,      "Input")
+    Float loc_prob_base     = GetParamFlt(akModifier, asDataStr, 1, 100.0,  "Probability")
+    Float loc_prob_acc      = GetParamFlt(akModifier, asDataStr, 2, 0.0,    "Probability")
+    Bool loc_repeat         = GetParamBln(akModifier, asDataStr, 3, False)
     
-    If !BaseTriggerIsActive(aiDataStr, 4)
+    If !BaseTriggerIsActive(asDataStr, 4)
         Return False
     EndIf
     
@@ -56,7 +56,7 @@ Bool Function TimeUpdateSeconds(UD_Modifier_Combo akModifier, UD_CustomDevice_Re
         TickTackSound.Play(akDevice.GetWearer())
     EndIf
 
-    Return TriggerOnValueDelta(akDevice, akModifier.NameAlias, aiDataStr, afValueDelta = afGameHoursSinceLastCall, afMinAccum = loc_min_value, afProbBase = loc_prob_base, afProbAccum = loc_prob_acc, abRepeat = loc_repeat, aiAccumParamIndex = 4)
+    Return TriggerOnValueDelta(akDevice, akModifier.NameAlias, asDataStr, afValueDelta = afGameHoursSinceLastCall, afMinAccum = loc_min_value, afProbBase = loc_prob_base, afProbAccum = loc_prob_acc, abRepeat = loc_repeat, aiAccumParamIndex = 4)
 EndFunction
 
 ;/  Group: User interface
@@ -64,12 +64,12 @@ EndFunction
 ===========================================================================================
 ===========================================================================================
 /;
-String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
-    Float loc_min_value     = GetParamFlt(akModifier, aiDataStr, 0, 0,      "Input")
-    Float loc_prob_base     = GetParamFlt(akModifier, aiDataStr, 1, 100.0,  "Probability")
-    Float loc_prob_acc      = GetParamFlt(akModifier, aiDataStr, 2, 0.0,    "Probability")
-    Bool loc_repeat         = GetParamBln(akModifier, aiDataStr, 3, False)
-    Float loc_accum         = GetParamFlt(akModifier, aiDataStr, 4, 0.0)
+String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1)
+    Float loc_min_value     = GetParamFlt(akModifier, asDataStr, 0, 0,      "Input")
+    Float loc_prob_base     = GetParamFlt(akModifier, asDataStr, 1, 100.0,  "Probability")
+    Float loc_prob_acc      = GetParamFlt(akModifier, asDataStr, 2, 0.0,    "Probability")
+    Bool loc_repeat         = GetParamBln(akModifier, asDataStr, 3, False)
+    Float loc_accum         = GetParamFlt(akModifier, asDataStr, 4, 0.0)
     
     String loc_res = ""
     loc_res += UDmain.UDMTF.TableRowDetails("Threshold value:",         FormatFloat(loc_min_value, 2) + " hours")

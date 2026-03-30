@@ -46,7 +46,7 @@ import UD_Native
 ===========================================================================================
 /;
 
-Bool Function DeviceLocked(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
+Bool Function DeviceLocked(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1)
     UD_CustomDevice_NPCSlot loc_slot = akDevice.UD_WearerSlot
     loc_slot.RegisterItemEvent(akForm1)
     
@@ -56,22 +56,22 @@ Bool Function DeviceLocked(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderS
     Return False
 EndFunction
 
-Bool Function DeviceUnlocked(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
+Bool Function DeviceUnlocked(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1)
     UD_CustomDevice_NPCSlot loc_slot = akDevice.UD_WearerSlot
     loc_slot.UnregisterItemEvent(akForm1)
     
     Return False
 EndFunction
 
-Bool Function TimeUpdateHour(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Float afGameHoursSinceLastCall, String aiDataStr, Form akForm1)
+Bool Function TimeUpdateHour(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Float afGameHoursSinceLastCall, String asDataStr, Form akForm1)
     Float loc_timer = akDevice.GetGameTimeLockedTime()
-    Int loc_min_count   = GetParamInt(akModifier, aiDataStr, 0, 1,      "Input")
-    Float loc_prob1     = GetParamFlt(akModifier, aiDataStr, 1, 100.0,  "Probability")
-    Bool loc_stolen     = GetParamBln(akModifier, aiDataStr, 2, False)
-    Float loc_period    = GetParamFlt(akModifier, aiDataStr, 3, 8.0,    "-Input")
-    Bool loc_repeat     = GetParamBln(akModifier, aiDataStr, 4, False)
-    Int loc_acc         = GetParamInt(akModifier, aiDataStr, 5, 0)
-    Float loc_last      = GetParamFlt(akModifier, aiDataStr, 6, 0.0)
+    Int loc_min_count   = GetParamInt(akModifier, asDataStr, 0, 1,      "Input")
+    Float loc_prob1     = GetParamFlt(akModifier, asDataStr, 1, 100.0,  "Probability")
+    Bool loc_stolen     = GetParamBln(akModifier, asDataStr, 2, False)
+    Float loc_period    = GetParamFlt(akModifier, asDataStr, 3, 8.0,    "-Input")
+    Bool loc_repeat     = GetParamBln(akModifier, asDataStr, 4, False)
+    Int loc_acc         = GetParamInt(akModifier, asDataStr, 5, 0)
+    Float loc_last      = GetParamFlt(akModifier, asDataStr, 6, 0.0)
     
     ; triggered once and no repeat option
     If loc_last < 0.0
@@ -115,7 +115,7 @@ Bool Function TimeUpdateHour(UD_Modifier_Combo akModifier, UD_CustomDevice_Rende
     Return False
 EndFunction
 
-Bool Function ItemAdded(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Form akItemForm, Int aiItemCount, ObjectReference akSourceContainer, Bool abIsStolen, String aiDataStr, Form akForm1)
+Bool Function ItemAdded(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Form akItemForm, Int aiItemCount, ObjectReference akSourceContainer, Bool abIsStolen, String asDataStr, Form akForm1)
     If !_IsValidForm(akForm1, akItemForm)
         Return False
     EndIf
@@ -123,13 +123,13 @@ Bool Function ItemAdded(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScri
         UDmain.Log("UD_ModTrigger_ItemDemand::ItemAdded() akItemForm = " + akItemForm + " abIsStolen = " + abIsStolen, 3)
     EndIf
     
-    Int loc_min_count   = GetParamInt(akModifier, aiDataStr, 0, 1,      "Input")
-    Float loc_prob1     = GetParamFlt(akModifier, aiDataStr, 1, 100.0,  "Probability")
-    Bool loc_stolen     = GetParamBln(akModifier, aiDataStr, 2, False)
-    Float loc_period    = GetParamFlt(akModifier, aiDataStr, 3, 8.0,    "-Input")
-    Bool loc_repeat     = GetParamBln(akModifier, aiDataStr, 4, False)
-    Int loc_acc         = GetParamInt(akModifier, aiDataStr, 5, 0)
-    Float loc_last      = GetParamFlt(akModifier, aiDataStr, 6, 0.0)
+    Int loc_min_count   = GetParamInt(akModifier, asDataStr, 0, 1,      "Input")
+    Float loc_prob1     = GetParamFlt(akModifier, asDataStr, 1, 100.0,  "Probability")
+    Bool loc_stolen     = GetParamBln(akModifier, asDataStr, 2, False)
+    Float loc_period    = GetParamFlt(akModifier, asDataStr, 3, 8.0,    "-Input")
+    Bool loc_repeat     = GetParamBln(akModifier, asDataStr, 4, False)
+    Int loc_acc         = GetParamInt(akModifier, asDataStr, 5, 0)
+    Float loc_last      = GetParamFlt(akModifier, asDataStr, 6, 0.0)
 
     ; triggered once and no repeat option
     If loc_last < 0.0
@@ -159,7 +159,7 @@ Bool Function ItemAdded(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScri
     Return False
 EndFunction
 
-Bool Function ItemRemoved(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Form akItemForm, Int aiItemCount, ObjectReference akDestContainer, String aiDataStr, Form akForm1)
+Bool Function ItemRemoved(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Form akItemForm, Int aiItemCount, ObjectReference akDestContainer, String asDataStr, Form akForm1)
     Return False
 EndFunction
 
@@ -168,15 +168,15 @@ EndFunction
 ===========================================================================================
 ===========================================================================================
 /;
-String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
+String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1)
     String loc_res = ""
-    Int loc_min_count   = GetParamInt(akModifier, aiDataStr, 0, 1,      "Input")
-    Float loc_prob1     = GetParamFlt(akModifier, aiDataStr, 1, 100.0,  "Probability")
-    Bool loc_stolen     = GetParamBln(akModifier, aiDataStr, 2, False)
-    Float loc_period    = GetParamFlt(akModifier, aiDataStr, 3, 8.0,    "-Input")
-    Bool loc_repeat     = GetParamBln(akModifier, aiDataStr, 4, False)
-    Int loc_acc         = GetParamInt(akModifier, aiDataStr, 5, 0)
-    Float loc_last      = GetParamFlt(akModifier, aiDataStr, 6, 0.0)
+    Int loc_min_count   = GetParamInt(akModifier, asDataStr, 0, 1,      "Input")
+    Float loc_prob1     = GetParamFlt(akModifier, asDataStr, 1, 100.0,  "Probability")
+    Bool loc_stolen     = GetParamBln(akModifier, asDataStr, 2, False)
+    Float loc_period    = GetParamFlt(akModifier, asDataStr, 3, 8.0,    "-Input")
+    Bool loc_repeat     = GetParamBln(akModifier, asDataStr, 4, False)
+    Int loc_acc         = GetParamInt(akModifier, asDataStr, 5, 0)
+    Float loc_last      = GetParamFlt(akModifier, asDataStr, 6, 0.0)
     
     loc_res += UDmain.UDMTF.TableRowDetails("Num. of items demanded:",  loc_min_count As String)
     loc_res += UDmain.UDMTF.TableRowDetails("Base probability:",        FormatFloat(loc_prob1, 1) + "%")

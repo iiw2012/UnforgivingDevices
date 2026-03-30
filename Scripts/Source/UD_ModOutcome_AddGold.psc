@@ -34,16 +34,16 @@ import UD_Native
 ===========================================================================================
 /;
 
-Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm2, Form akForm3)
+Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm2, Form akForm3)
     Actor loc_actor = akDevice.GetWearer()
     if !loc_actor || !IsPlayer(loc_actor) ;should only work for the player
         return
     endif
     
-    Int loc_A_min = GetParamInt(akModifier, aiDataStr, 0, 0,            "Output")
-    Int loc_A_max = GetParamInt(akModifier, aiDataStr, 1, loc_A_min,    "Output")
-    Int loc_B_min = GetParamInt(akModifier, aiDataStr, 2, 0,            "Output")
-    Int loc_B_max = GetParamInt(akModifier, aiDataStr, 3, loc_B_min,    "Output")
+    Int loc_A_min = GetParamInt(akModifier, asDataStr, 0, 0,            "Output")
+    Int loc_A_max = GetParamInt(akModifier, asDataStr, 1, loc_A_min,    "Output")
+    Int loc_B_min = GetParamInt(akModifier, asDataStr, 2, 0,            "Output")
+    Int loc_B_max = GetParamInt(akModifier, asDataStr, 3, loc_B_min,    "Output")
 
     If UDmain.TraceAllowed()
         UDmain.Log("UD_ModOutcome_AddGold::Outcome() akForm2 = " + akForm2 + ", loc_A_min = " + loc_A_min + ", loc_A_max = " + loc_A_max + ", loc_B_min = " + loc_B_min + ", loc_B_max = " + loc_B_max, 3)
@@ -68,13 +68,13 @@ EndFunction
 ===========================================================================================
 ===========================================================================================
 /;
-String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm2, Form akForm3)
+String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm2, Form akForm3)
     String loc_res = ""
     Form loc_currency = UDlibs.Gold
-    Int loc_A_min = GetParamInt(akModifier, aiDataStr, 0, 0,            "Output")
-    Int loc_A_max = GetParamInt(akModifier, aiDataStr, 1, loc_A_min,    "Output")
-    Int loc_B_min = GetParamInt(akModifier, aiDataStr, 2, 0,            "Output")
-    Int loc_B_max = GetParamInt(akModifier, aiDataStr, 3, loc_B_min,    "Output")
+    Int loc_A_min = GetParamInt(akModifier, asDataStr, 0, 0,            "Output")
+    Int loc_A_max = GetParamInt(akModifier, asDataStr, 1, loc_A_min,    "Output")
+    Int loc_B_min = GetParamInt(akModifier, asDataStr, 2, 0,            "Output")
+    Int loc_B_max = GetParamInt(akModifier, asDataStr, 3, loc_B_min,    "Output")
     If akForm2 != None
         loc_currency = akForm2
     EndIf

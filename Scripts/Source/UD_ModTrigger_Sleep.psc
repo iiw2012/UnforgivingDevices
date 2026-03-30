@@ -40,21 +40,21 @@ import UD_Native
 ===========================================================================================
 ===========================================================================================
 /;
-Bool Function Sleep(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Float afDuration, Bool abInterrupted, String aiDataStr, Form akForm1)
-    Int loc_min_dur         = GetParamInt(akModifier, aiDataStr, 0, 0,      "Input")
-    Float loc_prob_base     = GetParamFlt(akModifier, aiDataStr, 1, 100.0,  "Probability")
-    Float loc_prob_accum    = GetParamFlt(akModifier, aiDataStr, 2, 0.0,    "Probability")
-    Int loc_ending          = GetParamInt(akModifier, aiDataStr, 3, 0)
-    Bool loc_repeat         = GetParamBln(akModifier, aiDataStr, 4, False)
+Bool Function Sleep(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Float afDuration, Bool abInterrupted, String asDataStr, Form akForm1)
+    Int loc_min_dur         = GetParamInt(akModifier, asDataStr, 0, 0,      "Input")
+    Float loc_prob_base     = GetParamFlt(akModifier, asDataStr, 1, 100.0,  "Probability")
+    Float loc_prob_accum    = GetParamFlt(akModifier, asDataStr, 2, 0.0,    "Probability")
+    Int loc_ending          = GetParamInt(akModifier, asDataStr, 3, 0)
+    Bool loc_repeat         = GetParamBln(akModifier, asDataStr, 4, False)
     If (loc_ending == 2 && !abInterrupted) || (loc_ending == 1 && abInterrupted)
         Return False
     EndIf
 
-    If BaseTriggerIsActive(aiDataStr, 5) && RandomFloat(0.0, 100.0) < 30.0 * akModifier.MultVerboseness
+    If BaseTriggerIsActive(asDataStr, 5) && RandomFloat(0.0, 100.0) < 30.0 * akModifier.MultVerboseness
         PrintNotification(akDevice, ;/ reacted /;"in response to your awakening from sleep.")
     EndIf
 
-    Return TriggerOnValueAbs(akDevice, akModifier.NameAlias, aiDataStr, afValueAbs = afDuration, afMinValue = loc_min_dur, afProbBase = loc_prob_base, afProbAccum = loc_prob_accum, abRepeat = loc_repeat, aiLastTriggerValueIndex = 5)
+    Return TriggerOnValueAbs(akDevice, akModifier.NameAlias, asDataStr, afValueAbs = afDuration, afMinValue = loc_min_dur, afProbBase = loc_prob_base, afProbAccum = loc_prob_accum, abRepeat = loc_repeat, aiLastTriggerValueIndex = 5)
 EndFunction
 
 ;/  Group: User interface
@@ -62,12 +62,12 @@ EndFunction
 ===========================================================================================
 ===========================================================================================
 /;
-String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
-    Int loc_min_dur         = GetParamInt(akModifier, aiDataStr, 0, 0,      "Input")
-    Float loc_prob_base     = GetParamFlt(akModifier, aiDataStr, 1, 100.0,  "Probability")
-    Float loc_prob_accum    = GetParamFlt(akModifier, aiDataStr, 2, 0.0,    "Probability")
-    Int loc_ending          = GetParamInt(akModifier, aiDataStr, 3, 0)
-    Bool loc_repeat         = GetParamBln(akModifier, aiDataStr, 4, False)
+String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1)
+    Int loc_min_dur         = GetParamInt(akModifier, asDataStr, 0, 0,      "Input")
+    Float loc_prob_base     = GetParamFlt(akModifier, asDataStr, 1, 100.0,  "Probability")
+    Float loc_prob_accum    = GetParamFlt(akModifier, asDataStr, 2, 0.0,    "Probability")
+    Int loc_ending          = GetParamInt(akModifier, asDataStr, 3, 0)
+    Bool loc_repeat         = GetParamBln(akModifier, asDataStr, 4, False)
     String loc_res = ""
     String loc_frag = ""
     If loc_ending == 0

@@ -32,11 +32,11 @@ import UD_Native
 ===========================================================================================
 ===========================================================================================
 /;
-Function GameLoaded(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+Function GameLoaded(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
 
 EndFunction
 
-Function DeviceLocked(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+Function DeviceLocked(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     Actor loc_wearer = akDevice.GetWearer()
     If akForm1
         If loc_wearer.AddSpell(akForm1 as Spell) == False
@@ -55,7 +55,7 @@ Function DeviceLocked(UD_CustomDevice_RenderScript akDevice, String aiDataStr, F
     EndIf
 EndFunction
 
-Function DeviceUnlocked(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+Function DeviceUnlocked(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     Actor loc_wearer = akDevice.GetWearer()
     If akForm1
         If loc_wearer.RemoveSpell(akForm1 as Spell) == False
@@ -79,7 +79,7 @@ EndFunction
 ===========================================================================================
 ===========================================================================================
 /;
-String Function GetParamsTableRows(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+String Function GetParamsTableRows(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     String loc_res = ""
     If akForm1
         loc_res += UDmain.UDMTF.TableRowDetails("Enchantment:", akForm1.GetName())

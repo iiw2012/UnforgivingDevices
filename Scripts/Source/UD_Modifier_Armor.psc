@@ -31,15 +31,15 @@ import UD_Native
 ===========================================================================================
 ===========================================================================================
 /;
-Function GameLoaded(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
-    SetArmorValues(akDevice, aiDataStr)
+Function GameLoaded(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+    SetArmorValues(akDevice, asDataStr)
 EndFunction
 
-Function DeviceLocked(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
-    SetArmorValues(akDevice, aiDataStr)
+Function DeviceLocked(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+    SetArmorValues(akDevice, asDataStr)
 EndFunction
 
-Function DeviceUnlocked(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+Function DeviceUnlocked(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
 EndFunction
 
 ;/  Group: User Interface
@@ -47,11 +47,11 @@ EndFunction
 ===========================================================================================
 ===========================================================================================
 /;
-String Function GetParamsTableRows(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+String Function GetParamsTableRows(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     String loc_res = ""
-    loc_res += UDmain.UDMTF.TableRowDetails("Armor Type:",      GetParamStr(aiDataStr, 0, "Light"))
-    loc_res += UDmain.UDMTF.TableRowDetails("Material:",        GetParamStr(aiDataStr, 1, "Leather"))
-    loc_res += UDmain.UDMTF.TableRowDetails("Armor Value:",     GetParamInt(aiDataStr, 2, 0,            "Output"))
+    loc_res += UDmain.UDMTF.TableRowDetails("Armor Type:",      GetParamStr(asDataStr, 0, "Light"))
+    loc_res += UDmain.UDMTF.TableRowDetails("Material:",        GetParamStr(asDataStr, 1, "Leather"))
+    loc_res += UDmain.UDMTF.TableRowDetails("Armor Value:",     GetParamInt(asDataStr, 2, 0,            "Output"))
     Return loc_res
 EndFunction
 
@@ -61,10 +61,10 @@ EndFunction
 ===========================================================================================
 ===========================================================================================
 /;
-Function SetArmorValues(UD_CustomDevice_RenderScript akDevice, String aiDataStr)
-    String loc_armor_type       = GetParamStr(aiDataStr, 0, "Light")
-    String loc_armor_material   = GetParamStr(aiDataStr, 1, "Leather")
-    Int loc_armor_value         = GetParamInt(aiDataStr, 2, 0,          "Output")
+Function SetArmorValues(UD_CustomDevice_RenderScript akDevice, String asDataStr)
+    String loc_armor_type       = GetParamStr(asDataStr, 0, "Light")
+    String loc_armor_material   = GetParamStr(asDataStr, 1, "Leather")
+    Int loc_armor_value         = GetParamInt(asDataStr, 2, 0,          "Output")
 
     If loc_armor_value < 1
         UDmain.Error("UD_Modifier_Armor::SetArmorValues() Armor value is invalid. loc_armor_value = " + loc_armor_value)
@@ -75,11 +75,11 @@ Function SetArmorValues(UD_CustomDevice_RenderScript akDevice, String aiDataStr)
     Keyword loc_kw_material = Keyword.GetKeyword("ArmorMaterial" + loc_armor_material)
         
     If loc_kw_type == None
-        UDmain.Error("UD_Modifier_Armor::SetArmorValues() Can't find keyword for the provided armor type. Invalid argument aiDataStr = " + aiDataStr)
+        UDmain.Error("UD_Modifier_Armor::SetArmorValues() Can't find keyword for the provided armor type. Invalid argument asDataStr = " + asDataStr)
         Return
     EndIf
     If loc_kw_material == None
-        UDmain.Warning("UD_Modifier_Armor::SetArmorValues() Can't find keyword for the provided armor material. Invalid argument aiDataStr = " + aiDataStr)
+        UDmain.Warning("UD_Modifier_Armor::SetArmorValues() Can't find keyword for the provided armor material. Invalid argument asDataStr = " + asDataStr)
     EndIf
     
     Armor loc_device_inventory = akDevice.DeviceInventory

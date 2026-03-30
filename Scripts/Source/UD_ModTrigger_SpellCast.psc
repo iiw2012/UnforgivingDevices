@@ -43,19 +43,19 @@ import UD_Native
 ===========================================================================================
 ===========================================================================================
 /;
-Bool Function SpellCast(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Spell akSpell, String aiDataStr, Form akForm1)
+Bool Function SpellCast(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Spell akSpell, String asDataStr, Form akForm1)
     Int loc_cost            = iRange(akSpell.GetMagickaCost(), 5, 100)
-    Int loc_min_value       = GetParamInt(akModifier, aiDataStr, 0, 0,      "Input")
-    Float loc_prob_base     = GetParamFlt(akModifier, aiDataStr, 1, 100.0,  "Probability")
-    Float loc_prob_delta    = GetParamFlt(akModifier, aiDataStr, 2, 0.0,    "Probability")
-    Float loc_prob_acc      = GetParamFlt(akModifier, aiDataStr, 3, 0.0,    "Probability")
-    Bool loc_repeat         = GetParamBln(akModifier, aiDataStr, 4, False)
+    Int loc_min_value       = GetParamInt(akModifier, asDataStr, 0, 0,      "Input")
+    Float loc_prob_base     = GetParamFlt(akModifier, asDataStr, 1, 100.0,  "Probability")
+    Float loc_prob_delta    = GetParamFlt(akModifier, asDataStr, 2, 0.0,    "Probability")
+    Float loc_prob_acc      = GetParamFlt(akModifier, asDataStr, 3, 0.0,    "Probability")
+    Bool loc_repeat         = GetParamBln(akModifier, asDataStr, 4, False)
 
-    If BaseTriggerIsActive(aiDataStr, 5) && RandomFloat(0.0, 100.0) < 10.0 * akModifier.MultVerboseness
+    If BaseTriggerIsActive(asDataStr, 5) && RandomFloat(0.0, 100.0) < 10.0 * akModifier.MultVerboseness
         PrintNotification(akDevice, ;/ reacted /;"by absorbing and recharging from your magic.")
     EndIf
 
-    Return TriggerOnValueDelta(akDevice, akModifier.NameAlias, aiDataStr, afValueDelta = loc_cost, afMinAccum = loc_min_value, afProbBase = loc_prob_base, afProbDelta = loc_prob_delta, afProbAccum = loc_prob_acc, abRepeat = loc_repeat, aiAccumParamIndex = 5)
+    Return TriggerOnValueDelta(akDevice, akModifier.NameAlias, asDataStr, afValueDelta = loc_cost, afMinAccum = loc_min_value, afProbBase = loc_prob_base, afProbDelta = loc_prob_delta, afProbAccum = loc_prob_acc, abRepeat = loc_repeat, aiAccumParamIndex = 5)
 EndFunction
 
 ;/  Group: User interface
@@ -63,13 +63,13 @@ EndFunction
 ===========================================================================================
 ===========================================================================================
 /;
-String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
-    Int loc_min_value       = GetParamInt(akModifier, aiDataStr, 0, 0,      "Input")
-    Float loc_prob_base     = GetParamFlt(akModifier, aiDataStr, 1, 100.0,  "Probability")
-    Float loc_prob_delta    = GetParamFlt(akModifier, aiDataStr, 2, 0.0,    "Probability")
-    Float loc_prob_acc      = GetParamFlt(akModifier, aiDataStr, 3, 0.0,    "Probability")
-    Bool loc_repeat         = GetParamBln(akModifier, aiDataStr, 4, False)
-    Float loc_acc           = GetParamFlt(akModifier, aiDataStr, 5, 0.0)
+String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1)
+    Int loc_min_value       = GetParamInt(akModifier, asDataStr, 0, 0,      "Input")
+    Float loc_prob_base     = GetParamFlt(akModifier, asDataStr, 1, 100.0,  "Probability")
+    Float loc_prob_delta    = GetParamFlt(akModifier, asDataStr, 2, 0.0,    "Probability")
+    Float loc_prob_acc      = GetParamFlt(akModifier, asDataStr, 3, 0.0,    "Probability")
+    Bool loc_repeat         = GetParamBln(akModifier, asDataStr, 4, False)
+    Float loc_acc           = GetParamFlt(akModifier, asDataStr, 5, 0.0)
     
     String loc_res = ""
     loc_res += UDmain.UDMTF.TableRowDetails("Threshold value:",     loc_min_value + " mana")

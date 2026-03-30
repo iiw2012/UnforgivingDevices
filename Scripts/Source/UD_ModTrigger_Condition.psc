@@ -47,21 +47,21 @@ import UD_Native
 ===========================================================================================
 ===========================================================================================
 /;
-Bool Function ConditionLoss(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Int aiCondition, String aiDataStr, Form akForm1)
+Bool Function ConditionLoss(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Int aiCondition, String asDataStr, Form akForm1)
     If aiCondition > 3
     ; ignoring "destroyed" state. Use UD_ModTrigger_SimpleEvent + DeviceBroken instead.
         Return False
     EndIf
-    Int loc_min_condition   = iRange(GetParamInt(akModifier, aiDataStr, 0, 0,       "Input"),       0, 4)
-    Float loc_prob_base            = GetParamFlt(akModifier, aiDataStr, 1, 100.0,   "Probability")
-    Float loc_prob_value           = GetParamFlt(akModifier, aiDataStr, 2, 0.0,     "Probability")
-    Bool loc_repeat                = GetParamBln(akModifier, aiDataStr, 3, False)
+    Int loc_min_condition   = iRange(GetParamInt(akModifier, asDataStr, 0, 0,       "Input"),       0, 4)
+    Float loc_prob_base            = GetParamFlt(akModifier, asDataStr, 1, 100.0,   "Probability")
+    Float loc_prob_value           = GetParamFlt(akModifier, asDataStr, 2, 0.0,     "Probability")
+    Bool loc_repeat                = GetParamBln(akModifier, asDataStr, 3, False)
 
-    If BaseTriggerIsActive(aiDataStr, 4) && RandomFloat(0.0, 100.0) < 100.0 * akModifier.MultVerboseness
+    If BaseTriggerIsActive(asDataStr, 4) && RandomFloat(0.0, 100.0) < 100.0 * akModifier.MultVerboseness
         PrintNotification(akDevice, ;/ reacted /;"after its condition worsened.")
     EndIf
 
-    Return TriggerOnValueAbs(akDevice, akModifier.NameAlias, aiDataStr, afValueAbs = aiCondition, afMinValue = loc_min_condition, afProbBase = loc_prob_base, afProbAccum = loc_prob_value, abRepeat = loc_repeat, aiLastTriggerValueIndex = 4)
+    Return TriggerOnValueAbs(akDevice, akModifier.NameAlias, asDataStr, afValueAbs = aiCondition, afMinValue = loc_min_condition, afProbBase = loc_prob_base, afProbAccum = loc_prob_value, abRepeat = loc_repeat, aiLastTriggerValueIndex = 4)
 EndFunction
 
 ;/  Group: User interface
@@ -69,11 +69,11 @@ EndFunction
 ===========================================================================================
 ===========================================================================================
 /;
-String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
-    Int loc_min_condition   = iRange(GetParamInt(akModifier, aiDataStr, 0, 0,       "Input"),       0, 4)
-    Float loc_prob_base            = GetParamFlt(akModifier, aiDataStr, 1, 100.0,   "Probability")
-    Float loc_prob_value           = GetParamFlt(akModifier, aiDataStr, 2, 0.0,     "Probability")
-    Bool loc_repeat                = GetParamBln(akModifier, aiDataStr, 3, False)
+String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1)
+    Int loc_min_condition   = iRange(GetParamInt(akModifier, asDataStr, 0, 0,       "Input"),       0, 4)
+    Float loc_prob_base            = GetParamFlt(akModifier, asDataStr, 1, 100.0,   "Probability")
+    Float loc_prob_value           = GetParamFlt(akModifier, asDataStr, 2, 0.0,     "Probability")
+    Bool loc_repeat                = GetParamBln(akModifier, asDataStr, 3, False)
     String loc_res = ""
     loc_res += UDmain.UDMTF.TableRowDetails("Threshold value:", UDCDMain.GetConditionString(loc_min_condition))
     loc_res += UDmain.UDMTF.TableRowDetails("Base probability:", FormatFloat(loc_prob_base, 1) + "%")

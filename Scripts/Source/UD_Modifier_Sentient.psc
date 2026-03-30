@@ -24,8 +24,8 @@ import UD_Native
 ===========================================================================================
 ===========================================================================================
 /;
-String Function GetParamsTableRows(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+String Function GetParamsTableRows(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     String loc_res = ""
-    loc_res += UDmain.UDMTF.TableRowDetails("Power:", GetParamInt(aiDataStr, 0, 0, "Output"))
+    loc_res += UDmain.UDMTF.TableRowDetails("Power:", GetParamInt(asDataStr, 0, 0, "Output"))
     Return loc_res
 EndFunction

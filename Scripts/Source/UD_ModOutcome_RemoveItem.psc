@@ -28,12 +28,12 @@ import UD_Native
 ===========================================================================================
 /;
 
-Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm2, Form akForm3)
+Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm2, Form akForm3)
     Form loc_item = UD_Modifier.GetRandomForm(akForm2, akForm3)
         
     If loc_item
-        Int loc_min = GetParamInt(akModifier, aiDataStr, 0, 1,          "Output")
-        Int loc_max = GetParamInt(akModifier, aiDataStr, 1, loc_min,    "Output")
+        Int loc_min = GetParamInt(akModifier, asDataStr, 0, 1,          "Output")
+        Int loc_max = GetParamInt(akModifier, asDataStr, 1, loc_min,    "Output")
         
         If RandomFloat(0.0, 100.0) < 100.0 * akModifier.MultVerboseness
             PrintNotification(akDevice, ;/changed/; "and consume some item from your bag.")
@@ -49,10 +49,10 @@ EndFunction
 ===========================================================================================
 ===========================================================================================
 /;
-String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm2, Form akForm3)
+String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm2, Form akForm3)
     String loc_res = ""
-    Int loc_min = GetParamInt(akModifier, aiDataStr, 0, 1,          "Output")
-    Int loc_max = GetParamInt(akModifier, aiDataStr, 1, loc_min,    "Output")
+    Int loc_min = GetParamInt(akModifier, asDataStr, 0, 1,          "Output")
+    Int loc_max = GetParamInt(akModifier, asDataStr, 1, loc_min,    "Output")
 
     loc_res += UDmain.UDMTF.TableRowDetails("Number of items:", loc_min + " - " + loc_max)
     If akForm2

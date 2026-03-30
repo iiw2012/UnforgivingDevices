@@ -31,9 +31,9 @@ import UD_Native
 ===========================================================================================
 ===========================================================================================
 /;
-Bool Function DeviceLocked(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
-    String loc_event    = GetParamStr(akModifier, aiDataStr, 0, "")
-    Float loc_prob      = GetParamFlt(akModifier, aiDataStr, 1, 100.0, "Probability")
+Bool Function DeviceLocked(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1)
+    String loc_event    = GetParamStr(akModifier, asDataStr, 0, "")
+    Float loc_prob      = GetParamFlt(akModifier, asDataStr, 1, 100.0, "Probability")
 
     If StringUtil.Find(loc_event, "DL") < 0
         Return False
@@ -46,9 +46,9 @@ Bool Function DeviceLocked(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderS
     Return (RandomFloat(0.0, 100.0) < loc_prob)
 EndFunction
 
-Bool Function DeviceUnlocked(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
-    String loc_event    = GetParamStr(akModifier, aiDataStr, 0, "")
-    Float loc_prob      = GetParamFlt(akModifier, aiDataStr, 1, 100.0, "Probability")
+Bool Function DeviceUnlocked(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1)
+    String loc_event    = GetParamStr(akModifier, asDataStr, 0, "")
+    Float loc_prob      = GetParamFlt(akModifier, asDataStr, 1, 100.0, "Probability")
 
     If StringUtil.Find(loc_event, "DU") < 0
         Return False
@@ -57,12 +57,12 @@ Bool Function DeviceUnlocked(UD_Modifier_Combo akModifier, UD_CustomDevice_Rende
     Return (RandomFloat(0.0, 100.0) < loc_prob)
 EndFunction
 
-Bool Function ConditionLoss(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Int aiCondition, String aiDataStr, Form akForm1)
+Bool Function ConditionLoss(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Int aiCondition, String asDataStr, Form akForm1)
     If aiCondition < 4
         Return False
     EndIf
-    String loc_event    = GetParamStr(akModifier, aiDataStr, 0, "")
-    Float loc_prob      = GetParamFlt(akModifier, aiDataStr, 1, 100.0, "Probability")
+    String loc_event    = GetParamStr(akModifier, asDataStr, 0, "")
+    Float loc_prob      = GetParamFlt(akModifier, asDataStr, 1, 100.0, "Probability")
 
     If StringUtil.Find(loc_event, "DB") < 0
         Return False
@@ -76,9 +76,9 @@ EndFunction
 ===========================================================================================
 ===========================================================================================
 /;
-String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
-    String loc_frag     = GetParamStr(akModifier, aiDataStr, 0, "")
-    Float loc_prob      = GetParamFlt(akModifier, aiDataStr, 1, 100.0, "Probability")
+String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1)
+    String loc_frag     = GetParamStr(akModifier, asDataStr, 0, "")
+    Float loc_prob      = GetParamFlt(akModifier, asDataStr, 1, 100.0, "Probability")
     String loc_res = ""
     If UDmain.UDMTF.HasHtmlMarkup()
         loc_frag = GetDeviceEventString(loc_frag, "<br/> \t\t")

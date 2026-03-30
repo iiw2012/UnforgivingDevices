@@ -83,30 +83,30 @@ EndEvent
 ===========================================================================================
 ===========================================================================================
 /;
-Bool Function StatEvent(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asStatName, Int aiStatValue, String aiDataStr, Form akForm1)
+Bool Function StatEvent(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asStatName, Int aiStatValue, String asDataStr, Form akForm1)
     If UDmain.TraceAllowed()
-        UDmain.Log("UD_ModTrigger_StatEvent::StatEvent() akModifier = " + akModifier + ", akDevice = " + akDevice + ", asStatName = " + asStatName + ", aiStatValue = " + aiStatValue + ", aiDataStr = " + aiDataStr, 3)
+        UDmain.Log("UD_ModTrigger_StatEvent::StatEvent() akModifier = " + akModifier + ", akDevice = " + akDevice + ", asStatName = " + asStatName + ", aiStatValue = " + aiStatValue + ", asDataStr = " + asDataStr, 3)
     EndIf
     If asStatName == "Locks Picked" && UDCDmain.actorInMinigame(akDevice.GetWearer())
     ; in case the wearer picks lock in minigame
         Return False
     EndIf
-    If asStatName != GetParamStr(akModifier, aiDataStr, 0, "")
+    If asStatName != GetParamStr(akModifier, asDataStr, 0, "")
         Return False
     EndIf
-    Int loc_min_value       = GetParamInt(akModifier, aiDataStr, 1, 0,      "Input")
-    Float loc_prob_base     = GetParamFlt(akModifier, aiDataStr, 2, 100.0,  "Probability")
-    Bool loc_repeat         = GetParamBln(akModifier, aiDataStr, 3, False)
+    Int loc_min_value       = GetParamInt(akModifier, asDataStr, 1, 0,      "Input")
+    Float loc_prob_base     = GetParamFlt(akModifier, asDataStr, 2, 100.0,  "Probability")
+    Bool loc_repeat         = GetParamBln(akModifier, asDataStr, 3, False)
 
     Bool loc_rare_events = PapyrusUtil.CountString(_FrequentEvents, asStatName) == 0
-    If BaseTriggerIsActive(aiDataStr, 4) && RandomFloat(0.0, 100.0) < (2.0 * (1.0 + 9.0 * (loc_rare_events As Int))) * akModifier.MultVerboseness
+    If BaseTriggerIsActive(asDataStr, 4) && RandomFloat(0.0, 100.0) < (2.0 * (1.0 + 9.0 * (loc_rare_events As Int))) * akModifier.MultVerboseness
         PrintNotification(akDevice, ;/ reacted /;"to your actions. You try in vain to understand what caused this response.")
     EndIf
     
     If StringUtil.Find(asStatName, "Bounty") >= 0
-        Return TriggerOnValueAbs(akDevice, akModifier.NameAlias, aiDataStr, afValueAbs = aiStatValue, afMinValue = loc_min_value, afProbBase = loc_prob_base, abRepeat = loc_repeat, aiLastTriggerValueIndex = 4)
+        Return TriggerOnValueAbs(akDevice, akModifier.NameAlias, asDataStr, afValueAbs = aiStatValue, afMinValue = loc_min_value, afProbBase = loc_prob_base, abRepeat = loc_repeat, aiLastTriggerValueIndex = 4)
     Else
-        Return TriggerOnValueDelta(akDevice, akModifier.NameAlias, aiDataStr, afValueDelta = 1, afMinAccum = loc_min_value, afProbBase = loc_prob_base, abRepeat = loc_repeat, aiAccumParamIndex = 4)
+        Return TriggerOnValueDelta(akDevice, akModifier.NameAlias, asDataStr, afValueDelta = 1, afMinAccum = loc_min_value, afProbBase = loc_prob_base, abRepeat = loc_repeat, aiAccumParamIndex = 4)
     EndIf
     
 EndFunction
@@ -116,12 +116,12 @@ EndFunction
 ===========================================================================================
 ===========================================================================================
 /;
-String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
-    String loc_stat         = GetParamStr(akModifier, aiDataStr, 0, "")
-    Int loc_min_value       = GetParamInt(akModifier, aiDataStr, 1, 0,      "Input")
-    Float loc_prob_base     = GetParamFlt(akModifier, aiDataStr, 2, 100.0,  "Probability")
-    Bool loc_repeat         = GetParamBln(akModifier, aiDataStr, 3, False)
-    Float loc_accum         = GetParamFlt(akModifier, aiDataStr, 4, 0.0)
+String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1)
+    String loc_stat         = GetParamStr(akModifier, asDataStr, 0, "")
+    Int loc_min_value       = GetParamInt(akModifier, asDataStr, 1, 0,      "Input")
+    Float loc_prob_base     = GetParamFlt(akModifier, asDataStr, 2, 100.0,  "Probability")
+    Bool loc_repeat         = GetParamBln(akModifier, asDataStr, 3, False)
+    Float loc_accum         = GetParamFlt(akModifier, asDataStr, 4, 0.0)
     
     String loc_res = ""
     loc_res += UDmain.UDMTF.TableRowDetails("Stat name:",           loc_stat)

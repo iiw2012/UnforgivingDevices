@@ -34,11 +34,11 @@ import UD_Native
 ===========================================================================================
 /;
 
-UD_ModTrigger Function GetTrigger(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+UD_ModTrigger Function GetTrigger(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     Return akForm4 as UD_ModTrigger
 EndFunction
 
-UD_ModOutcome Function GetOutcome(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+UD_ModOutcome Function GetOutcome(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     Return akForm5 as UD_ModOutcome
 EndFunction
 
@@ -47,8 +47,8 @@ EndFunction
 ===========================================================================================
 ===========================================================================================
 /;
-String Function GetCaption(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
-    UD_ModTrigger loc_trigger = GetTrigger(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    UD_ModOutcome loc_outcome = GetOutcome(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+String Function GetCaption(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+    UD_ModTrigger loc_trigger = GetTrigger(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    UD_ModOutcome loc_outcome = GetOutcome(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
     Return loc_trigger.NameFull + " => " + loc_outcome.NameFull
 EndFunction

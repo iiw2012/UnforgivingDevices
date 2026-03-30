@@ -41,12 +41,12 @@ import UD_Native
 ===========================================================================================
 ===========================================================================================
 /;
-Bool Function KillMonitor(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, ObjectReference akVictim, Int aiCrimeStatus, String aiDataStr, Form akForm1)
-    Int loc_min_value       = GetParamInt(akModifier, aiDataStr, 0, 0,      "Input")
-    Float loc_prob_base     = GetParamFlt(akModifier, aiDataStr, 1, 100.0,  "Probability")
-    Float loc_prob_accum    = GetParamFlt(akModifier, aiDataStr, 2, 0.0,    "Probability")
-    Bool loc_repeat         = GetParamBln(akModifier, aiDataStr, 3, False)
-    Int loc_killings        = GetParamInt(akModifier, aiDataStr, 4, 0)
+Bool Function KillMonitor(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, ObjectReference akVictim, Int aiCrimeStatus, String asDataStr, Form akForm1)
+    Int loc_min_value       = GetParamInt(akModifier, asDataStr, 0, 0,      "Input")
+    Float loc_prob_base     = GetParamFlt(akModifier, asDataStr, 1, 100.0,  "Probability")
+    Float loc_prob_accum    = GetParamFlt(akModifier, asDataStr, 2, 0.0,    "Probability")
+    Bool loc_repeat         = GetParamBln(akModifier, asDataStr, 3, False)
+    Int loc_killings        = GetParamInt(akModifier, asDataStr, 4, 0)
 
     ; checking crime status
     If loc_killings < 0 && aiCrimeStatus <= 0
@@ -76,11 +76,11 @@ Bool Function KillMonitor(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderSc
         EndIf
     EndIf
 
-    If BaseTriggerIsActive(aiDataStr, 5) && RandomFloat(0.0, 100.0) < 30.0 * akModifier.MultVerboseness
+    If BaseTriggerIsActive(asDataStr, 5) && RandomFloat(0.0, 100.0) < 30.0 * akModifier.MultVerboseness
         PrintNotification(akDevice, ;/ reacted /;"because of your actions. You're horrified to realize you've taken someone's life.")
     EndIf
 
-    Return TriggerOnValueDelta(akDevice, akModifier.NameAlias, aiDataStr, afValueDelta = 1, afMinAccum = loc_min_value, afProbBase = loc_prob_base, afProbAccum = loc_prob_accum, abRepeat = loc_repeat, aiAccumParamIndex = 5)
+    Return TriggerOnValueDelta(akDevice, akModifier.NameAlias, asDataStr, afValueDelta = 1, afMinAccum = loc_min_value, afProbBase = loc_prob_base, afProbAccum = loc_prob_accum, abRepeat = loc_repeat, aiAccumParamIndex = 5)
 EndFunction
 
 ;/  Group: User interface
@@ -88,12 +88,12 @@ EndFunction
 ===========================================================================================
 ===========================================================================================
 /;
-String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
-    Int loc_min_value       = GetParamInt(akModifier, aiDataStr, 0, 0,      "Input")
-    Float loc_prob_base     = GetParamFlt(akModifier, aiDataStr, 1, 100.0,  "Probability")
-    Float loc_prob_accum    = GetParamFlt(akModifier, aiDataStr, 2, 0.0,    "Probability")
-    Bool loc_repeat         = GetParamBln(akModifier, aiDataStr, 3, False)
-    Int loc_killings        = GetParamInt(akModifier, aiDataStr, 4, 0)
+String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1)
+    Int loc_min_value       = GetParamInt(akModifier, asDataStr, 0, 0,      "Input")
+    Float loc_prob_base     = GetParamFlt(akModifier, asDataStr, 1, 100.0,  "Probability")
+    Float loc_prob_accum    = GetParamFlt(akModifier, asDataStr, 2, 0.0,    "Probability")
+    Bool loc_repeat         = GetParamBln(akModifier, asDataStr, 3, False)
+    Int loc_killings        = GetParamInt(akModifier, asDataStr, 4, 0)
     
     String loc_res = ""
     String loc_killings_str = ""
@@ -109,7 +109,7 @@ String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice
     loc_res += UDmain.UDMTF.TableRowDetails("Accumulator weight:", FormatFloat(loc_prob_accum, 2) + "%")
     loc_res += UDmain.UDMTF.TableRowDetails("Repeat:", InlineIfStr(loc_repeat, "True", "False"))
     loc_res += UDmain.UDMTF.TableRowDetails("Killings:", loc_killings_str)
-    loc_res += UDmain.UDMTF.TableRowDetails("Accumulator:", FormatFloat(GetParamFlt(akModifier, aiDataStr, 5, 0.0), 0))
+    loc_res += UDmain.UDMTF.TableRowDetails("Accumulator:", FormatFloat(GetParamFlt(akModifier, asDataStr, 5, 0.0), 0))
     loc_res += UDmain.UDMTF.Paragraph("(Accumulator contains the number of consecutive kills)", asAlign = "center")
     Return loc_res
 EndFunction

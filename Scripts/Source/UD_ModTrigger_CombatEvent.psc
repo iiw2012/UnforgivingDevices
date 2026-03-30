@@ -50,9 +50,9 @@ EndEvent
 ===========================================================================================
 ===========================================================================================
 /;
-Bool Function ActorAction(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Int aiActorAction, Int aiEquipSlot, Form akSource, String aiDataStr, Form akForm1)
-    String loc_event        = GetParamStr(akModifier, aiDataStr, 0, "")
-    Float loc_prob          = GetParamFlt(akModifier, aiDataStr, 1, 100.0, "Input")
+Bool Function ActorAction(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Int aiActorAction, Int aiEquipSlot, Form akSource, String asDataStr, Form akForm1)
+    String loc_event        = GetParamStr(akModifier, asDataStr, 0, "")
+    Float loc_prob          = GetParamFlt(akModifier, asDataStr, 1, 100.0, "Input")
 
     If loc_event == ""
         Return False
@@ -104,10 +104,10 @@ EndFunction
 ===========================================================================================
 ===========================================================================================
 /;
-String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
+String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1)
     String loc_res = ""
-    String loc_frag         = GetParamStr(akModifier, aiDataStr, 0, "")
-    Float loc_prob          = GetParamFlt(akModifier, aiDataStr, 1, 100.0, "Input")
+    String loc_frag         = GetParamStr(akModifier, asDataStr, 0, "")
+    Float loc_prob          = GetParamFlt(akModifier, asDataStr, 1, 100.0, "Input")
     If UDmain.UDMTF.HasHtmlMarkup()
         loc_frag = GetCombatEventString(loc_frag, "<br/> \t\t")
     Else

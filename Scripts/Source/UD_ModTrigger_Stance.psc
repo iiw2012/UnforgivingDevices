@@ -44,16 +44,16 @@ import UD_Native
 ===========================================================================================
 ===========================================================================================
 /;
-Bool Function TimeUpdateSeconds(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Float afGameHoursSinceLastCall, Float afRealSecondsSinceLastCall, String aiDataStr, Form akForm1)
+Bool Function TimeUpdateSeconds(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Float afGameHoursSinceLastCall, Float afRealSecondsSinceLastCall, String asDataStr, Form akForm1)
     Actor loc_actor = akDevice.GetWearer()
-    String loc_stance       = GetParamStr(akModifier, aiDataStr, 0, "")
-    Float loc_min_value     = GetParamFlt(akModifier, aiDataStr, 1, 0.0, "Input")
-    Float loc_prob_accum    = GetParamFlt(akModifier, aiDataStr, 2, 0.0, "Probability")
-    Bool loc_reset          = GetParamBln(akModifier, aiDataStr, 3, True)
-    Bool loc_repeat         = GetParamBln(akModifier, aiDataStr, 4, False)
-    Float loc_accum         = GetParamFlt(akModifier, aiDataStr, 5, 0.0)
+    String loc_stance       = GetParamStr(akModifier, asDataStr, 0, "")
+    Float loc_min_value     = GetParamFlt(akModifier, asDataStr, 1, 0.0, "Input")
+    Float loc_prob_accum    = GetParamFlt(akModifier, asDataStr, 2, 0.0, "Probability")
+    Bool loc_reset          = GetParamBln(akModifier, asDataStr, 3, True)
+    Bool loc_repeat         = GetParamBln(akModifier, asDataStr, 4, False)
+    Float loc_accum         = GetParamFlt(akModifier, asDataStr, 5, 0.0)
 
-    If !BaseTriggerIsActive(aiDataStr, 5)
+    If !BaseTriggerIsActive(asDataStr, 5)
         Return False
     EndIf
 
@@ -65,11 +65,11 @@ Bool Function TimeUpdateSeconds(UD_Modifier_Combo akModifier, UD_CustomDevice_Re
             EndIf
         EndIf
 
-        If BaseTriggerIsActive(aiDataStr, 5) && RandomFloat(0.0, 100.0) < 15.0 * akModifier.MultVerboseness
+        If BaseTriggerIsActive(asDataStr, 5) && RandomFloat(0.0, 100.0) < 15.0 * akModifier.MultVerboseness
             PrintNotification(akDevice, ;/ reacted /;"probably because of the way you move.")
         EndIf
 
-        Return TriggerOnValueDelta(akDevice, akModifier.NameAlias, aiDataStr, afValueDelta = afRealSecondsSinceLastCall, afMinAccum = loc_min_value, afProbBase = 0.0, afProbAccum = loc_prob_accum, abRepeat = loc_repeat, aiAccumParamIndex = 5)
+        Return TriggerOnValueDelta(akDevice, akModifier.NameAlias, asDataStr, afValueDelta = afRealSecondsSinceLastCall, afMinAccum = loc_min_value, afProbBase = 0.0, afProbAccum = loc_prob_accum, abRepeat = loc_repeat, aiAccumParamIndex = 5)
     ElseIf loc_reset
     ; reseting accumulator
         If UDmain.TraceAllowed()
@@ -88,13 +88,13 @@ EndFunction
 ===========================================================================================
 ===========================================================================================
 /;
-String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
-    String loc_stance       = GetParamStr(akModifier, aiDataStr, 0, "")
-    Float loc_min_value     = GetParamFlt(akModifier, aiDataStr, 1, 0.0, "Input")
-    Float loc_prob_accum    = GetParamFlt(akModifier, aiDataStr, 2, 0.0, "Probability")
-    Bool loc_reset          = GetParamBln(akModifier, aiDataStr, 3, True)
-    Bool loc_repeat         = GetParamBln(akModifier, aiDataStr, 4, False)
-    Float loc_accum         = GetParamFlt(akModifier, aiDataStr, 5, 0.0)
+String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1)
+    String loc_stance       = GetParamStr(akModifier, asDataStr, 0, "")
+    Float loc_min_value     = GetParamFlt(akModifier, asDataStr, 1, 0.0, "Input")
+    Float loc_prob_accum    = GetParamFlt(akModifier, asDataStr, 2, 0.0, "Probability")
+    Bool loc_reset          = GetParamBln(akModifier, asDataStr, 3, True)
+    Bool loc_repeat         = GetParamBln(akModifier, asDataStr, 4, False)
+    Float loc_accum         = GetParamFlt(akModifier, asDataStr, 5, 0.0)
 
     String loc_frag = loc_stance
     String loc_res = ""

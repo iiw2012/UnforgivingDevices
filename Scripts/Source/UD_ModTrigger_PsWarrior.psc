@@ -32,11 +32,11 @@ import UD_Native
 ===========================================================================================
 ===========================================================================================
 /;
-Bool Function ActorAction(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Int aiActorAction, Int aiEquipSlot, Form akSource, String aiDataStr, Form akForm1)
+Bool Function ActorAction(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Int aiActorAction, Int aiEquipSlot, Form akSource, String asDataStr, Form akForm1)
     If aiActorAction == 0
     ; weapon swing
     ; TODO PR195: check weapon type to exclude daggers and staffs
-        Float loc_prob = GetParamFlt(akModifier, aiDataStr, 0, 0.0, "Probability")
+        Float loc_prob = GetParamFlt(akModifier, asDataStr, 0, 0.0, "Probability")
 
         If RandomFloat(0.0, 100.0) < 30.0 * akModifier.MultVerboseness
             PrintNotification(akDevice, ;/ reacted /;"because of your actions. For a moment, you see the silhouette of a warrior.")
@@ -47,10 +47,10 @@ Bool Function ActorAction(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderSc
     Return False
 EndFunction
 
-Bool Function WeaponHit(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Weapon akWeapon, Float afDamage, String aiDataStr, Form akForm1)
+Bool Function WeaponHit(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Weapon akWeapon, Float afDamage, String asDataStr, Form akForm1)
     If akWeapon && akWeapon.GetWeaponType() <= 6
     ; melee or unarmed
-        Float loc_prob = GetParamFlt(akModifier, aiDataStr, 2, 0.0, "Probability")
+        Float loc_prob = GetParamFlt(akModifier, asDataStr, 2, 0.0, "Probability")
 
         If RandomFloat(0.0, 100.0) < 30.0 * akModifier.MultVerboseness
             PrintNotification(akDevice, ;/ reacted /;"because of your actions. For a moment, you see the silhouette of a warrior.")
@@ -61,9 +61,9 @@ Bool Function WeaponHit(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScri
     Return False
 EndFunction
 
-Bool Function SkillIncreased(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asSkill, Int aiValue, String aiDataStr, Form akForm1)
+Bool Function SkillIncreased(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asSkill, Int aiValue, String asDataStr, Form akForm1)
     If asSkill == "TwoHanded" || asSkill == "Block" || asSkill == "Smithing" || asSkill == "HeavyArmor"
-        Float loc_prob = GetParamFlt(akModifier, aiDataStr, 1, 0.0, "Probability")
+        Float loc_prob = GetParamFlt(akModifier, asDataStr, 1, 0.0, "Probability")
 
         If RandomFloat(0.0, 100.0) < 30.0 * akModifier.MultVerboseness
             PrintNotification(akDevice, ;/ reacted /;"because of your actions. For a moment, you see the silhouette of a warrior.")
@@ -79,10 +79,10 @@ EndFunction
 ===========================================================================================
 ===========================================================================================
 /;
-String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
-    Float loc_prob1 = GetParamFlt(akModifier, aiDataStr, 0, 0.0, "Probability")
-    Float loc_prob2 = GetParamFlt(akModifier, aiDataStr, 1, 0.0, "Probability")
-    Float loc_prob3 = GetParamFlt(akModifier, aiDataStr, 2, 0.0, "Probability")
+String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1)
+    Float loc_prob1 = GetParamFlt(akModifier, asDataStr, 0, 0.0, "Probability")
+    Float loc_prob2 = GetParamFlt(akModifier, asDataStr, 1, 0.0, "Probability")
+    Float loc_prob3 = GetParamFlt(akModifier, asDataStr, 2, 0.0, "Probability")
     String loc_res = ""
     loc_res += UDmain.UDMTF.TableRowDetails("Prob. on weapon swing:",       FormatFloat(loc_prob1, 1) + "%")
     loc_res += UDmain.UDMTF.TableRowDetails("Prob. on skill increase:",     FormatFloat(loc_prob2, 1) + "%")

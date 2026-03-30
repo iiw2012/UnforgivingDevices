@@ -26,9 +26,9 @@ import UD_Native
 ===========================================================================================
 ===========================================================================================
 /;
-String Function GetParamsTableRows(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+String Function GetParamsTableRows(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     String loc_res = ""
     ; TODO: The Output multiplier does not actually affect the modifier's behavior, since the parameter value is evaluated without the multiplier in the code
-    loc_res += UDmain.UDMTF.TableRowDetails("Comfort:", GetParamInt(aiDataStr, 0, 0, "Output"))
+    loc_res += UDmain.UDMTF.TableRowDetails("Comfort:", GetParamInt(asDataStr, 0, 0, "Output"))
     Return loc_res
 EndFunction

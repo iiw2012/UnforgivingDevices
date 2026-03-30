@@ -28,7 +28,7 @@ import UD_Native
 ===========================================================================================
 /;
 
-Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm2, Form akForm3)
+Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm2, Form akForm3)
     Quest loc_quest = None
     loc_quest = UD_Modifier.GetRandomForm(akForm2) as Quest
     If loc_quest as UD_ModInjection_Quest
@@ -38,7 +38,7 @@ Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDe
         If !loc_quest.IsRunning()
             loc_quest.Start()
         EndIf
-        Int loc_stage = GetParamInt(akModifier, aiDataStr, 0, -1)
+        Int loc_stage = GetParamInt(akModifier, asDataStr, 0, -1)
         If loc_stage >= 0
             loc_quest.SetStage(loc_stage)
         EndIf
@@ -52,7 +52,7 @@ Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDe
         If !loc_quest.IsRunning()
             loc_quest.Start()
         EndIf
-        Int loc_stage = GetParamInt(akModifier, aiDataStr, 1, -1)
+        Int loc_stage = GetParamInt(akModifier, asDataStr, 1, -1)
         If loc_stage >= 0
             loc_quest.SetStage(loc_stage)
         EndIf
@@ -65,7 +65,7 @@ EndFunction
 ===========================================================================================
 ===========================================================================================
 /;
-String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm2, Form akForm3)
+String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm2, Form akForm3)
     String loc_res = ""
 
     If akForm2
@@ -74,7 +74,7 @@ String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice
     If akForm3
         loc_res += akModifier.PrintFormListSelectionDetails(akForm3, "R")
     EndIf
-    loc_res += UDmain.UDMTF.TableRowDetails("Stage #1:", GetParamInt(akModifier, aiDataStr, 0, -1))
-    loc_res += UDmain.UDMTF.TableRowDetails("Stage #2:", GetParamInt(akModifier, aiDataStr, 0, -1))
+    loc_res += UDmain.UDMTF.TableRowDetails("Stage #1:", GetParamInt(akModifier, asDataStr, 0, -1))
+    loc_res += UDmain.UDMTF.TableRowDetails("Stage #2:", GetParamInt(akModifier, asDataStr, 0, -1))
     Return loc_res
 EndFunction

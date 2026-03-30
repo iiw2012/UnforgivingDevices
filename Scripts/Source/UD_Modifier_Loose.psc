@@ -24,8 +24,8 @@ import UD_Native
 ===========================================================================================
 ===========================================================================================
 /;
-String Function GetParamsTableRows(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+String Function GetParamsTableRows(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     String loc_res = ""
-    loc_res += UDmain.UDMTF.TableRowDetails("Looseness:", FormatFloat(GetParamFlt(aiDataStr, 0, 0.0, "Output"), 1) + "%")
+    loc_res += UDmain.UDMTF.TableRowDetails("Looseness:", FormatFloat(GetParamFlt(asDataStr, 0, 0.0, "Output"), 1) + "%")
     Return loc_res
 EndFunction

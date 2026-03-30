@@ -40,10 +40,10 @@ Spell Property ManifestExplosion Auto
 ===========================================================================================
 /;
 
-Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm2, Form akForm3)
-    Int loc_count           = GetParamInt(akModifier, aiDataStr, 0, 1, "Output")
-    String loc_method_list2 = GetParamStr(akModifier, aiDataStr, 1, "L")
-    String loc_method_list3 = GetParamStr(akModifier, aiDataStr, 2, "")
+Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm2, Form akForm3)
+    Int loc_count           = GetParamInt(akModifier, asDataStr, 0, 1, "Output")
+    String loc_method_list2 = GetParamStr(akModifier, asDataStr, 1, "L")
+    String loc_method_list3 = GetParamStr(akModifier, asDataStr, 2, "")
     Int loc_remain = loc_count
     String loc_method = loc_method_list2
     
@@ -101,11 +101,11 @@ EndFunction
 ===========================================================================================
 ===========================================================================================
 /;
-String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm2, Form akForm3)
+String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm2, Form akForm3)
     String loc_res = ""
-    Int loc_count           = GetParamInt(akModifier, aiDataStr, 0, 1, "Output")
-    String loc_method_list2 = GetParamStr(akModifier, aiDataStr, 1, "L")
-    String loc_method_list3 = GetParamStr(akModifier, aiDataStr, 2, "")
+    Int loc_count           = GetParamInt(akModifier, asDataStr, 0, 1, "Output")
+    String loc_method_list2 = GetParamStr(akModifier, asDataStr, 1, "L")
+    String loc_method_list3 = GetParamStr(akModifier, asDataStr, 2, "")
 
     loc_res += UDmain.UDMTF.TableRowDetails("Number of devices:", loc_count)
     If loc_method_list2 != "" || akForm2

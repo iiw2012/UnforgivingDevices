@@ -38,16 +38,22 @@ import UD_Native
 ===========================================================================================
 /;
 
-Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm2, Form akForm3)
-    Int loc_count           = GetParamInt(akModifier, aiDataStr, 0, 1)
-    String loc_method_list2 = GetParamStr(akModifier, aiDataStr, 1, "S")
-    Float loc_min           = GetParamFlt(akModifier, aiDataStr, 2, 0.0,      "Output")
-    Float loc_max           = GetParamFlt(akModifier, aiDataStr, 3, loc_min,  "Output")
+Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm2, Form akForm3)
+    Int loc_count           = GetParamInt(akModifier, asDataStr, 0, 1)
+    String loc_method_list2 = GetParamStr(akModifier, asDataStr, 1, "S")
+    Float loc_min           = GetParamFlt(akModifier, asDataStr, 2, 0.0,      "Output")
+    Float loc_max           = GetParamFlt(akModifier, asDataStr, 3, loc_min,  "Output")
 
     UD_CustomDevice_RenderScript[] loc_devices = GetEquippedDevicesWithSelectionMethod(akDevice, loc_count, akForm2, loc_method_list2, akForm3, "")
 
-    If loc_devices.Length > 0 && RandomFloat(0.0, 100.0) < 50.0 * akModifier.MultVerboseness
-        PrintNotification(akDevice, ;/changed/; "and weakened some of your devices a little bit.")
+    If loc_devices.Length > 0 && RandomFloat(0.0, 100.0) < 50.0 * akModifier.MultVerboseness        
+        If loc_method_list2 == "S" || loc_method_list2 == "SELF"
+            PrintNotification(akDevice, ;/changed/; "and weakened itself a little bit.")
+        ElseIf loc_method_list2 == "A" || loc_method_list2 == "ALL"
+            PrintNotification(akDevice, ;/changed/; "and weakened all your devices a little bit.")
+        Else
+            PrintNotification(akDevice, ;/changed/; "and weakened some of your devices a little bit.")
+        EndIf
     EndIf
 
     Int loc_i = 0
@@ -65,13 +71,13 @@ EndFunction
 ===========================================================================================
 ===========================================================================================
 /;
-String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm2, Form akForm3)
+String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm2, Form akForm3)
     String loc_res = ""
     String loc_frag = "" 
-    Int loc_count               = GetParamInt(akModifier, aiDataStr, 0, 1)
-    String loc_method_list2     = GetParamStr(akModifier, aiDataStr, 1, "S")
-    Float loc_min               = GetParamFlt(akModifier, aiDataStr, 2, 0.0,      "Output")
-    Float loc_max               = GetParamFlt(akModifier, aiDataStr, 3, loc_min,  "Output")
+    Int loc_count               = GetParamInt(akModifier, asDataStr, 0, 1)
+    String loc_method_list2     = GetParamStr(akModifier, asDataStr, 1, "S")
+    Float loc_min               = GetParamFlt(akModifier, asDataStr, 2, 0.0,      "Output")
+    Float loc_max               = GetParamFlt(akModifier, asDataStr, 3, loc_min,  "Output")
     If loc_method_list2 == "S"
         loc_frag = "SELF"
     ElseIf loc_method_list2 == "A"

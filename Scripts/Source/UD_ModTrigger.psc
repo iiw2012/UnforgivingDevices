@@ -52,7 +52,7 @@ String      Property Description            Auto
 ===========================================================================================
 /;
 
-Bool Function ValidateTrigger(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
+Bool Function ValidateTrigger(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1)
     Return True
 EndFunction
 
@@ -62,83 +62,83 @@ EndFunction
 ===========================================================================================
 /;
 
-Bool Function GameLoaded(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
+Bool Function GameLoaded(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1)
     Return False
 EndFunction
 
-Bool Function TimeUpdateSeconds(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Float afGameHoursSinceLastCall, Float afRealSecondsSinceLastCall, String aiDataStr, Form akForm1)
+Bool Function TimeUpdateSeconds(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Float afGameHoursSinceLastCall, Float afRealSecondsSinceLastCall, String asDataStr, Form akForm1)
     Return False
 EndFunction
 
-Bool Function TimeUpdateHour(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Float afGameHoursSinceLastCall, String aiDataStr, Form akForm1)
+Bool Function TimeUpdateHour(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Float afGameHoursSinceLastCall, String asDataStr, Form akForm1)
     Return False
 EndFunction
 
-Bool Function Orgasm(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
+Bool Function Orgasm(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1)
     Return False
 EndFunction
 
-Bool Function DeviceLocked(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
+Bool Function DeviceLocked(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1)
     Return False
 EndFunction
 
-Bool Function DeviceUnlocked(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
+Bool Function DeviceUnlocked(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1)
     Return False
 EndFunction
 
-Bool Function MinigameAllowed(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
+Bool Function MinigameAllowed(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1)
     return true
 EndFunction
 
-Bool Function MinigameStarted(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, UD_CustomDevice_RenderScript akMinigameDevice, String aiDataStr, Form akForm1)
+Bool Function MinigameStarted(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, UD_CustomDevice_RenderScript akMinigameDevice, String asDataStr, Form akForm1)
     Return False
 EndFunction
 
-Bool Function MinigameEnded(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, UD_CustomDevice_RenderScript akMinigameDevice, String aiDataStr, Form akForm1)
+Bool Function MinigameEnded(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, UD_CustomDevice_RenderScript akMinigameDevice, String asDataStr, Form akForm1)
     Return False
 EndFunction
 
-Bool Function WeaponHit(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Weapon akWeapon, Float afDamage, String aiDataStr, Form akForm1)
+Bool Function WeaponHit(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Weapon akWeapon, Float afDamage, String asDataStr, Form akForm1)
     Return False
 EndFunction
 
-Bool Function SpellHit(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Form akSpell, Float afDamage, String aiDataStr, Form akForm1)
+Bool Function SpellHit(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Form akSpell, Float afDamage, String asDataStr, Form akForm1)
     Return False
 EndFunction
 
-Bool Function SpellCast(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Spell akSpell, String aiDataStr, Form akForm1)
+Bool Function SpellCast(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Spell akSpell, String asDataStr, Form akForm1)
     Return False
 EndFunction
 
-Bool Function ConditionLoss(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Int aiCondition, String aiDataStr, Form akForm1)
+Bool Function ConditionLoss(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Int aiCondition, String asDataStr, Form akForm1)
     Return False
 EndFunction
 
-Bool Function StatEvent(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asStatName, Int aiStatValue, String aiDataStr, Form akForm1)
+Bool Function StatEvent(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asStatName, Int aiStatValue, String asDataStr, Form akForm1)
     Return False
 EndFunction
 
-Bool Function Sleep(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Float afDuration, Bool abInterrupted, String aiDataStr, Form akForm1)
+Bool Function Sleep(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Float afDuration, Bool abInterrupted, String asDataStr, Form akForm1)
     Return False
 EndFunction
 
-Bool Function ActorAction(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Int aiActorAction, Int aiEquipSlot, Form akSource, String aiDataStr, Form akForm1)
+Bool Function ActorAction(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Int aiActorAction, Int aiEquipSlot, Form akSource, String asDataStr, Form akForm1)
     Return False
 EndFunction
 
-Bool Function KillMonitor(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, ObjectReference akVictim, Int aiCrimeStatus, String aiDataStr, Form akForm1)
+Bool Function KillMonitor(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, ObjectReference akVictim, Int aiCrimeStatus, String asDataStr, Form akForm1)
     Return False
 EndFunction
 
-Bool Function ItemAdded(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Form akItemForm, Int aiItemCount, ObjectReference akSourceContainer, Bool abIsStolen, String aiDataStr, Form akForm1)
+Bool Function ItemAdded(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Form akItemForm, Int aiItemCount, ObjectReference akSourceContainer, Bool abIsStolen, String asDataStr, Form akForm1)
     Return False
 EndFunction
 
-Bool Function ItemRemoved(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Form akItemForm, Int aiItemCount, ObjectReference akDestContainer, String aiDataStr, Form akForm1)
+Bool Function ItemRemoved(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Form akItemForm, Int aiItemCount, ObjectReference akDestContainer, String asDataStr, Form akForm1)
     Return False
 EndFunction
 
-Bool Function SkillIncreased(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asSkill, Int aiValue, String aiDataStr, Form akForm1)
+Bool Function SkillIncreased(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asSkill, Int aiValue, String asDataStr, Form akForm1)
     Return False
 EndFunction
 
@@ -148,19 +148,19 @@ EndFunction
 ===========================================================================================
 /;
 
-String Function GetDetails(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
+String Function GetDetails(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1)
     String loc_res = ""
     If Description
         loc_res += UDmain.UDMTF.Paragraph(Description, asAlign = "center")
     EndIf
     loc_res += UDmain.UDMTF.TableBegin(aiLeftMargin = 40, aiColumn1Width = 150)
-    loc_res += GetParamsTableRows(akModifier, akDevice, aiDataStr, akForm1)
+    loc_res += GetParamsTableRows(akModifier, akDevice, asDataStr, akForm1)
     loc_res += UDmain.UDMTF.TableEnd()
     loc_res += UDmain.UDMTF.LineGap()
     Return loc_res
 EndFunction
 
-String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1)
+String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1)
     String loc_res = ""
 ;    loc_res += UDmain.UDMTF.TableRowDetails("Name:", NameFull)
 ;    loc_res += UDmain.UDMTF.TableRowDetails("Param:", Param)
@@ -234,9 +234,9 @@ EndFunction
     This function is used to calculate and check probability to trigger on some value change with many options
     
     Parameters:
-        akDevice                - Device with the modifier. Used to update its aiDataStr
-        asNameAlias             - Alias of the modifier. Used to update its aiDataStr
-        aiDataStr               - String with modifier parameters
+        akDevice                - Device with the modifier. Used to update its asDataStr
+        asNameAlias             - Alias of the modifier. Used to update its asDataStr
+        asDataStr               - String with modifier parameters
         afValueAbs              - Absolute value (-1.0 if not used)
         afValueDelta            - The change of the value (0.0 if not used)
         afMinAccum              - Minimum accumulated value to trigger
@@ -249,10 +249,10 @@ EndFunction
     Returns:
         True if triggered
 /;
-Bool Function TriggerOnValueDelta(UD_CustomDevice_RenderScript akDevice, String asNameAlias, String aiDataStr, Float afValueDelta, Float afMinAccum = 0.0, Float afProbBase = 100.0, Float afProbDelta = 0.0, Float afProbAccum = 0.0, Bool abRepeat = False, Int aiAccumParamIndex = -1)
+Bool Function TriggerOnValueDelta(UD_CustomDevice_RenderScript akDevice, String asNameAlias, String asDataStr, Float afValueDelta, Float afMinAccum = 0.0, Float afProbBase = 100.0, Float afProbDelta = 0.0, Float afProbAccum = 0.0, Bool abRepeat = False, Int aiAccumParamIndex = -1)
     Float loc_accum_current = 0
     If aiAccumParamIndex >= 0
-        loc_accum_current = GetStringParamFloat(aiDataStr, aiAccumParamIndex, 0.0)
+        loc_accum_current = GetStringParamFloat(asDataStr, aiAccumParamIndex, 0.0)
     EndIf
     If loc_accum_current < 0
         ; did it once with no repeat option
@@ -294,9 +294,9 @@ EndFunction
     This function is used to calculate and check probability to trigger on some absolute value (positive, increased over time) with many options
     
     Parameters:
-        akDevice                - Device with the modifier. Used to update its aiDataStr
-        asNameAlias             - Alias of the modifier. Used to update its aiDataStr
-        aiDataStr               - String with modifier parameters
+        akDevice                - Device with the modifier. Used to update its asDataStr
+        asNameAlias             - Alias of the modifier. Used to update its asDataStr
+        asDataStr               - String with modifier parameters
         afValueAbs              - Absolute value
         afMinValue              - Minimum value to trigger
         afProbBase              - Base probability to trigger on call
@@ -307,10 +307,10 @@ EndFunction
     Returns:
         True if triggered
 /;
-Bool Function TriggerOnValueAbs(UD_CustomDevice_RenderScript akDevice, String asNameAlias, String aiDataStr, Float afValueAbs, Float afMinValue = 0.0, Float afProbBase = 100.0, Float afProbAccum = 0.0, Bool abRepeat = False, Int aiLastTriggerValueIndex = -1)
+Bool Function TriggerOnValueAbs(UD_CustomDevice_RenderScript akDevice, String asNameAlias, String asDataStr, Float afValueAbs, Float afMinValue = 0.0, Float afProbBase = 100.0, Float afProbAccum = 0.0, Bool abRepeat = False, Int aiLastTriggerValueIndex = -1)
     Float loc_last_trigger_value = 0
     If aiLastTriggerValueIndex >= 0
-        loc_last_trigger_value = GetStringParamFloat(aiDataStr, aiLastTriggerValueIndex, 0.0)
+        loc_last_trigger_value = GetStringParamFloat(asDataStr, aiLastTriggerValueIndex, 0.0)
     EndIf
     If loc_last_trigger_value < 0
         ; did it once with no repeat option
@@ -345,8 +345,8 @@ Bool Function TriggerOnValueAbs(UD_CustomDevice_RenderScript akDevice, String as
     Return False
 EndFunction
 
-Bool Function BaseTriggerIsActive(String aiDataStr, Int aiMemoryParamIndex)
-    Return GetStringParamFloat(aiDataStr, aiMemoryParamIndex, 0.0) >= 0.0
+Bool Function BaseTriggerIsActive(String asDataStr, Int aiMemoryParamIndex)
+    Return GetStringParamFloat(asDataStr, aiMemoryParamIndex, 0.0) >= 0.0
 EndFunction
 
 ;/  Function: _IsValidForm
