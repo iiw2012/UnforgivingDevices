@@ -10,6 +10,8 @@ UD_ModifierManager_Script Property UDMOM
     EndFunction
 EndProperty
 
+FormList Property PublicHandlers Auto
+
 String[] Property UD_ModifierList Auto Hidden
 
 Event OnSetup()

@@ -254,6 +254,24 @@ String[] Function GetModifiersTags()
     Return loc_tags
 EndFunction
 
+Form Function GetPublicHandler(String asHandlerName)
+    Int loc_i = _modifierstorages.Length
+    While loc_i > 0
+        loc_i -= 1
+        UD_ModifierStorage loc_storage = _GetNthModifierStorage(loc_i)
+        If loc_storage.PublicHandlers
+            Int loc_j = loc_storage.PublicHandlers.GetSize()
+            While loc_j > 0 
+                loc_j -= 1
+                Form loc_form = loc_storage.PublicHandlers.GetAt(loc_j)
+                If loc_form.GetName() == asHandlerName
+                    Return loc_form
+                EndIf
+            EndWhile
+        EndIf
+    EndWhile
+    Return None
+EndFunction
 
 ;====================================================================================
 ;                            receive modifier update events
