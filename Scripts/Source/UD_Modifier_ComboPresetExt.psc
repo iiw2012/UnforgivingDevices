@@ -39,15 +39,17 @@ String Property ModOutcomeName Auto
 /;
 
 Bool Function ValidateModifier(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+    Bool loc_res = True
     If ModTriggerName != "" && ModTrigger == None
-        UD_ModOutcome loc_trigger = UDMain.UDMOM.GetPublicHandler(ModTriggerName) As UD_ModOutcome
+        UD_ModTrigger loc_trigger = UDMain.UDMOM.GetPublicHandler(ModTriggerName) As UD_ModTrigger
         If loc_trigger != None
             If UDMain.TraceAllowed()
                 UDMain.Log(Self + "::ValidateModifier() Found and set trigger by its name '" + ModTriggerName + "'", 1)
             EndIf
             ModTrigger = loc_trigger
         Else
-            UDMain.Error(Self + "::ValidateModifier() Can't find public trigger handler with name '" + ModTriggerName + "'!")
+            UDMain.Warning(Self + "::ValidateModifier() Can't find public trigger handler with name '" + ModTriggerName + "'!")
+            loc_res = False
         EndIf
     EndIf
     If ModOutcomeName != "" && ModOutcome == None
@@ -58,10 +60,11 @@ Bool Function ValidateModifier(UD_CustomDevice_RenderScript akDevice, String asD
             EndIf
             ModOutcome = loc_outcome
         Else
-            UDMain.Error(Self + "::ValidateModifier() Can't find public outcome handler with name '" + ModOutcomeName + "'!")
+            UDMain.Warning(Self + "::ValidateModifier() Can't find public outcome handler with name '" + ModOutcomeName + "'!")
+            loc_res = False
         EndIf
     EndIf
-    Parent.ValidateModifier(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    Return loc_res && Parent.ValidateModifier(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
 EndFunction
 
 UD_ModTrigger Function GetTrigger(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)

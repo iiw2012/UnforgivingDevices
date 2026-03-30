@@ -1,5 +1,6 @@
 ;/  File: UD_Modifier_ComboPreset
     A modifier with pre-determined Triggers and Outcome. Bind the script to an alias and use it like any other modifier.
+    If you want to use this script in external esp then better try UD_Modifier_ComboPresetExt version
 
     NameFull:   
     NameAlias:  
@@ -33,11 +34,11 @@ UD_ModOutcome Property ModOutcome Auto
 ===========================================================================================
 /;
 
-UD_ModTrigger Function GetTrigger(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+UD_ModTrigger Function GetTrigger(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     Return ModTrigger
 EndFunction
 
-UD_ModOutcome Function GetOutcome(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+UD_ModOutcome Function GetOutcome(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     Return ModOutcome
 EndFunction
 
@@ -46,6 +47,6 @@ EndFunction
 ===========================================================================================
 ===========================================================================================
 /;
-String Function GetCaption(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+String Function GetCaption(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     Return NameFull
 EndFunction

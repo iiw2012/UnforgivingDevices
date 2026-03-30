@@ -31,35 +31,37 @@ import UD_Native
 ===========================================================================================
 /;
 
-Bool Function ValidateModifier(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+Bool Function ValidateModifier(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     Bool loc_result = True
-    UD_ModTrigger loc_trigger = GetTrigger(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    UD_ModTrigger loc_trigger = GetTrigger(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
     If loc_trigger == None
+        UDMain.Warning(Self + "::ValidateModifier() Trigger was not set!")
         Return False
     Else
-        loc_result = loc_result && loc_trigger.ValidateTrigger(akDevice, aiDataStr, akForm1)
+        loc_result = loc_result && loc_trigger.ValidateTrigger(akDevice, asDataStr, akForm1)
     EndIf
-    UD_ModOutcome loc_outcome = GetOutcome(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    UD_ModOutcome loc_outcome = GetOutcome(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
     If loc_outcome == None
+        UDMain.Warning(Self + "::ValidateModifier() Outcome was not set!")
         Return False
     EndIf
     Return loc_result
 EndFunction
 
-UD_ModTrigger Function GetTrigger(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+UD_ModTrigger Function GetTrigger(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     UDmain.Error(Self + "::GetTrigger() Abstract method call!")
     Return None
 EndFunction
 
-UD_ModOutcome Function GetOutcome(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+UD_ModOutcome Function GetOutcome(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     UDmain.Error(Self + "::GetOutcome() Abstract method call!")
     Return None
 EndFunction
 
-Function OnBeforeOutcome(UD_ModOutcome akOutcome, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm2, Form akForm3)
+Function OnBeforeOutcome(UD_ModOutcome akOutcome, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm2, Form akForm3)
 EndFunction
 
-Function OnAfterOutcome(UD_ModOutcome akOutcome, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm2, Form akForm3)
+Function OnAfterOutcome(UD_ModOutcome akOutcome, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm2, Form akForm3)
 EndFunction
 
 ;/  Group: Events Processing
@@ -67,179 +69,179 @@ EndFunction
 ===========================================================================================
 ===========================================================================================
 /;
-Function GameLoaded(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
-    UD_ModTrigger loc_trigger = GetTrigger(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    UD_ModOutcome loc_outcome = GetOutcome(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    loc_outcome.OnGameLoaded(Self, akDevice, aiDataStr, akForm2, akForm3)
-    If loc_trigger.GameLoaded(Self, akDevice, aiDataStr, akForm1) == True
-        _DoCallOutcome(loc_outcome, akDevice, aiDataStr, akForm2, akForm3)
+Function GameLoaded(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+    UD_ModTrigger loc_trigger = GetTrigger(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    UD_ModOutcome loc_outcome = GetOutcome(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    loc_outcome.OnGameLoaded(Self, akDevice, asDataStr, akForm2, akForm3)
+    If loc_trigger.GameLoaded(Self, akDevice, asDataStr, akForm1) == True
+        _DoCallOutcome(loc_outcome, akDevice, asDataStr, akForm2, akForm3)
     EndIf
 EndFunction
 
-Function TimeUpdateSeconds(UD_CustomDevice_RenderScript akDevice, Float afGameHoursSinceLastCall, Float afRealSecondsSinceLastCall, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
-    UD_ModTrigger loc_trigger = GetTrigger(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    UD_ModOutcome loc_outcome = GetOutcome(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    If loc_trigger.TimeUpdateSeconds(Self, akDevice, afGameHoursSinceLastCall, afRealSecondsSinceLastCall, aiDataStr, akForm1) == True
-        _DoCallOutcome(loc_outcome, akDevice, aiDataStr, akForm2, akForm3)
+Function TimeUpdateSeconds(UD_CustomDevice_RenderScript akDevice, Float afGameHoursSinceLastCall, Float afRealSecondsSinceLastCall, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+    UD_ModTrigger loc_trigger = GetTrigger(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    UD_ModOutcome loc_outcome = GetOutcome(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    If loc_trigger.TimeUpdateSeconds(Self, akDevice, afGameHoursSinceLastCall, afRealSecondsSinceLastCall, asDataStr, akForm1) == True
+        _DoCallOutcome(loc_outcome, akDevice, asDataStr, akForm2, akForm3)
     EndIf
 EndFunction
 
-Function TimeUpdateHour(UD_CustomDevice_RenderScript akDevice, Float afGameHoursSinceLastCall, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
-    UD_ModTrigger loc_trigger = GetTrigger(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    UD_ModOutcome loc_outcome = GetOutcome(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    If loc_trigger.TimeUpdateHour(Self, akDevice, afGameHoursSinceLastCall, aiDataStr, akForm1) == True
-        _DoCallOutcome(loc_outcome, akDevice, aiDataStr, akForm2, akForm3)
+Function TimeUpdateHour(UD_CustomDevice_RenderScript akDevice, Float afGameHoursSinceLastCall, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+    UD_ModTrigger loc_trigger = GetTrigger(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    UD_ModOutcome loc_outcome = GetOutcome(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    If loc_trigger.TimeUpdateHour(Self, akDevice, afGameHoursSinceLastCall, asDataStr, akForm1) == True
+        _DoCallOutcome(loc_outcome, akDevice, asDataStr, akForm2, akForm3)
     EndIf
 EndFunction
 
-Function Orgasm(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
-    UD_ModTrigger loc_trigger = GetTrigger(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    UD_ModOutcome loc_outcome = GetOutcome(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    If loc_trigger.Orgasm(Self, akDevice, aiDataStr, akForm1) == True
-        _DoCallOutcome(loc_outcome, akDevice, aiDataStr, akForm2, akForm3)
+Function Orgasm(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+    UD_ModTrigger loc_trigger = GetTrigger(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    UD_ModOutcome loc_outcome = GetOutcome(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    If loc_trigger.Orgasm(Self, akDevice, asDataStr, akForm1) == True
+        _DoCallOutcome(loc_outcome, akDevice, asDataStr, akForm2, akForm3)
     EndIf
 EndFunction
 
-Function DeviceLocked(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
-    UD_ModTrigger loc_trigger = GetTrigger(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    UD_ModOutcome loc_outcome = GetOutcome(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    loc_outcome.OnDeviceLocked(Self, akDevice, aiDataStr, akForm2, akForm3)
-    If loc_trigger.DeviceLocked(Self, akDevice, aiDataStr, akForm1) == True
-        _DoCallOutcome(loc_outcome, akDevice, aiDataStr, akForm2, akForm3)
+Function DeviceLocked(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+    UD_ModTrigger loc_trigger = GetTrigger(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    UD_ModOutcome loc_outcome = GetOutcome(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    loc_outcome.OnDeviceLocked(Self, akDevice, asDataStr, akForm2, akForm3)
+    If loc_trigger.DeviceLocked(Self, akDevice, asDataStr, akForm1) == True
+        _DoCallOutcome(loc_outcome, akDevice, asDataStr, akForm2, akForm3)
     EndIf
 EndFunction
 
-Function DeviceUnlocked(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
-    UD_ModTrigger loc_trigger = GetTrigger(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    UD_ModOutcome loc_outcome = GetOutcome(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    loc_outcome.OnDeviceUnlocked(Self, akDevice, aiDataStr, akForm2, akForm3)
-    If loc_trigger.DeviceUnlocked(Self, akDevice, aiDataStr, akForm1) == True
-        _DoCallOutcome(loc_outcome, akDevice, aiDataStr, akForm2, akForm3)
+Function DeviceUnlocked(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+    UD_ModTrigger loc_trigger = GetTrigger(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    UD_ModOutcome loc_outcome = GetOutcome(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    loc_outcome.OnDeviceUnlocked(Self, akDevice, asDataStr, akForm2, akForm3)
+    If loc_trigger.DeviceUnlocked(Self, akDevice, asDataStr, akForm1) == True
+        _DoCallOutcome(loc_outcome, akDevice, asDataStr, akForm2, akForm3)
     EndIf
 EndFunction
 
-Bool Function MinigameAllowed(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
-    UD_ModOutcome loc_outcome = GetOutcome(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+Bool Function MinigameAllowed(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+    UD_ModOutcome loc_outcome = GetOutcome(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
     If loc_outcome
-        Return loc_outcome.MinigameAllowed(Self, akDevice, aiDataStr, akForm2, akForm3)
+        Return loc_outcome.MinigameAllowed(Self, akDevice, asDataStr, akForm2, akForm3)
     Else
         Return True
     EndIf
 EndFunction
 
-Function MinigameStarted(UD_CustomDevice_RenderScript akDevice, UD_CustomDevice_RenderScript akMinigameDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
-    UD_ModTrigger loc_trigger = GetTrigger(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    UD_ModOutcome loc_outcome = GetOutcome(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    If loc_trigger.MinigameStarted(Self, akDevice, akMinigameDevice, aiDataStr, akForm1) == True
-        _DoCallOutcome(loc_outcome, akDevice, aiDataStr, akForm2, akForm3)
+Function MinigameStarted(UD_CustomDevice_RenderScript akDevice, UD_CustomDevice_RenderScript akMinigameDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+    UD_ModTrigger loc_trigger = GetTrigger(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    UD_ModOutcome loc_outcome = GetOutcome(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    If loc_trigger.MinigameStarted(Self, akDevice, akMinigameDevice, asDataStr, akForm1) == True
+        _DoCallOutcome(loc_outcome, akDevice, asDataStr, akForm2, akForm3)
     EndIf
 EndFunction
 
-Function MinigameEnded(UD_CustomDevice_RenderScript akDevice, UD_CustomDevice_RenderScript akMinigameDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
-    UD_ModTrigger loc_trigger = GetTrigger(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    UD_ModOutcome loc_outcome = GetOutcome(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    If loc_trigger.MinigameEnded(Self, akDevice, akMinigameDevice, aiDataStr, akForm1) == True
-        _DoCallOutcome(loc_outcome, akDevice, aiDataStr, akForm2, akForm3)
+Function MinigameEnded(UD_CustomDevice_RenderScript akDevice, UD_CustomDevice_RenderScript akMinigameDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+    UD_ModTrigger loc_trigger = GetTrigger(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    UD_ModOutcome loc_outcome = GetOutcome(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    If loc_trigger.MinigameEnded(Self, akDevice, akMinigameDevice, asDataStr, akForm1) == True
+        _DoCallOutcome(loc_outcome, akDevice, asDataStr, akForm2, akForm3)
     EndIf
 EndFunction
 
-Function WeaponHit(UD_CustomDevice_RenderScript akDevice, Weapon akWeapon, Float afDamage, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
-    UD_ModTrigger loc_trigger = GetTrigger(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    UD_ModOutcome loc_outcome = GetOutcome(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    If loc_trigger.WeaponHit(Self, akDevice, akWeapon, afDamage, aiDataStr, akForm1) == True
-        _DoCallOutcome(loc_outcome, akDevice, aiDataStr, akForm2, akForm3)
+Function WeaponHit(UD_CustomDevice_RenderScript akDevice, Weapon akWeapon, Float afDamage, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+    UD_ModTrigger loc_trigger = GetTrigger(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    UD_ModOutcome loc_outcome = GetOutcome(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    If loc_trigger.WeaponHit(Self, akDevice, akWeapon, afDamage, asDataStr, akForm1) == True
+        _DoCallOutcome(loc_outcome, akDevice, asDataStr, akForm2, akForm3)
     EndIf
 EndFunction
 
-Function SpellHit(UD_CustomDevice_RenderScript akDevice, Form akSpell, Float afDamage, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
-    UD_ModTrigger loc_trigger = GetTrigger(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    UD_ModOutcome loc_outcome = GetOutcome(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    If loc_trigger.SpellHit(Self, akDevice, akSpell, afDamage, aiDataStr, akForm1) == True
-        _DoCallOutcome(loc_outcome, akDevice, aiDataStr, akForm2, akForm3)
+Function SpellHit(UD_CustomDevice_RenderScript akDevice, Form akSpell, Float afDamage, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+    UD_ModTrigger loc_trigger = GetTrigger(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    UD_ModOutcome loc_outcome = GetOutcome(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    If loc_trigger.SpellHit(Self, akDevice, akSpell, afDamage, asDataStr, akForm1) == True
+        _DoCallOutcome(loc_outcome, akDevice, asDataStr, akForm2, akForm3)
     EndIf
 EndFunction
 
-Function SpellCast(UD_CustomDevice_RenderScript akDevice, Spell akSpell, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
-    UD_ModTrigger loc_trigger = GetTrigger(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    UD_ModOutcome loc_outcome = GetOutcome(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    If loc_trigger.SpellCast(Self, akDevice, akSpell, aiDataStr, akForm1) == True
-        _DoCallOutcome(loc_outcome, akDevice, aiDataStr, akForm2, akForm3)
+Function SpellCast(UD_CustomDevice_RenderScript akDevice, Spell akSpell, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+    UD_ModTrigger loc_trigger = GetTrigger(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    UD_ModOutcome loc_outcome = GetOutcome(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    If loc_trigger.SpellCast(Self, akDevice, akSpell, asDataStr, akForm1) == True
+        _DoCallOutcome(loc_outcome, akDevice, asDataStr, akForm2, akForm3)
     EndIf
 EndFunction
 
-Function ConditionLoss(UD_CustomDevice_RenderScript akDevice, Int aiCondition, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
-    UD_ModTrigger loc_trigger = GetTrigger(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    UD_ModOutcome loc_outcome = GetOutcome(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    If loc_trigger.ConditionLoss(Self, akDevice, aiCondition, aiDataStr, akForm1) == True
-        _DoCallOutcome(loc_outcome, akDevice, aiDataStr, akForm2, akForm3)
+Function ConditionLoss(UD_CustomDevice_RenderScript akDevice, Int aiCondition, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+    UD_ModTrigger loc_trigger = GetTrigger(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    UD_ModOutcome loc_outcome = GetOutcome(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    If loc_trigger.ConditionLoss(Self, akDevice, aiCondition, asDataStr, akForm1) == True
+        _DoCallOutcome(loc_outcome, akDevice, asDataStr, akForm2, akForm3)
     EndIf
 EndFunction
 
-Function StatEvent(UD_CustomDevice_RenderScript akDevice, String asStatName, Int aiStatValue, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
-    UD_ModTrigger loc_trigger = GetTrigger(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    UD_ModOutcome loc_outcome = GetOutcome(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    If loc_trigger.StatEvent(Self, akDevice, asStatName, aiStatValue, aiDataStr, akForm1) == True
-        _DoCallOutcome(loc_outcome, akDevice, aiDataStr, akForm2, akForm3)
+Function StatEvent(UD_CustomDevice_RenderScript akDevice, String asStatName, Int aiStatValue, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+    UD_ModTrigger loc_trigger = GetTrigger(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    UD_ModOutcome loc_outcome = GetOutcome(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    If loc_trigger.StatEvent(Self, akDevice, asStatName, aiStatValue, asDataStr, akForm1) == True
+        _DoCallOutcome(loc_outcome, akDevice, asDataStr, akForm2, akForm3)
     EndIf
 EndFunction
 
-Function Sleep(UD_CustomDevice_RenderScript akDevice, Float afDuration, Bool abInterrupted, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
-    UD_ModTrigger loc_trigger = GetTrigger(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    UD_ModOutcome loc_outcome = GetOutcome(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    If loc_trigger.Sleep(Self, akDevice, afDuration, abInterrupted, aiDataStr, akForm1) == True
-        _DoCallOutcome(loc_outcome, akDevice, aiDataStr, akForm2, akForm3)
+Function Sleep(UD_CustomDevice_RenderScript akDevice, Float afDuration, Bool abInterrupted, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+    UD_ModTrigger loc_trigger = GetTrigger(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    UD_ModOutcome loc_outcome = GetOutcome(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    If loc_trigger.Sleep(Self, akDevice, afDuration, abInterrupted, asDataStr, akForm1) == True
+        _DoCallOutcome(loc_outcome, akDevice, asDataStr, akForm2, akForm3)
     EndIf
 EndFunction
 
-Function ActorAction(UD_CustomDevice_RenderScript akDevice, Int aiActorAction, Int aiEquipSlot, Form akSource, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
-    UD_ModTrigger loc_trigger = GetTrigger(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    UD_ModOutcome loc_outcome = GetOutcome(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    If loc_trigger.ActorAction(Self, akDevice, aiActorAction, aiEquipSlot, akSource, aiDataStr, akForm1) == True
-        _DoCallOutcome(loc_outcome, akDevice, aiDataStr, akForm2, akForm3)
+Function ActorAction(UD_CustomDevice_RenderScript akDevice, Int aiActorAction, Int aiEquipSlot, Form akSource, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+    UD_ModTrigger loc_trigger = GetTrigger(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    UD_ModOutcome loc_outcome = GetOutcome(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    If loc_trigger.ActorAction(Self, akDevice, aiActorAction, aiEquipSlot, akSource, asDataStr, akForm1) == True
+        _DoCallOutcome(loc_outcome, akDevice, asDataStr, akForm2, akForm3)
     EndIf
 EndFunction
 
-Function KillMonitor(UD_CustomDevice_RenderScript akDevice, ObjectReference akVictim, Int aiCrimeStatus, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
-    UD_ModTrigger loc_trigger = GetTrigger(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    UD_ModOutcome loc_outcome = GetOutcome(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    If loc_trigger.KillMonitor(Self, akDevice, akVictim, aiCrimeStatus, aiDataStr, akForm1) == True
-        _DoCallOutcome(loc_outcome, akDevice, aiDataStr, akForm2, akForm3)
+Function KillMonitor(UD_CustomDevice_RenderScript akDevice, ObjectReference akVictim, Int aiCrimeStatus, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+    UD_ModTrigger loc_trigger = GetTrigger(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    UD_ModOutcome loc_outcome = GetOutcome(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    If loc_trigger.KillMonitor(Self, akDevice, akVictim, aiCrimeStatus, asDataStr, akForm1) == True
+        _DoCallOutcome(loc_outcome, akDevice, asDataStr, akForm2, akForm3)
     EndIf
 EndFunction
 
-Function ItemAdded(UD_CustomDevice_RenderScript akDevice, Form akItemForm, Int aiItemCount, ObjectReference akSourceContainer, Bool abIsStolen, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
-    UD_ModTrigger loc_trigger = GetTrigger(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    UD_ModOutcome loc_outcome = GetOutcome(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    If loc_trigger.ItemAdded(Self, akDevice, akItemForm, aiItemCount, akSourceContainer, abIsStolen, aiDataStr, akForm1) == True
-        _DoCallOutcome(loc_outcome, akDevice, aiDataStr, akForm2, akForm3)
+Function ItemAdded(UD_CustomDevice_RenderScript akDevice, Form akItemForm, Int aiItemCount, ObjectReference akSourceContainer, Bool abIsStolen, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+    UD_ModTrigger loc_trigger = GetTrigger(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    UD_ModOutcome loc_outcome = GetOutcome(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    If loc_trigger.ItemAdded(Self, akDevice, akItemForm, aiItemCount, akSourceContainer, abIsStolen, asDataStr, akForm1) == True
+        _DoCallOutcome(loc_outcome, akDevice, asDataStr, akForm2, akForm3)
     EndIf
 EndFunction
 
-Function ItemRemoved(UD_CustomDevice_RenderScript akDevice, Form akItemForm, Int aiItemCount, ObjectReference akDestContainer, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
-    UD_ModTrigger loc_trigger = GetTrigger(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    UD_ModOutcome loc_outcome = GetOutcome(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    If loc_trigger.ItemRemoved(Self, akDevice, akItemForm, aiItemCount, akDestContainer, aiDataStr, akForm1) == True
-        _DoCallOutcome(loc_outcome, akDevice, aiDataStr, akForm2, akForm3)
+Function ItemRemoved(UD_CustomDevice_RenderScript akDevice, Form akItemForm, Int aiItemCount, ObjectReference akDestContainer, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+    UD_ModTrigger loc_trigger = GetTrigger(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    UD_ModOutcome loc_outcome = GetOutcome(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    If loc_trigger.ItemRemoved(Self, akDevice, akItemForm, aiItemCount, akDestContainer, asDataStr, akForm1) == True
+        _DoCallOutcome(loc_outcome, akDevice, asDataStr, akForm2, akForm3)
     EndIf
 EndFunction
 
-Function SkillIncreased(UD_CustomDevice_RenderScript akDevice, String asSkill, Int aiValue, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
-    UD_ModTrigger loc_trigger = GetTrigger(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    UD_ModOutcome loc_outcome = GetOutcome(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    If loc_trigger.SkillIncreased(Self, akDevice, asSkill, aiValue, aiDataStr, akForm1) == True
-        _DoCallOutcome(loc_outcome, akDevice, aiDataStr, akForm2, akForm3)
+Function SkillIncreased(UD_CustomDevice_RenderScript akDevice, String asSkill, Int aiValue, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+    UD_ModTrigger loc_trigger = GetTrigger(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    UD_ModOutcome loc_outcome = GetOutcome(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    If loc_trigger.SkillIncreased(Self, akDevice, asSkill, aiValue, asDataStr, akForm1) == True
+        _DoCallOutcome(loc_outcome, akDevice, asDataStr, akForm2, akForm3)
     EndIf
 EndFunction
 
 ; Privates
-Function _DoCallOutcome(UD_ModOutcome akOutcome, UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm2, Form akForm3)
-    OnBeforeOutcome(akOutcome, akDevice, aiDataStr, akForm2, akForm3)
+Function _DoCallOutcome(UD_ModOutcome akOutcome, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm2, Form akForm3)
+    OnBeforeOutcome(akOutcome, akDevice, asDataStr, akForm2, akForm3)
     If akOutcome
         If UDmain.TraceAllowed()
-            UDmain.Log(akOutcome + "::Outcome() akModifier = " + Self + ", akDevice = " + akDevice + ", aiDataStr = " + aiDataStr + ", akForm2 = " + akForm2 + ", akForm3 = " + akForm3, 3)
+            UDmain.Log(akOutcome + "::Outcome() akModifier = " + Self + ", akDevice = " + akDevice + ", asDataStr = " + asDataStr + ", akForm2 = " + akForm2 + ", akForm3 = " + akForm3, 3)
         EndIf
-        akOutcome.Outcome(Self, akDevice, aiDataStr, akForm2, akForm3)
-        OnAfterOutcome(akOutcome, akDevice, aiDataStr, akForm2, akForm3)
+        akOutcome.Outcome(Self, akDevice, asDataStr, akForm2, akForm3)
+        OnAfterOutcome(akOutcome, akDevice, asDataStr, akForm2, akForm3)
     Else
         UDmain.Warning(Self + "::_DoCallOutcome() akOutcome is None!")
     EndIf
@@ -250,9 +252,9 @@ EndFunction
 ===========================================================================================
 ===========================================================================================
 /;
-String Function GetDetails(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
-    UD_ModTrigger loc_trigger = GetTrigger(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    UD_ModOutcome loc_outcome = GetOutcome(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+String Function GetDetails(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+    UD_ModTrigger loc_trigger = GetTrigger(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    UD_ModOutcome loc_outcome = GetOutcome(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
     String loc_res = ""
     loc_res += UDmain.UDMTF.Header(NameFull, UDMain.UDMTF.FontSize + 4)
     loc_res += UDmain.UDMTF.FontBegin(aiFontSize = UDmain.UDMTF.FontSize, asColor = UDmain.UDMTF.TextColorDefault)
@@ -264,11 +266,11 @@ String Function GetDetails(UD_CustomDevice_RenderScript akDevice, String aiDataS
 ; Trigger
     loc_res += UDmain.UDMTF.PageSplit(abForce = False)
     loc_res += UDmain.UDMTF.Header("Trigger")
-    loc_res += loc_trigger.GetDetails(Self, akDevice, aiDataStr, akForm1)
+    loc_res += loc_trigger.GetDetails(Self, akDevice, asDataStr, akForm1)
 ; Outcome
     loc_res += UDmain.UDMTF.PageSplit(abForce = False)
     loc_res += UDmain.UDMTF.Header("Outcome")
-    loc_res += loc_outcome.GetDetails(Self, akDevice, aiDataStr, akForm2, akForm3)
+    loc_res += loc_outcome.GetDetails(Self, akDevice, asDataStr, akForm2, akForm3)
     
     loc_res += UDmain.UDMTF.FooterSplit()
     loc_res += UDmain.UDMTF.FontEnd()
@@ -277,7 +279,7 @@ String Function GetDetails(UD_CustomDevice_RenderScript akDevice, String aiDataS
 EndFunction
 
 ; A message in the device description that explains the minigame prohibition
-String Function MinigameProhibitedMessage(UD_CustomDevice_RenderScript akDevice, String aiDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
-    UD_ModOutcome loc_outcome = GetOutcome(akDevice, aiDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    Return loc_outcome.MinigameProhibitedMessage(Self, akDevice, aiDataStr, akForm2, akForm3)
+String Function MinigameProhibitedMessage(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+    UD_ModOutcome loc_outcome = GetOutcome(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    Return loc_outcome.MinigameProhibitedMessage(Self, akDevice, asDataStr, akForm2, akForm3)
 EndFunction
