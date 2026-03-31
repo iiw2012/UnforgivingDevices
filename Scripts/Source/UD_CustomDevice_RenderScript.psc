@@ -2249,6 +2249,22 @@ Int Function GetJammedLocks()
     endif
 EndFunction
 
+Int Function GetTimeLockedLocks()
+    if HaveLocks()
+        Int loc_LockNum = GetLockNumber()
+        Int loc_res = 0
+        while loc_LockNum
+            loc_LockNum -= 1
+            if IsNthLockTimeLocked(loc_LockNum) && GetNthLockTimeLock(loc_LockNum) > 0
+                loc_res += 1
+            endif
+        endwhile
+        return loc_res
+    else
+        return 0
+    endif    
+EndFunction
+
 ;return string array of lock names. This is what is shown to player when selecting lock
 ;return none in case of error
 String[] Function GetLockList()
@@ -7080,6 +7096,10 @@ String Function _GetDeviceLockMenuText()
     EndIf
     If _getLockpickLevel(0) <= 4 && loc_lps_couns == 0
         loc_res += UDMTF.Text("You have no lockpicks!", asColor = UDMTF.BoolToRainbow(False))
+        loc_res += UDMTF.LineBreak()
+    EndIf
+    If GetTimeLockedLocks() > 0
+        loc_res += UDMTF.Text("You'll have to wait some time before you can try to unlock some of the locks!", asColor = UDMTF.PercentToRainbow(50))
         loc_res += UDMTF.LineBreak()
     EndIf
     

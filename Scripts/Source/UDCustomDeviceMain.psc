@@ -3771,7 +3771,7 @@ int Function ManifestDevices(Actor akActor,string asSource ,int aiChance,int aiN
                 ShowMessageBox(loc_str)
                 /;
             elseif AllowNPCMessage(akActor)
-                UDmain.Print(GetActorName(akActor) + "'s "+ asSource +" suddenly locks them in bondage restraints!",3)
+                UDmain.Print(GetActorName(akActor) + "'s " + asSource + " suddenly locks them in bondage restraints!",3)
             endif
         endif
     endif

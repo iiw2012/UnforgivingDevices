@@ -46,8 +46,10 @@ Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDe
 
     Actor loc_wearer = akDevice.GetWearer()
     Int loc_i = 0
-    If loc_devices.Length > 0
-        PrintNotification(akDevice, "You heard the sound of locks closing from one of your devices", aiEffectId = 0)
+    If loc_devices.Length > 1
+        PrintNotification(akDevice, "You heard the sound of locks clicking shut on one of your devices that you had adjusted earlier.", aiEffectId = 0)
+    ElseIf loc_devices.Length > 0
+        PrintNotification(akDevice, "You heard the sound of locks clicking shut on several of your devices that you had adjusted earlier.", aiEffectId = 0)
     EndIf
     While loc_i < loc_devices.Length
         If loc_devices[loc_i]
