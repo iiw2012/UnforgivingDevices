@@ -98,6 +98,10 @@ Bool Function MinigameEnded(UD_Modifier_Combo akModifier, UD_CustomDevice_Render
     Return False
 EndFunction
 
+Bool Function MinigameEndedAsync(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, UD_CustomDevice_RenderScript akMinigameDevice, String asMinigameName, String asDataStr, Form akForm1)
+    Return False
+EndFunction
+
 Bool Function WeaponHit(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Weapon akWeapon, Float afDamage, String asDataStr, Form akForm1)
     Return False
 EndFunction

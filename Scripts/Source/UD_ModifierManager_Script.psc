@@ -130,7 +130,22 @@ Function _UpdateEventRegistrations(Bool abUnregister = False)
         RegisterForActorAction(8)       ; 
         RegisterForActorAction(9)       ; 
         RegisterForActorAction(10)      ; 
+        RegisterForModEvent("UDEvent_DeviceMinigameEnd", "OnUDDeviceMinigameEnd")
     Else
+        UnregisterForTrackedStatsEvent()
+        UnregisterForSleep()
+        UnregisterForActorAction(0)       ; weapon swing
+        UnregisterForActorAction(1)       ; 
+        UnregisterForActorAction(2)       ; 
+        UnregisterForActorAction(3)       ; voice cast
+        UnregisterForActorAction(4)       ; voice fire
+        UnregisterForActorAction(5)       ; 
+        UnregisterForActorAction(6)       ; 
+        UnregisterForActorAction(7)       ; 
+        UnregisterForActorAction(8)       ; 
+        UnregisterForActorAction(9)       ; 
+        UnregisterForActorAction(10)      ; 
+        UnregisterForModEvent("UDEvent_DeviceMinigameEnd")
     EndIf
 EndFunction
 
@@ -240,6 +255,14 @@ Event OnActorAction(Int aiActionType, Actor akActor, Form akSource, Int aiSlot)
         Return
     EndIf
     _UpdateModifiers_ActorAction(loc_slot, aiActionType, aiSlot, akSource)
+EndEvent
+
+Event OnUDDeviceMinigameEnd(String asSource, Form akFActor, Form akFHelper, String asMinigameName, Float afRelativeDurability, Bool abIsUnlocked, Form akFID, Form akFRD)
+    UD_CustomDevice_RenderScript loc_device = akFRD As UD_CustomDevice_RenderScript
+    If loc_device == None
+        Return
+    EndIf
+    Procces_UpdateModifiers_MinigameEndedAsync(loc_device, asMinigameName)
 EndEvent
 
 String[] Function GetModifiersTags()
@@ -463,7 +486,7 @@ Function ValidateModifiers(UD_CustomDevice_RenderScript akDevice, Bool abGameLoa
         loc_error = True
     EndIf
     If loc_error
-        UDmain.Warning(akDevice + "::ValidateModifiers() Modifier's datas were fixed during validation!")
+        UDmain.Warning("UD_ModifierManager_Script::ValidateModifiers()" + akDevice + " modifier's datas were fixed during validation!")
     EndIf
     int loc_modid = akDevice.UD_ModifiersRef.length
     while loc_modid 
@@ -585,7 +608,7 @@ Function Procces_UpdateModifiers_MinigameStarted(UD_CustomDevice_RenderScript ak
 
 EndFunction
 
-Function Procces_UpdateModifiers_MinigameEnded(UD_CustomDevice_RenderScript akDevice) ;directly accesed from device
+Function Procces_UpdateModifiers_MinigameEnded(UD_CustomDevice_RenderScript akDevice)
     UD_CustomDevice_NPCSlot loc_slot = akDevice.UD_WearerSlot
     if !loc_slot || !loc_slot.isUsed() || loc_slot.isDead() || !loc_slot.isScriptRunning()
         return
@@ -601,6 +624,27 @@ Function Procces_UpdateModifiers_MinigameEnded(UD_CustomDevice_RenderScript akDe
             loc_mod.MinigameEnded(loc_device,akDevice,loc_device.UD_ModifiersDataStr[loc_modid],loc_device.UD_ModifiersDataForm1[loc_modid],loc_device.UD_ModifiersDataForm2[loc_modid],loc_device.UD_ModifiersDataForm3[loc_modid],loc_device.UD_ModifiersDataForm4[loc_modid],loc_device.UD_ModifiersDataForm5[loc_modid])
         endwhile
         i+=1
+        loc_device = loc_slot.UD_equipedCustomDevices[i]
+    endwhile
+
+EndFunction
+
+Function Procces_UpdateModifiers_MinigameEndedAsync(UD_CustomDevice_RenderScript akDevice, String asMinigameName;/, Form akWearer, Form akHelper, Bool abIsUnlocked/;)
+    UD_CustomDevice_NPCSlot loc_slot = akDevice.UD_WearerSlot
+    if !loc_slot || !loc_slot.isUsed() || loc_slot.isDead() || !loc_slot.isScriptRunning()
+        return
+    endif
+    
+    int i = 0
+    UD_CustomDevice_RenderScript loc_device = loc_slot.UD_equipedCustomDevices[i]
+    while i < loc_slot.UD_equipedCustomDevices.Length && loc_device
+        int loc_modid = loc_device.UD_ModifiersRef.length
+        while loc_modid 
+            loc_modid -= 1
+            UD_Modifier loc_mod = (loc_device.UD_ModifiersRef[loc_modid] as UD_Modifier)
+            loc_mod.MinigameEndedAsync(loc_device, akDevice, asMinigameName, loc_device.UD_ModifiersDataStr[loc_modid],loc_device.UD_ModifiersDataForm1[loc_modid],loc_device.UD_ModifiersDataForm2[loc_modid],loc_device.UD_ModifiersDataForm3[loc_modid],loc_device.UD_ModifiersDataForm4[loc_modid],loc_device.UD_ModifiersDataForm5[loc_modid])
+        endwhile
+        i += 1
         loc_device = loc_slot.UD_equipedCustomDevices[i]
     endwhile
 

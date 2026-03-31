@@ -145,6 +145,14 @@ Function MinigameEnded(UD_CustomDevice_RenderScript akDevice, UD_CustomDevice_Re
     EndIf
 EndFunction
 
+Function MinigameEndedAsync(UD_CustomDevice_RenderScript akDevice, UD_CustomDevice_RenderScript akMinigameDevice, String asMinigameName, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+    UD_ModTrigger loc_trigger = GetTrigger(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    UD_ModOutcome loc_outcome = GetOutcome(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
+    If loc_trigger.MinigameEndedAsync(Self, akDevice, akMinigameDevice, asMinigameName, asDataStr, akForm1) == True
+        _DoCallOutcome(loc_outcome, akDevice, asDataStr, akForm2, akForm3)
+    EndIf
+EndFunction
+
 Function WeaponHit(UD_CustomDevice_RenderScript akDevice, Weapon akWeapon, Float afDamage, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     UD_ModTrigger loc_trigger = GetTrigger(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
     UD_ModOutcome loc_outcome = GetOutcome(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
