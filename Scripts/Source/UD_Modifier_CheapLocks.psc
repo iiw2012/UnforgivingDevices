@@ -34,7 +34,7 @@ Function TimeUpdateHour(UD_CustomDevice_RenderScript akDevice, Float afGameHours
     if !akDevice.HaveUnlockableLocks()
         return
     endif
-    Float loc_chance_h = GetParamFlt(asDataStr, 0, 0.0, "Probability")
+    Float loc_chance_h = GetParamFlt(akDevice, asDataStr, 0, 0.0, "Probability")
     If loc_chance_h <= 0.0
         Return
     EndIf
@@ -58,8 +58,8 @@ Function WeaponHit(UD_CustomDevice_RenderScript akDevice, Weapon akWeapon, Float
         Return
     EndIf
     Int loc_jlocks = akDevice.GetJammedLocks()
-    Float loc_chance1 = GetParamFlt(asDataStr, 1, 0.0, "Probability")
-    Float loc_chance2 = GetParamFlt(asDataStr, 2, 0.0, "Probability")
+    Float loc_chance1 = GetParamFlt(akDevice, asDataStr, 1, 0.0, "Probability")
+    Float loc_chance2 = GetParamFlt(akDevice, asDataStr, 2, 0.0, "Probability")
     If loc_chance1 + loc_chance2 * afDamage <= 0.0
         Return
     EndIf
@@ -76,8 +76,8 @@ EndFunction
 /;
 String Function GetParamsTableRows(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     String loc_res = ""
-    loc_res += UDmain.UDMTF.TableRowDetails("Chance per hour:",     FormatFloat(GetParamFlt(asDataStr, 0, 0.0, "Probability"), 2) + "%")
-    loc_res += UDmain.UDMTF.TableRowDetails("Chance per hit:",      FormatFloat(GetParamFlt(asDataStr, 1, 0.0, "Probability"), 2) + "%")
-    loc_res += UDmain.UDMTF.TableRowDetails("Chance per dmg:",      FormatFloat(GetParamFlt(asDataStr, 2, 0.0, "Probability"), 2) + "%")
+    loc_res += UDmain.UDMTF.TableRowDetails("Chance per hour:",     FormatFloat(GetParamFlt(akDevice, asDataStr, 0, 0.0, "Probability"), 2) + "%")
+    loc_res += UDmain.UDMTF.TableRowDetails("Chance per hit:",      FormatFloat(GetParamFlt(akDevice, asDataStr, 1, 0.0, "Probability"), 2) + "%")
+    loc_res += UDmain.UDMTF.TableRowDetails("Chance per dmg:",      FormatFloat(GetParamFlt(akDevice, asDataStr, 2, 0.0, "Probability"), 2) + "%")
     Return loc_res
 EndFunction

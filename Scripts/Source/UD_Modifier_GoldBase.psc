@@ -39,10 +39,10 @@ import UD_Native
 /;
 String Function GetParamsTableRows(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     Form loc_currency = UDlibs.Gold
-    Int loc_A_min = GetParamInt(asDataStr, 0, 0,            "Output")
-    Int loc_A_max = GetParamInt(asDataStr, 1, loc_A_min,    "Output")
-    Int loc_B_min = GetParamInt(asDataStr, 2, 0,            "Output")
-    Int loc_B_max = GetParamInt(asDataStr, 3, loc_B_min,    "Output")
+    Int loc_A_min = GetParamInt(akDevice, asDataStr, 0, 0,            "Output")
+    Int loc_A_max = GetParamInt(akDevice, asDataStr, 1, loc_A_min,    "Output")
+    Int loc_B_min = GetParamInt(akDevice, asDataStr, 2, 0,            "Output")
+    Int loc_B_max = GetParamInt(akDevice, asDataStr, 3, loc_B_min,    "Output")
     If akForm3 != None
         loc_currency = akForm3
     EndIf
@@ -58,21 +58,21 @@ EndFunction
 ===========================================================================================
 ===========================================================================================
 /;
-Int Function CalculateGold2(String asDataStr, int aiLevel, Bool abRandom = true)
+Int Function CalculateGold2(UD_CustomDevice_RenderScript akDevice, String asDataStr, Bool abRandom = true)
     ; para 0 = min A
     ; para 1 = max A
     ; para 2 = min B
     ; para 3 = max B
     ; result = A + B * Level
 
-    Int loc_A_min = GetParamInt(asDataStr, 0, 0,            "Output")
-    Int loc_A_max = GetParamInt(asDataStr, 1, loc_A_min,    "Output")
-    Int loc_B_min = GetParamInt(asDataStr, 2, 0,            "Output")
-    Int loc_B_max = GetParamInt(asDataStr, 3, loc_B_min,    "Output")
+    Int loc_A_min = GetParamInt(akDevice, asDataStr, 0, 0,            "Output")
+    Int loc_A_max = GetParamInt(akDevice, asDataStr, 1, loc_A_min,    "Output")
+    Int loc_B_min = GetParamInt(akDevice, asDataStr, 2, 0,            "Output")
+    Int loc_B_max = GetParamInt(akDevice, asDataStr, 3, loc_B_min,    "Output")
     
     If abRandom
-        Return RandomInt(loc_A_min, loc_A_max) + RandomInt(loc_B_min, loc_B_max) * aiLevel
+        Return RandomInt(loc_A_min, loc_A_max) + RandomInt(loc_B_min, loc_B_max) * akDevice.UD_Level
     Else
-        Return loc_A_max + loc_B_max * aiLevel
+        Return loc_A_max + loc_B_max * akDevice.UD_Level
     EndIf
 EndFunction

@@ -40,9 +40,9 @@ Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDe
 
     Form loc_item = UD_Modifier.GetRandomForm(akForm2, akForm3)
     If loc_item
-        Int loc_min     = GetParamInt(akModifier, asDataStr, 0, 1,          "Output")
-        Int loc_max     = GetParamInt(akModifier, asDataStr, 1, loc_min,    "Output")
-        Bool loc_use    = GetParamBln(akModifier, asDataStr, 2, False)
+        Int loc_min     = GetParamInt(akModifier, akDevice, asDataStr, 0, 1,          "Output")
+        Int loc_max     = GetParamInt(akModifier, akDevice, asDataStr, 1, loc_min,    "Output")
+        Bool loc_use    = GetParamBln(akModifier, akDevice, asDataStr, 2, False)
         Actor loc_wearer = akDevice.GetWearer()
         Int loc_count = RandomInt(loc_min, loc_max)
         
@@ -78,9 +78,9 @@ EndFunction
 /;
 String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm2, Form akForm3)
     String loc_res = ""
-    Int loc_min     = GetParamInt(akModifier, asDataStr, 0, 1,          "Output")
-    Int loc_max     = GetParamInt(akModifier, asDataStr, 1, loc_min,    "Output")
-    Bool loc_use    = GetParamBln(akModifier, asDataStr, 2, False)
+    Int loc_min     = GetParamInt(akModifier, akDevice, asDataStr, 0, 1,          "Output")
+    Int loc_max     = GetParamInt(akModifier, akDevice, asDataStr, 1, loc_min,    "Output")
+    Bool loc_use    = GetParamBln(akModifier, akDevice, asDataStr, 2, False)
 
     loc_res += UDmain.UDMTF.TableRowDetails("Number of items:", loc_min + " - " + loc_max)
     If akForm2

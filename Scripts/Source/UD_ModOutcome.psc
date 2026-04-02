@@ -139,20 +139,20 @@ Function PrintNotification(UD_CustomDevice_RenderScript akDevice, String asOutco
     UDMain.Print(loc_effect + asOutcome)
 EndFunction
 
-Int Function GetParamInt(UD_Modifier akModifier, String asDataStr, Int aiPos, Int aiDefault = 0, String asMultType = "")
-    Return akModifier.GetParamInt(asDataStr, DataStrOffset + aiPos, aiDefault, asMultType)
+Int Function GetParamInt(UD_Modifier akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Int aiPos, Int aiDefault = 0, String asMultType = "")
+    Return akModifier.GetParamInt(akDevice, asDataStr, DataStrOffset + aiPos, aiDefault, asMultType)
 EndFunction
 
-Float Function GetParamFlt(UD_Modifier akModifier, String asDataStr, Int aiPos, Float afDefault = 0.0, String asMultType = "")
-    Return akModifier.GetParamFlt(asDataStr, DataStrOffset + aiPos, afDefault, asMultType)
+Float Function GetParamFlt(UD_Modifier akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Int aiPos, Float afDefault = 0.0, String asMultType = "")
+    Return akModifier.GetParamFlt(akDevice, asDataStr, DataStrOffset + aiPos, afDefault, asMultType)
 EndFunction
 
-String Function GetParamStr(UD_Modifier akModifier, String asDataStr, Int aiPos, String asDefault = "", String asMultType = "")
-    Return akModifier.GetParamStr(asDataStr, DataStrOffset + aiPos, asDefault, asMultType)
+String Function GetParamStr(UD_Modifier akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Int aiPos, String asDefault = "", String asMultType = "")
+    Return akModifier.GetParamStr(akDevice, asDataStr, DataStrOffset + aiPos, asDefault, asMultType)
 EndFunction
 
-Bool Function GetParamBln(UD_Modifier akModifier, String asDataStr, Int aiPos, Bool abDefault = False, String asMultType = "")
-    Return akModifier.GetParamBln(asDataStr, DataStrOffset + aiPos, abDefault, asMultType)
+Bool Function GetParamBln(UD_Modifier akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Int aiPos, Bool abDefault = False, String asMultType = "")
+    Return akModifier.GetParamBln(akDevice, asDataStr, DataStrOffset + aiPos, abDefault, asMultType)
 EndFunction
 
 Function SetParamInt(UD_Modifier akModifier, UD_CustomDevice_RenderScript akDevice, Int aiPos, Int aiNewValue)

@@ -49,9 +49,9 @@ EndFunction
 /;
 String Function GetParamsTableRows(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     String loc_res = ""
-    loc_res += UDmain.UDMTF.TableRowDetails("Armor Type:",      GetParamStr(asDataStr, 0, "Light"))
-    loc_res += UDmain.UDMTF.TableRowDetails("Material:",        GetParamStr(asDataStr, 1, "Leather"))
-    loc_res += UDmain.UDMTF.TableRowDetails("Armor Value:",     GetParamInt(asDataStr, 2, 0,            "Output"))
+    loc_res += UDmain.UDMTF.TableRowDetails("Armor Type:",      GetParamStr(akDevice, asDataStr, 0, "Light"))
+    loc_res += UDmain.UDMTF.TableRowDetails("Material:",        GetParamStr(akDevice, asDataStr, 1, "Leather"))
+    loc_res += UDmain.UDMTF.TableRowDetails("Armor Value:",     GetParamInt(akDevice, asDataStr, 2, 0,            "Output"))
     Return loc_res
 EndFunction
 
@@ -62,9 +62,9 @@ EndFunction
 ===========================================================================================
 /;
 Function SetArmorValues(UD_CustomDevice_RenderScript akDevice, String asDataStr)
-    String loc_armor_type       = GetParamStr(asDataStr, 0, "Light")
-    String loc_armor_material   = GetParamStr(asDataStr, 1, "Leather")
-    Int loc_armor_value         = GetParamInt(asDataStr, 2, 0,          "Output")
+    String loc_armor_type       = GetParamStr(akDevice, asDataStr, 0, "Light")
+    String loc_armor_material   = GetParamStr(akDevice, asDataStr, 1, "Leather")
+    Int loc_armor_value         = GetParamInt(akDevice, asDataStr, 2, 0,          "Output")
 
     If loc_armor_value < 1
         UDmain.Error("UD_Modifier_Armor::SetArmorValues() Armor value is invalid. loc_armor_value = " + loc_armor_value)

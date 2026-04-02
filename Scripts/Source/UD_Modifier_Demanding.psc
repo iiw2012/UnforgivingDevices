@@ -52,7 +52,7 @@ Bool Function MinigameAllowed(UD_CustomDevice_RenderScript akModDevice, String a
     EndIf
 
     ; checking max. possible value
-    Int loc_gold = CalculateGold2(asDataStr, akModDevice.UD_Level, false)
+    Int loc_gold = CalculateGold2(akModDevice, asDataStr, false)
     Int loc_WearerGold = akModDevice.GetWearer().GetItemCount(loc_currency)
     
     Actor loc_helper   = akModDevice.GetHelper()
@@ -80,7 +80,7 @@ Function MinigameStarted(UD_CustomDevice_RenderScript akModDevice, UD_CustomDevi
         loc_currency = akForm1
     EndIf
 
-    Int loc_Gold = CalculateGold2(asDataStr, akModDevice.UD_Level)
+    Int loc_Gold = CalculateGold2(akModDevice, asDataStr)
     
     if akModDevice.GetWearer().GetItemCount(loc_currency) >= loc_Gold
         akMinigameDevice.GetWearer().RemoveItem(loc_currency, loc_Gold)

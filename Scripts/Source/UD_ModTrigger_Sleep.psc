@@ -41,11 +41,11 @@ import UD_Native
 ===========================================================================================
 /;
 Bool Function Sleep(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Float afDuration, Bool abInterrupted, String asDataStr, Form akForm1)
-    Int loc_min_dur         = GetParamInt(akModifier, asDataStr, 0, 0,      "Input")
-    Float loc_prob_base     = GetParamFlt(akModifier, asDataStr, 1, 100.0,  "Probability")
-    Float loc_prob_accum    = GetParamFlt(akModifier, asDataStr, 2, 0.0,    "Probability")
-    Int loc_ending          = GetParamInt(akModifier, asDataStr, 3, 0)
-    Bool loc_repeat         = GetParamBln(akModifier, asDataStr, 4, False)
+    Int loc_min_dur         = GetParamInt(akModifier, akDevice, asDataStr, 0, 0,      "Input")
+    Float loc_prob_base     = GetParamFlt(akModifier, akDevice, asDataStr, 1, 100.0,  "Probability")
+    Float loc_prob_accum    = GetParamFlt(akModifier, akDevice, asDataStr, 2, 0.0,    "Probability")
+    Int loc_ending          = GetParamInt(akModifier, akDevice, asDataStr, 3, 0)
+    Bool loc_repeat         = GetParamBln(akModifier, akDevice, asDataStr, 4, False)
     If (loc_ending == 2 && !abInterrupted) || (loc_ending == 1 && abInterrupted)
         Return False
     EndIf
@@ -63,11 +63,11 @@ EndFunction
 ===========================================================================================
 /;
 String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1)
-    Int loc_min_dur         = GetParamInt(akModifier, asDataStr, 0, 0,      "Input")
-    Float loc_prob_base     = GetParamFlt(akModifier, asDataStr, 1, 100.0,  "Probability")
-    Float loc_prob_accum    = GetParamFlt(akModifier, asDataStr, 2, 0.0,    "Probability")
-    Int loc_ending          = GetParamInt(akModifier, asDataStr, 3, 0)
-    Bool loc_repeat         = GetParamBln(akModifier, asDataStr, 4, False)
+    Int loc_min_dur         = GetParamInt(akModifier, akDevice, asDataStr, 0, 0,      "Input")
+    Float loc_prob_base     = GetParamFlt(akModifier, akDevice, asDataStr, 1, 100.0,  "Probability")
+    Float loc_prob_accum    = GetParamFlt(akModifier, akDevice, asDataStr, 2, 0.0,    "Probability")
+    Int loc_ending          = GetParamInt(akModifier, akDevice, asDataStr, 3, 0)
+    Bool loc_repeat         = GetParamBln(akModifier, akDevice, asDataStr, 4, False)
     String loc_res = ""
     String loc_frag = ""
     If loc_ending == 0

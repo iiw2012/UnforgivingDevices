@@ -46,12 +46,12 @@ import UD_Native
 /;
 Bool Function TimeUpdateSeconds(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Float afGameHoursSinceLastCall, Float afRealSecondsSinceLastCall, String asDataStr, Form akForm1)
     Actor loc_actor = akDevice.GetWearer()
-    String loc_stance       = GetParamStr(akModifier, asDataStr, 0, "")
-    Float loc_min_value     = GetParamFlt(akModifier, asDataStr, 1, 0.0, "Input")
-    Float loc_prob_accum    = GetParamFlt(akModifier, asDataStr, 2, 0.0, "Probability")
-    Bool loc_reset          = GetParamBln(akModifier, asDataStr, 3, True)
-    Bool loc_repeat         = GetParamBln(akModifier, asDataStr, 4, False)
-    Float loc_accum         = GetParamFlt(akModifier, asDataStr, 5, 0.0)
+    String loc_stance       = GetParamStr(akModifier, akDevice, asDataStr, 0, "")
+    Float loc_min_value     = GetParamFlt(akModifier, akDevice, asDataStr, 1, 0.0, "Input")
+    Float loc_prob_accum    = GetParamFlt(akModifier, akDevice, asDataStr, 2, 0.0, "Probability")
+    Bool loc_reset          = GetParamBln(akModifier, akDevice, asDataStr, 3, True)
+    Bool loc_repeat         = GetParamBln(akModifier, akDevice, asDataStr, 4, False)
+    Float loc_accum         = GetParamFlt(akModifier, akDevice, asDataStr, 5, 0.0)
 
     If !BaseTriggerIsActive(asDataStr, 5)
         Return False
@@ -65,11 +65,14 @@ Bool Function TimeUpdateSeconds(UD_Modifier_Combo akModifier, UD_CustomDevice_Re
             EndIf
         EndIf
 
-        If BaseTriggerIsActive(asDataStr, 5) && RandomFloat(0.0, 100.0) < 15.0 * akModifier.MultVerboseness
-            PrintNotification(akDevice, ;/ reacted /;"probably because of the way you move.")
+        If TriggerOnValueDelta(akDevice, akModifier.NameAlias, asDataStr, afValueDelta = afRealSecondsSinceLastCall, afMinAccum = loc_min_value, afProbBase = 0.0, afProbAccum = loc_prob_accum, abRepeat = loc_repeat, aiAccumParamIndex = 5)
+            Return True
+        Else
+            If BaseTriggerIsActive(asDataStr, 5) && RandomFloat(0.0, 100.0) < 15.0 * akModifier.MultVerboseness
+                PrintNotification(akDevice, ;/ reacted /;"probably because of the way you move.")
+            EndIf        
+            Return False
         EndIf
-
-        Return TriggerOnValueDelta(akDevice, akModifier.NameAlias, asDataStr, afValueDelta = afRealSecondsSinceLastCall, afMinAccum = loc_min_value, afProbBase = 0.0, afProbAccum = loc_prob_accum, abRepeat = loc_repeat, aiAccumParamIndex = 5)
     ElseIf loc_reset
     ; reseting accumulator
         If UDmain.TraceAllowed()
@@ -89,12 +92,12 @@ EndFunction
 ===========================================================================================
 /;
 String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1)
-    String loc_stance       = GetParamStr(akModifier, asDataStr, 0, "")
-    Float loc_min_value     = GetParamFlt(akModifier, asDataStr, 1, 0.0, "Input")
-    Float loc_prob_accum    = GetParamFlt(akModifier, asDataStr, 2, 0.0, "Probability")
-    Bool loc_reset          = GetParamBln(akModifier, asDataStr, 3, True)
-    Bool loc_repeat         = GetParamBln(akModifier, asDataStr, 4, False)
-    Float loc_accum         = GetParamFlt(akModifier, asDataStr, 5, 0.0)
+    String loc_stance       = GetParamStr(akModifier, akDevice, asDataStr, 0, "")
+    Float loc_min_value     = GetParamFlt(akModifier, akDevice, asDataStr, 1, 0.0, "Input")
+    Float loc_prob_accum    = GetParamFlt(akModifier, akDevice, asDataStr, 2, 0.0, "Probability")
+    Bool loc_reset          = GetParamBln(akModifier, akDevice, asDataStr, 3, True)
+    Bool loc_repeat         = GetParamBln(akModifier, akDevice, asDataStr, 4, False)
+    Float loc_accum         = GetParamFlt(akModifier, akDevice, asDataStr, 5, 0.0)
 
     String loc_frag = loc_stance
     String loc_res = ""

@@ -42,11 +42,11 @@ Sound       Property TickTackSound      Auto
 ===========================================================================================
 /;
 Bool Function TimeUpdateSeconds(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Float afGameHoursSinceLastCall, Float afRealSecondsSinceLastCall, String asDataStr, Form akForm1)
-    Float loc_min_value     = GetParamFlt(akModifier, asDataStr, 0, 0,      "Input")
-    Float loc_prob_base     = GetParamFlt(akModifier, asDataStr, 1, 100.0,  "Probability")
-    Float loc_prob_acc      = GetParamFlt(akModifier, asDataStr, 2, 0.0,    "Probability")
-    Bool loc_repeat         = GetParamBln(akModifier, asDataStr, 3, False)
-    Float loc_last_check    = GetParamFlt(akModifier, asDataStr, 5, 0.0)
+    Float loc_min_value     = GetParamFlt(akModifier, akDevice, asDataStr, 0, 0,      "Input")
+    Float loc_prob_base     = GetParamFlt(akModifier, akDevice, asDataStr, 1, 100.0,  "Probability")
+    Float loc_prob_acc      = GetParamFlt(akModifier, akDevice, asDataStr, 2, 0.0,    "Probability")
+    Bool loc_repeat         = GetParamBln(akModifier, akDevice, asDataStr, 3, False)
+    Float loc_last_check    = GetParamFlt(akModifier, akDevice, asDataStr, 5, 0.0)
 
     If !BaseTriggerIsActive(asDataStr, 4)
         Return False
@@ -55,27 +55,29 @@ Bool Function TimeUpdateSeconds(UD_Modifier_Combo akModifier, UD_CustomDevice_Re
     If loc_last_check + afGameHoursSinceLastCall > 1.00
         SetParamFlt(akModifier, akDevice, 5, 0.000)
     Else
-    ; using string version for extra precision
-        SetParamStr(akModifier, akDevice, 5, FormatFloat(loc_last_check + afGameHoursSinceLastCall, 3))
+        SetParamFlt(akModifier, akDevice, 5, loc_last_check + afGameHoursSinceLastCall)
         Return False
     EndIf
 
-    If RandomFloat(0.0, 100.0) < 15.0 * akModifier.MultVerboseness
-        PrintNotification(akDevice, "You feel that your " + akDevice.UD_DeviceType + " pulsing faintly and slowly, as if responding to the passage of time.", aiEffectId = 0)
+    If TriggerOnValueDelta(akDevice, akModifier.NameAlias, asDataStr, afValueDelta = afGameHoursSinceLastCall, afMinAccum = loc_min_value, afProbBase = loc_prob_base, afProbAccum = loc_prob_acc, abRepeat = loc_repeat, aiAccumParamIndex = 4)
+        Return True
+    Else 
+        If RandomFloat(0.0, 100.0) < 15.0 * akModifier.MultVerboseness
+            PrintNotification(akDevice, "You feel that your " + akDevice.UD_DeviceType + " pulsing faintly and slowly, as if responding to the passage of time.", aiEffectId = 0)
+        EndIf
+        If TickTackSound && RandomFloat(0.0, 100.0) < 35.0 * akModifier.MultVerboseness
+            TickTackSound.Play(akDevice.GetWearer())
+        EndIf
+        Return False
     EndIf
-    If TickTackSound && RandomFloat(0.0, 100.0) < 35.0 * akModifier.MultVerboseness
-        TickTackSound.Play(akDevice.GetWearer())
-    EndIf
-
-    Return TriggerOnValueDelta(akDevice, akModifier.NameAlias, asDataStr, afValueDelta = afGameHoursSinceLastCall, afMinAccum = loc_min_value, afProbBase = loc_prob_base, afProbAccum = loc_prob_acc, abRepeat = loc_repeat, aiAccumParamIndex = 4)
 EndFunction
 
 Bool Function TimeUpdateHour(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Float afGameHoursSinceLastCall, String asDataStr, Form akForm1)
     Return False
 ;/    
     Float loc_min_value = MultFloat(GetStringParamInt(asDataStr, 0, 0, "Input")
-    Float loc_prob_base = GetParamFlt(akModifier, asDataStr, 1, 100.0, "Probability")
-    Float loc_prob_acc = GetParamFlt(akModifier, asDataStr, 2, 0.0, "Probability")
+    Float loc_prob_base = GetParamFlt(akModifier, akDevice, asDataStr, 1, 100.0, "Probability")
+    Float loc_prob_acc = GetParamFlt(akModifier, akDevice, asDataStr, 2, 0.0, "Probability")
     Bool loc_repeat = GetStringParamInt(asDataStr, 3, 1) > 0
 
     If BaseTriggerIsActive(asDataStr, 4) && RandomFloat(0.0, 100.0) < 30.0 * akModifier.MultVerboseness
@@ -91,7 +93,7 @@ Bool Function DeviceLocked(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderS
     Float loc_offset = RandomFloat(-0.45, 0.45)
     SetParamFlt(akModifier, akDevice, 5, loc_offset)
     If UDmain.TraceAllowed()
-        UDmain.Log(Self + "::DeviceLocked() loc_offset = " + FormatFloat(loc_offset, 2), 3)
+        UDmain.Log(Self + "::DeviceLocked() loc_offset = " + FormatFloat(loc_offset, 3), 3)
     EndIf
     Return False
 EndFunction
@@ -102,11 +104,11 @@ EndFunction
 ===========================================================================================
 /;
 String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1)
-    Float loc_min_value     = GetParamFlt(akModifier, asDataStr, 0, 0,      "Input")
-    Float loc_prob_base     = GetParamFlt(akModifier, asDataStr, 1, 100.0,  "Probability")
-    Float loc_prob_acc      = GetParamFlt(akModifier, asDataStr, 2, 0.0,    "Probability")
-    Bool loc_repeat         = GetParamBln(akModifier, asDataStr, 3, False)
-    Float loc_accum         = GetParamFlt(akModifier, asDataStr, 4, 0.0)
+    Float loc_min_value     = GetParamFlt(akModifier, akDevice, asDataStr, 0, 0,      "Input")
+    Float loc_prob_base     = GetParamFlt(akModifier, akDevice, asDataStr, 1, 100.0,  "Probability")
+    Float loc_prob_acc      = GetParamFlt(akModifier, akDevice, asDataStr, 2, 0.0,    "Probability")
+    Bool loc_repeat         = GetParamBln(akModifier, akDevice, asDataStr, 3, False)
+    Float loc_accum         = GetParamFlt(akModifier, akDevice, asDataStr, 4, 0.0)
     String loc_res = ""
     loc_res += UDmain.UDMTF.TableRowDetails("Threshold value:",     FormatFloat(loc_min_value, 2) + " hours")
     loc_res += UDmain.UDMTF.TableRowDetails("Base probability:",    FormatFloat(loc_prob_base, 1) + "%")

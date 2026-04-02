@@ -91,12 +91,12 @@ Bool Function StatEvent(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScri
     ; in case the wearer picks lock in minigame
         Return False
     EndIf
-    If asStatName != GetParamStr(akModifier, asDataStr, 0, "")
+    If asStatName != GetParamStr(akModifier, akDevice, asDataStr, 0, "")
         Return False
     EndIf
-    Int loc_min_value       = GetParamInt(akModifier, asDataStr, 1, 0,      "Input")
-    Float loc_prob_base     = GetParamFlt(akModifier, asDataStr, 2, 100.0,  "Probability")
-    Bool loc_repeat         = GetParamBln(akModifier, asDataStr, 3, False)
+    Int loc_min_value       = GetParamInt(akModifier, akDevice, asDataStr, 1, 0,      "Input")
+    Float loc_prob_base     = GetParamFlt(akModifier, akDevice, asDataStr, 2, 100.0,  "Probability")
+    Bool loc_repeat         = GetParamBln(akModifier, akDevice, asDataStr, 3, False)
 
     Bool loc_rare_events = PapyrusUtil.CountString(_FrequentEvents, asStatName) == 0
     If BaseTriggerIsActive(asDataStr, 4) && RandomFloat(0.0, 100.0) < (2.0 * (1.0 + 9.0 * (loc_rare_events As Int))) * akModifier.MultVerboseness
@@ -117,11 +117,11 @@ EndFunction
 ===========================================================================================
 /;
 String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1)
-    String loc_stat         = GetParamStr(akModifier, asDataStr, 0, "")
-    Int loc_min_value       = GetParamInt(akModifier, asDataStr, 1, 0,      "Input")
-    Float loc_prob_base     = GetParamFlt(akModifier, asDataStr, 2, 100.0,  "Probability")
-    Bool loc_repeat         = GetParamBln(akModifier, asDataStr, 3, False)
-    Float loc_accum         = GetParamFlt(akModifier, asDataStr, 4, 0.0)
+    String loc_stat         = GetParamStr(akModifier, akDevice, asDataStr, 0, "")
+    Int loc_min_value       = GetParamInt(akModifier, akDevice, asDataStr, 1, 0,      "Input")
+    Float loc_prob_base     = GetParamFlt(akModifier, akDevice, asDataStr, 2, 100.0,  "Probability")
+    Bool loc_repeat         = GetParamBln(akModifier, akDevice, asDataStr, 3, False)
+    Float loc_accum         = GetParamFlt(akModifier, akDevice, asDataStr, 4, 0.0)
     
     String loc_res = ""
     loc_res += UDmain.UDMTF.TableRowDetails("Stat name:",           loc_stat)

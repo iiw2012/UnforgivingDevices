@@ -39,10 +39,10 @@ import UD_Native
 /;
 
 Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm2, Form akForm3)
-    Int loc_count               = GetParamInt(akModifier, asDataStr, 0, 1)
-    String loc_method_list2     = GetParamStr(akModifier, asDataStr, 1, "S")
-    Float loc_min               = GetParamFlt(akModifier, asDataStr, 2, 0.0,        "Output")
-    Float loc_max               = GetParamFlt(akModifier, asDataStr, 3, loc_min,    "Output")
+    Int loc_count               = GetParamInt(akModifier, akDevice, asDataStr, 0, 1)
+    String loc_method_list2     = GetParamStr(akModifier, akDevice, asDataStr, 1, "S")
+    Float loc_min               = GetParamFlt(akModifier, akDevice, asDataStr, 2, 0.0,        "Output")
+    Float loc_max               = GetParamFlt(akModifier, akDevice, asDataStr, 3, loc_min,    "Output")
 
     UD_CustomDevice_RenderScript[] loc_devices = GetEquippedDevicesWithSelectionMethod(akDevice, loc_count, akForm2, loc_method_list2, akForm3, "")
 
@@ -74,15 +74,15 @@ EndFunction
 String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm2, Form akForm3)
     String loc_res = ""
     String loc_frag = "" 
-    String loc_method_list2 = GetParamStr(akModifier, asDataStr, 1, "S")
-    Float loc_min           = GetParamFlt(akModifier, asDataStr, 2, 0.0,          "Output")
-    Float loc_max           = GetParamFlt(akModifier, asDataStr, 3, loc_min,      "Output")
+    String loc_method_list2 = GetParamStr(akModifier, akDevice, asDataStr, 1, "S")
+    Float loc_min           = GetParamFlt(akModifier, akDevice, asDataStr, 2, 0.0,          "Output")
+    Float loc_max           = GetParamFlt(akModifier, akDevice, asDataStr, 3, loc_min,      "Output")
     If loc_method_list2 == "S"
         loc_frag = "SELF"
     ElseIf loc_method_list2 == "A"
         loc_frag = "ALL"
     Else
-        loc_frag = GetParamInt(akModifier, asDataStr, 0, 1)   
+        loc_frag = GetParamInt(akModifier, akDevice, asDataStr, 0, 1)   
     EndIf
     loc_res += UDmain.UDMTF.TableRowDetails("Number of devices:", loc_frag)
     If loc_method_list2 != "" || akForm2

@@ -41,16 +41,16 @@ Spell Property ManifestExplosion Auto
 /;
 
 Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm2, Form akForm3)
-    Int loc_count           = GetParamInt(akModifier, asDataStr, 0, 1, "Output")
-    String loc_method_list2 = GetParamStr(akModifier, asDataStr, 1, "L")
-    String loc_method_list3 = GetParamStr(akModifier, asDataStr, 2, "")
+    Int loc_count           = GetParamInt(akModifier, akDevice, asDataStr, 0, 1, "Output")
+    String loc_method_list2 = GetParamStr(akModifier, akDevice, asDataStr, 1, "L")
+    String loc_method_list3 = GetParamStr(akModifier, akDevice, asDataStr, 2, "")
     Int loc_remain = loc_count
     String loc_method = loc_method_list2
     
     If loc_method_list2 == "L" || loc_method_list2 == "LIB"
         UDCDmain.ManifestDevices(akDevice.GetWearer(), akDevice.getDeviceName(), 100, loc_count)
         If loc_count > 0 && ManifestExplosion != None
-            akDevice.GetWearer().PlaceAtMe(ManifestExplosion)
+            ManifestExplosion.Cast(akDevice.GetWearer())
         EndIf
         Return
     EndIf
@@ -90,8 +90,7 @@ Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDe
     loc_remain -= UDCDmain.ManifestDevicesFromArray(akDevice.GetWearer(), akDevice.getDeviceName(), loc_forms, loc_method == "R" || loc_method == "RANDOM", loc_remain)
     
     If loc_remain < loc_count && ManifestExplosion != None
-        Actor loc_actor = akDevice.GetWearer()
-        ManifestExplosion.Cast(loc_actor)
+        ManifestExplosion.Cast(akDevice.GetWearer())
     EndIf
     
 EndFunction
@@ -103,9 +102,9 @@ EndFunction
 /;
 String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm2, Form akForm3)
     String loc_res = ""
-    Int loc_count           = GetParamInt(akModifier, asDataStr, 0, 1, "Output")
-    String loc_method_list2 = GetParamStr(akModifier, asDataStr, 1, "L")
-    String loc_method_list3 = GetParamStr(akModifier, asDataStr, 2, "")
+    Int loc_count           = GetParamInt(akModifier, akDevice, asDataStr, 0, 1, "Output")
+    String loc_method_list2 = GetParamStr(akModifier, akDevice, asDataStr, 1, "L")
+    String loc_method_list3 = GetParamStr(akModifier, akDevice, asDataStr, 2, "")
 
     loc_res += UDmain.UDMTF.TableRowDetails("Number of devices:", loc_count)
     If loc_method_list2 != "" || akForm2

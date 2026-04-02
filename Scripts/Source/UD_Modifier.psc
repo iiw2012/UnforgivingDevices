@@ -126,49 +126,47 @@ Float       Property MultVerboseness            = 1.0       Auto Hidden
 
 Int         Property PrintFormsMax              = 3         AutoReadOnly Hidden
 
-Int Function GetParamInt(String asDataStr, Int aiPos, Int aiDefault = 0, String asMultType = "")
+Int Function GetParamInt(UD_CustomDevice_RenderScript akDevice, String asDataStr, Int aiPos, Int aiDefault = 0, String asMultType = "")
     Int loc_val = UD_Native.GetStringParamInt(asDataStr, aiPos, aiDefault)
     Float loc_mult = 1.0
     If asMultType == "Input"
-        loc_mult = MultInputQuantities
-    ElseIf asMultType == "-Input"
-        loc_mult = 1.0 / MultInputQuantities
+        loc_mult *= MultInputQuantities
     ElseIf asMultType == "Output"
-        loc_mult = MultOutputQuantities
-    ElseIf asMultType == "-Output"
-        loc_mult = 1.0 / MultOutputQuantities
+        loc_mult *= MultOutputQuantities
+        loc_mult *= (1.0 - 0.1 * akDevice.UD_Condition)
     ElseIf asMultType == "Probability"
-        loc_mult = MultProbabilities
-    ElseIf asMultType == "-Probability"
-        loc_mult = 1.0 / MultProbabilities
+        loc_mult *= MultProbabilities
+    EndIf
+    If StringUtil.GetNthChar(asMultType, 0) == "-"
+    ; in cases asMultType == -Input, -Output, -Probability
+        loc_mult = 1.0 / loc_mult
     EndIf
     Return UD_Native.Round(loc_val * loc_mult)
 EndFunction
 
-Float Function GetParamFlt(String asDataStr, Int aiPos, Float afDefault = 0.0, String asMultType = "")
+Float Function GetParamFlt(UD_CustomDevice_RenderScript akDevice, String asDataStr, Int aiPos, Float afDefault = 0.0, String asMultType = "")
     Float loc_val = UD_Native.GetStringParamFloat(asDataStr, aiPos, afDefault)
     Float loc_mult = 1.0
     If asMultType == "Input"
-        loc_mult = MultInputQuantities
-    ElseIf asMultType == "-Input"
-        loc_mult = 1.0 / MultInputQuantities
+        loc_mult *= MultInputQuantities
     ElseIf asMultType == "Output"
-        loc_mult = MultOutputQuantities
-    ElseIf asMultType == "-Output"
-        loc_mult = 1.0 / MultOutputQuantities
+        loc_mult *= MultOutputQuantities
+        loc_mult *= (1.0 - 0.1 * akDevice.UD_Condition)
     ElseIf asMultType == "Probability"
-        loc_mult = MultProbabilities
-    ElseIf asMultType == "-Probability"
-        loc_mult = 1.0 / MultProbabilities
+        loc_mult *= MultProbabilities
+    EndIf
+    If StringUtil.GetNthChar(asMultType, 0) == "-"
+    ; in cases asMultType == -Input, -Output, -Probability
+        loc_mult = 1.0 / loc_mult
     EndIf
     Return loc_val * loc_mult
 EndFunction
 
-String Function GetParamStr(String asDataStr, Int aiPos, String asDefault = "", String asMultType = "")
+String Function GetParamStr(UD_CustomDevice_RenderScript akDevice, String asDataStr, Int aiPos, String asDefault = "", String asMultType = "")
     Return UD_Native.GetStringParamString(asDataStr, aiPos, asDefault)
 EndFunction
 
-Bool Function GetParamBln(String asDataStr, Int aiPos, Bool abDefault = False, String asMultType = "")
+Bool Function GetParamBln(UD_CustomDevice_RenderScript akDevice, String asDataStr, Int aiPos, Bool abDefault = False, String asMultType = "")
     Return UD_Native.GetStringParamInt(asDataStr, aiPos, abDefault As Int) > 0
 EndFunction
 
@@ -177,7 +175,7 @@ Function SetParamInt(UD_CustomDevice_RenderScript akDevice, Int aiPos, Int aiNew
 EndFunction
 
 Function SetParamFlt(UD_CustomDevice_RenderScript akDevice, Int aiPos, Float afNewValue)
-    akDevice.editStringModifier(NameAlias, aiPos, FormatFloat(afNewValue, 2))
+    akDevice.editStringModifier(NameAlias, aiPos, FormatFloat(afNewValue, 3))
 EndFunction
 
 Function SetParamStr(UD_CustomDevice_RenderScript akDevice, Int aiPos, String asNewValue)

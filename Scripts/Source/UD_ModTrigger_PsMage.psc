@@ -30,7 +30,7 @@ import UD_Native
 ===========================================================================================
 /;
 Bool Function ActorAction(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Int aiActorAction, Int aiEquipSlot, Form akSource, String asDataStr, Form akForm1)
-    Float loc_prob = GetParamFlt(akModifier, asDataStr, 0, 0.0, "Probability")
+    Float loc_prob = GetParamFlt(akModifier, akDevice, asDataStr, 0, 0.0, "Probability")
     If aiActorAction == 2
     ; Spell Fire
         If akSource as Spell
@@ -48,7 +48,7 @@ EndFunction
 
 Bool Function SkillIncreased(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asSkill, Int aiValue, String asDataStr, Form akForm1)
     If asSkill == "Alteration" || asSkill == "Conjuration" || asSkill == "Destruction" || asSkill == "Illusion"
-        Float loc_prob = GetParamFlt(akModifier, asDataStr, 1, 0.0, "Probability")
+        Float loc_prob = GetParamFlt(akModifier, akDevice, asDataStr, 1, 0.0, "Probability")
         
         If RandomFloat(0.0, 100.0) < 30.0 * akModifier.MultVerboseness
             PrintNotification(akDevice, ;/ reacted /;"because of your actions. For a moment, you see the silhouette of a mage.")
@@ -65,8 +65,8 @@ EndFunction
 ===========================================================================================
 /;
 String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1)
-    Float loc_prob1 = GetParamFlt(akModifier, asDataStr, 0, 0.0, "Probability")
-    Float loc_prob2 = GetParamFlt(akModifier, asDataStr, 1, 0.0, "Probability")
+    Float loc_prob1 = GetParamFlt(akModifier, akDevice, asDataStr, 0, 0.0, "Probability")
+    Float loc_prob2 = GetParamFlt(akModifier, akDevice, asDataStr, 1, 0.0, "Probability")
     String loc_res = ""
     loc_res += UDmain.UDMTF.TableRowDetails("Prob. on spell use:",          FormatFloat(loc_prob1, 1) + "%")
     loc_res += UDmain.UDMTF.TableRowDetails("Prob. on skill increase:",     FormatFloat(loc_prob2, 1) + "%")

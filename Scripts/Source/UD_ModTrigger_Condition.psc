@@ -52,10 +52,10 @@ Bool Function ConditionLoss(UD_Modifier_Combo akModifier, UD_CustomDevice_Render
     ; ignoring "destroyed" state. Use UD_ModTrigger_SimpleEvent + DeviceBroken instead.
         Return False
     EndIf
-    Int loc_min_condition   = iRange(GetParamInt(akModifier, asDataStr, 0, 0,       "Input"),       0, 4)
-    Float loc_prob_base            = GetParamFlt(akModifier, asDataStr, 1, 100.0,   "Probability")
-    Float loc_prob_value           = GetParamFlt(akModifier, asDataStr, 2, 0.0,     "Probability")
-    Bool loc_repeat                = GetParamBln(akModifier, asDataStr, 3, False)
+    Int loc_min_condition   = iRange(GetParamInt(akModifier, akDevice, asDataStr, 0, 0,       "Input"),       0, 4)
+    Float loc_prob_base            = GetParamFlt(akModifier, akDevice, asDataStr, 1, 100.0,   "Probability")
+    Float loc_prob_value           = GetParamFlt(akModifier, akDevice, asDataStr, 2, 0.0,     "Probability")
+    Bool loc_repeat                = GetParamBln(akModifier, akDevice, asDataStr, 3, False)
 
     If BaseTriggerIsActive(asDataStr, 4) && RandomFloat(0.0, 100.0) < 100.0 * akModifier.MultVerboseness
         PrintNotification(akDevice, ;/ reacted /;"after its condition worsened.")
@@ -70,10 +70,10 @@ EndFunction
 ===========================================================================================
 /;
 String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1)
-    Int loc_min_condition   = iRange(GetParamInt(akModifier, asDataStr, 0, 0,       "Input"),       0, 4)
-    Float loc_prob_base            = GetParamFlt(akModifier, asDataStr, 1, 100.0,   "Probability")
-    Float loc_prob_value           = GetParamFlt(akModifier, asDataStr, 2, 0.0,     "Probability")
-    Bool loc_repeat                = GetParamBln(akModifier, asDataStr, 3, False)
+    Int loc_min_condition   = iRange(GetParamInt(akModifier, akDevice, asDataStr, 0, 0,       "Input"),       0, 4)
+    Float loc_prob_base            = GetParamFlt(akModifier, akDevice, asDataStr, 1, 100.0,   "Probability")
+    Float loc_prob_value           = GetParamFlt(akModifier, akDevice, asDataStr, 2, 0.0,     "Probability")
+    Bool loc_repeat                = GetParamBln(akModifier, akDevice, asDataStr, 3, False)
     String loc_res = ""
     loc_res += UDmain.UDMTF.TableRowDetails("Threshold value:", UDCDMain.GetConditionString(loc_min_condition))
     loc_res += UDmain.UDMTF.TableRowDetails("Base probability:", FormatFloat(loc_prob_base, 1) + "%")

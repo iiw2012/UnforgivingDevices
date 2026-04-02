@@ -38,7 +38,7 @@ Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDe
         If !loc_quest.IsRunning()
             loc_quest.Start()
         EndIf
-        Int loc_stage = GetParamInt(akModifier, asDataStr, 0, -1)
+        Int loc_stage = GetParamInt(akModifier, akDevice, asDataStr, 0, -1)
         If loc_stage >= 0
             loc_quest.SetStage(loc_stage)
         EndIf
@@ -52,7 +52,7 @@ Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDe
         If !loc_quest.IsRunning()
             loc_quest.Start()
         EndIf
-        Int loc_stage = GetParamInt(akModifier, asDataStr, 1, -1)
+        Int loc_stage = GetParamInt(akModifier, akDevice, asDataStr, 1, -1)
         If loc_stage >= 0
             loc_quest.SetStage(loc_stage)
         EndIf
@@ -74,7 +74,7 @@ String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice
     If akForm3
         loc_res += akModifier.PrintFormListSelectionDetails(akForm3, "R")
     EndIf
-    loc_res += UDmain.UDMTF.TableRowDetails("Stage #1:", GetParamInt(akModifier, asDataStr, 0, -1))
-    loc_res += UDmain.UDMTF.TableRowDetails("Stage #2:", GetParamInt(akModifier, asDataStr, 0, -1))
+    loc_res += UDmain.UDMTF.TableRowDetails("Stage #1:", GetParamInt(akModifier, akDevice, asDataStr, 0, -1))
+    loc_res += UDmain.UDMTF.TableRowDetails("Stage #2:", GetParamInt(akModifier, akDevice, asDataStr, 0, -1))
     Return loc_res
 EndFunction

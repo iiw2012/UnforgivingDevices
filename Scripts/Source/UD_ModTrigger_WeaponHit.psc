@@ -49,17 +49,20 @@ Bool Function WeaponHit(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScri
     If afDamage <= 0.0
         Return False
     EndIf
-    Int loc_min_value       = GetParamInt(akModifier, asDataStr, 0, 0,      "Input")
-    Float loc_prob_base     = GetParamFlt(akModifier, asDataStr, 1, 100.0,  "Probability")
-    Float loc_prob_delta    = GetParamFlt(akModifier, asDataStr, 2, 0.0,    "Probability")
-    Float loc_prob_acc      = GetParamFlt(akModifier, asDataStr, 3, 0.0,    "Probability")
-    Bool loc_repeat         = GetParamBln(akModifier, asDataStr, 4, False)
+    Int loc_min_value       = GetParamInt(akModifier, akDevice, asDataStr, 0, 0,      "Input")
+    Float loc_prob_base     = GetParamFlt(akModifier, akDevice, asDataStr, 1, 100.0,  "Probability")
+    Float loc_prob_delta    = GetParamFlt(akModifier, akDevice, asDataStr, 2, 0.0,    "Probability")
+    Float loc_prob_acc      = GetParamFlt(akModifier, akDevice, asDataStr, 3, 0.0,    "Probability")
+    Bool loc_repeat         = GetParamBln(akModifier, akDevice, asDataStr, 4, False)
 
-    If BaseTriggerIsActive(asDataStr, 5) && RandomFloat(0.0, 100.0) < 10.0 * akModifier.MultVerboseness
-        PrintNotification(akDevice, ;/ reacted /;"by absorbing and recharging from the energy of a hit.")
+    If TriggerOnValueDelta(akDevice, akModifier.NameAlias, asDataStr, afValueDelta = afDamage, afMinAccum = loc_min_value, afProbBase = loc_prob_base, afProbDelta = loc_prob_delta, afProbAccum = loc_prob_acc, abRepeat = loc_repeat, aiAccumParamIndex = 5)
+        Return True
+    Else
+        If BaseTriggerIsActive(asDataStr, 5) && RandomFloat(0.0, 100.0) < 10.0 * akModifier.MultVerboseness
+            PrintNotification(akDevice, ;/ reacted /;"by absorbing and recharging from the energy of a hit.")
+        EndIf    
+        Return False
     EndIf
-
-    Return TriggerOnValueDelta(akDevice, akModifier.NameAlias, asDataStr, afValueDelta = afDamage, afMinAccum = loc_min_value, afProbBase = loc_prob_base, afProbDelta = loc_prob_delta, afProbAccum = loc_prob_acc, abRepeat = loc_repeat, aiAccumParamIndex = 5)
 EndFunction
 
 ;/  Group: User interface
@@ -68,12 +71,12 @@ EndFunction
 ===========================================================================================
 /;
 String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1)
-    Int loc_min_value       = GetParamInt(akModifier, asDataStr, 0, 0,      "Input")
-    Float loc_prob_base     = GetParamFlt(akModifier, asDataStr, 1, 100.0,  "Probability")
-    Float loc_prob_delta    = GetParamFlt(akModifier, asDataStr, 2, 0.0,    "Probability")
-    Float loc_prob_acc      = GetParamFlt(akModifier, asDataStr, 3, 0.0,    "Probability")
-    Bool loc_repeat         = GetParamBln(akModifier, asDataStr, 4, False)
-    Float loc_accum         = GetParamFlt(akModifier, asDataStr, 5, 0.0)
+    Int loc_min_value       = GetParamInt(akModifier, akDevice, asDataStr, 0, 0,      "Input")
+    Float loc_prob_base     = GetParamFlt(akModifier, akDevice, asDataStr, 1, 100.0,  "Probability")
+    Float loc_prob_delta    = GetParamFlt(akModifier, akDevice, asDataStr, 2, 0.0,    "Probability")
+    Float loc_prob_acc      = GetParamFlt(akModifier, akDevice, asDataStr, 3, 0.0,    "Probability")
+    Bool loc_repeat         = GetParamBln(akModifier, akDevice, asDataStr, 4, False)
+    Float loc_accum         = GetParamFlt(akModifier, akDevice, asDataStr, 5, 0.0)
     
     String loc_res = ""
     loc_res += UDmain.UDMTF.TableRowDetails("Threshold value:",     loc_min_value + " dmg")
