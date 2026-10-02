@@ -81,14 +81,36 @@ EndFunction
 /;
 String Function GetParamsTableRows(UD_CustomDevice_RenderScript akDevice, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     String loc_res = ""
+    String loc_name = ""
     If akForm1
-        loc_res += UDmain.UDMTF.TableRowDetails("Enchantment:", akForm1.GetName())
+        loc_name = akForm1.GetName()
+        If loc_name == ""
+            loc_name = "<Unnamed spell>"
+        EndIf
+        If StringUtil.GetLength(loc_name) > 20
+            loc_name = StringUtil.Substring(loc_name, 0, 18) + "..."
+        EndIf
+        loc_res += UDmain.UDMTF.TableRowDetails("Enchantment #1:", loc_name)
     EndIf
     If akForm2
-        loc_res += UDmain.UDMTF.TableRowDetails("Enchantment:", akForm2.GetName())
+        loc_name = akForm2.GetName()
+        If loc_name == ""
+            loc_name = "<Unnamed spell>"
+        EndIf
+        If StringUtil.GetLength(loc_name) > 20
+            loc_name = StringUtil.Substring(loc_name, 0, 18) + "..."
+        EndIf
+        loc_res += UDmain.UDMTF.TableRowDetails("Enchantment #2:", loc_name)
     EndIf
     If akForm3
-        loc_res += UDmain.UDMTF.TableRowDetails("Enchantment:", akForm3.GetName())
+        loc_name = akForm3.GetName()
+        If loc_name == ""
+            loc_name = "<Unnamed spell>"
+        EndIf
+        If StringUtil.GetLength(loc_name) > 20
+            loc_name = StringUtil.Substring(loc_name, 0, 18) + "..."
+        EndIf
+        loc_res += UDmain.UDMTF.TableRowDetails("Enchantment #3:", loc_name)
     EndIf
     Return loc_res
 EndFunction

@@ -38,7 +38,7 @@ Bool Function ActorAction(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderSc
     ; TODO PR195: check weapon type to exclude daggers and staffs
         Float loc_prob = GetParamFlt(akModifier, akDevice, asDataStr, 0, 0.0, "Probability")
 
-        If RandomFloat(0.0, 100.0) < 30.0 * akModifier.MultVerboseness
+        If RandomFloat(0.0, 100.0) < 10.0 * akModifier.MultVerboseness
             PrintNotification(akDevice, ;/ reacted /;"because of your actions. For a moment, you see the silhouette of a warrior.")
         EndIf
 
@@ -52,7 +52,7 @@ Bool Function WeaponHit(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScri
     ; melee or unarmed
         Float loc_prob = GetParamFlt(akModifier, akDevice, asDataStr, 2, 0.0, "Probability")
 
-        If RandomFloat(0.0, 100.0) < 30.0 * akModifier.MultVerboseness
+        If RandomFloat(0.0, 100.0) < 10.0 * akModifier.MultVerboseness
             PrintNotification(akDevice, ;/ reacted /;"because of your actions. For a moment, you see the silhouette of a warrior.")
         EndIf
 
@@ -65,7 +65,7 @@ Bool Function SkillIncreased(UD_Modifier_Combo akModifier, UD_CustomDevice_Rende
     If asSkill == "TwoHanded" || asSkill == "Block" || asSkill == "Smithing" || asSkill == "HeavyArmor"
         Float loc_prob = GetParamFlt(akModifier, akDevice, asDataStr, 1, 0.0, "Probability")
 
-        If RandomFloat(0.0, 100.0) < 30.0 * akModifier.MultVerboseness
+        If RandomFloat(0.0, 100.0) < 10.0 * akModifier.MultVerboseness
             PrintNotification(akDevice, ;/ reacted /;"because of your actions. For a moment, you see the silhouette of a warrior.")
         EndIf
 

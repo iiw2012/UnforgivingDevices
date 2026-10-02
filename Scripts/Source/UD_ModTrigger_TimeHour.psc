@@ -52,7 +52,7 @@ Bool Function TimeUpdateSeconds(UD_Modifier_Combo akModifier, UD_CustomDevice_Re
         Return False
     EndIf
 
-    If loc_last_check + afGameHoursSinceLastCall > 1.00
+    If loc_last_check + afGameHoursSinceLastCall > 1.00 || afGameHoursSinceLastCall < 0.0
         SetParamFlt(akModifier, akDevice, 5, 0.000)
     Else
         SetParamFlt(akModifier, akDevice, 5, loc_last_check + afGameHoursSinceLastCall)

@@ -37,7 +37,7 @@ Bool Function ActorAction(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderSc
     ; Bow Release
         Float loc_prob = GetParamFlt(akModifier, akDevice, asDataStr, 0, 0.0, "Probability")
 
-        If RandomFloat(0.0, 100.0) < 30.0 * akModifier.MultVerboseness
+        If RandomFloat(0.0, 100.0) < 10.0 * akModifier.MultVerboseness
             PrintNotification(akDevice, ;/ reacted /;"because of your actions. For a moment, you see the silhouette of an archer.")
         EndIf
 
@@ -50,7 +50,7 @@ Bool Function StatEvent(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScri
     If asStatName == "Locks Picked"
         Float loc_prob = GetParamFlt(akModifier, akDevice, asDataStr, 2, 0.0, "Probability")
 
-        If RandomFloat(0.0, 100.0) < 30.0 * akModifier.MultVerboseness
+        If RandomFloat(0.0, 100.0) < 10.0 * akModifier.MultVerboseness
             PrintNotification(akDevice, ;/ reacted /;"because of your actions. For a moment, you see the silhouette of an archer.")
         EndIf
 
@@ -63,7 +63,7 @@ Bool Function SkillIncreased(UD_Modifier_Combo akModifier, UD_CustomDevice_Rende
     If asSkill == "Marksman" || asSkill == "Pickpocket" || asSkill == "LockPicking" || asSkill == "Sneak"
         Float loc_prob = GetParamFlt(akModifier, akDevice, asDataStr, 1, 0.0, "Probability")
 
-        If RandomFloat(0.0, 100.0) < 30.0 * akModifier.MultVerboseness
+        If RandomFloat(0.0, 100.0) < 10.0 * akModifier.MultVerboseness
             PrintNotification(akDevice, ;/ reacted /;"because of your actions. For a moment, you see the silhouette of an archer.")
         EndIf
 

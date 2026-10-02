@@ -1022,6 +1022,8 @@ bool Function CheckConflict(Actor akActor)
     return true
 EndFunction
 
+; Return        true    - don't put it on
+;               false   - put it on
 bool Function EquipDeviceMenu(Actor akActor)
     Int msgChoice = zad_DeviceMsg.Show() ; display menu
     if msgChoice == 0 ;equip
