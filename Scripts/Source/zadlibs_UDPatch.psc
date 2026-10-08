@@ -814,49 +814,6 @@ EndFunction
 ;    EndWhile
 ;endfunction
 
-Function RepopulateNpcs()
-    if repopulateMutex ; Avoid this getting hit too quickly while comparing times
-        Log("RepopulateNpcs() is already processing.")
-        return
-    EndIf
-    repopulateMutex=true
-    Log("RepopulateNpcs()")
-    if Utility.GetCurrentRealTime() - lastRepopulateTime <= 5
-        Log("Aborting repopulation of NPC slots: Hit throttle.")
-        repopulateMutex=false
-        return
-    EndIf
-    lastRepopulateTime = Utility.GetCurrentRealTime()
-    if zadNPCQuest.IsProcessing
-        Log("Waiting, since NPC Events is currently processing.")
-        int timeout = 0
-        while zadNPCQuest.IsProcessing && timeout <= 24
-            Utility.WaitMenuMode(5) ;edited so devices lock also when in menu, to save time
-            timeout += 1
-        EndWhile
-        if timeout >= 24
-            Warn("RepopulateNpcs() spinlock timed out!!")
-            zadNPCQuest.IsProcessing = false
-        EndIf
-    EndIf
-    if !zadNPCSlots.IsStopping() && !zadNPCSlots.IsStarting()
-        if zadNPCSlots.IsRunning()
-            zadNPCSlots.Stop()
-        EndIf
-        If config.NumNpcs>0
-            ; Feels like a race condition / timing issue?
-            ; Perhaps if I call a short wait (Thus suspending execution, giving the quest a chance to fully stop?), it won't occur.
-            Utility.WaitMenuMode(2.0) ;edited so devices lock also when in menu, to save time
-            zadNPCSlots.Start()
-        Else
-            Log("Not repopulating NPC slots: Feature is disabled.")
-        EndIf
-    Else
-        Warn("Not repopulating NPC slots: Quest is changing state.")
-    EndIf
-    repopulateMutex=false
-EndFunction
-
 Bool Function JamLock(actor akActor, keyword zad_DeviousDevice)
     If akActor != playerRef || !akActor.WornHasKeyword(zad_DeviousDevice)
         return False
