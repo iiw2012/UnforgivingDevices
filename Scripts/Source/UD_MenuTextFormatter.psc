@@ -1023,6 +1023,16 @@ String Function BoolToRainbow(Bool abValue)
     EndIf
 EndFunction
 
+;/  Function: StringHashToColor
+
+    A function that converts a string into a color code. The resulting color is random, but it is the same for identical strings
+    
+    Parameters:
+        asStr                         - Input string
+
+    Returns:
+        Hexadecimal color code in CSS format with leading '#'
+/;
 String Function StringHashToColor(String asStr)
     Int loc_n = StringUtil.GetLength(asStr)
     Int loc_i = 0

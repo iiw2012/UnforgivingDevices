@@ -80,6 +80,7 @@ Int UD_ModifierPreferredDevicesDesc_T
 Int UD_ModifierPreferredDevices_T
 Int UD_ModifierForbiddenDevicesDesc_T
 Int UD_ModifierForbiddenDevices_T
+
 Function PageReset(Bool abLockMenu)
     Int UD_LockMenu_flag = FlagSwitch(!abLockMenu)
 
@@ -182,15 +183,18 @@ Function PageReset(Bool abLockMenu)
         UD_ModifierPatchSelected = 0
     EndIf
     UD_Patcher_ModPreset loc_mod_pp = loc_mod.GetPatcherPreset(UD_ModifierPatchSelected)
+    If loc_mod_pp == None
+        Return
+    EndIf
     UD_ModifierPatchList_M = AddMenuOption("$UD_CUSTOMMOD_PPSSELECTED", loc_mod_pp.DisplayName, FlagSwitch(true))           ; Selected patch preset:
     AddEmptyOption()
     
-    UD_ModifierVarEasyDesc_T = AddTextOption("$UD_CUSTOMMOD_VAREASY", "$-PREVIEW-", FlagSwitch(true))
-    UD_ModifierVarEasy_T = AddTextOption("", loc_mod_pp.DataStr_Easy, FlagSwitch(true))
-    UD_ModifierVarNormDesc_T = AddTextOption("$UD_CUSTOMMOD_VARNORM", "$-PREVIEW-", FlagSwitch(true))
-    UD_ModifierVarNorm_T = AddTextOption("", loc_mod_pp.DataStr_Ground, FlagSwitch(true))
-    UD_ModifierVarHardDesc_T = AddTextOption("$UD_CUSTOMMOD_VARHARD", "$-PREVIEW-", FlagSwitch(true))
-    UD_ModifierVarHard_T = AddTextOption("", loc_mod_pp.DataStr_Hard, FlagSwitch(true))
+;    UD_ModifierVarEasyDesc_T = AddTextOption("$UD_CUSTOMMOD_VAREASY", "$-PREVIEW-", FlagSwitch(true))
+;    UD_ModifierVarEasy_T = AddTextOption("", loc_mod_pp.DataStr_Easy, FlagSwitch(true))
+;    UD_ModifierVarNormDesc_T = AddTextOption("$UD_CUSTOMMOD_VARNORM", "$-PREVIEW-", FlagSwitch(true))
+;    UD_ModifierVarNorm_T = AddTextOption("", loc_mod_pp.DataStr_Ground, FlagSwitch(true))
+;    UD_ModifierVarHardDesc_T = AddTextOption("$UD_CUSTOMMOD_VARHARD", "$-PREVIEW-", FlagSwitch(true))
+;    UD_ModifierVarHard_T = AddTextOption("", loc_mod_pp.DataStr_Hard, FlagSwitch(true))
 
     UD_ModifierDeviceTagsDesc_T = AddTextOption("$UD_CUSTOMMOD_DEVTAGS", "$-INFO-", FlagSwitch(true))
     UD_ModifierDeviceTags_T = AddTextOption("", "[" + MCM.StringArrayToString(loc_mod_pp.ConflictedDeviceModTags) + "]", FlagSwitch(true))
@@ -211,6 +215,105 @@ Function PageReset(Bool abLockMenu)
     UD_ModPP_BaseSeverity_S = AddSliderOption("$UD_CUSTOMMOD_BASESEVERITY", loc_mod_pp.BaseSeverity, "{2}", UD_LockMenu_flag)                           ; Base severity
     UD_ModPP_IsAbsoluteProbability_T = addToggleOption("$UD_CUSTOMMOD_PROBABS", loc_mod_pp.IsAbsoluteProbability, UD_LockMenu_flag)                     ; Probability is absolute
     UD_ModPP_SeverityDispersion_S = AddSliderOption("$UD_CUSTOMMOD_SEVERITYDISP", loc_mod_pp.SeverityDispersion, "{2}", UD_LockMenu_flag)               ; Severity dispersion
+    
+    Int loc_i = 0
+    Int loc_cursor_pos = 54
+    While loc_i < loc_mod_pp.DataStr.Length
+        If loc_i == 0
+            SetCursorPosition(loc_cursor_pos)
+            AddHeaderOption("$UD_CUSTOMMOD_DATASTR_0")                  ; DataStr [0..6] (Trigger parameters)
+            loc_cursor_pos += 2
+        ElseIf loc_i == 7
+            SetCursorPosition(loc_cursor_pos)
+            AddHeaderOption("$UD_CUSTOMMOD_DATASTR_7")                  ; DataStr [7..n] (Outcome parameters)
+            loc_cursor_pos += 2
+        EndIf
+        SetCursorPosition(loc_cursor_pos)
+        AddTextOption("[" + loc_i + "]", loc_mod_pp.DataStr[loc_i], FlagSwitch(true))
+        loc_cursor_pos += 2
+        loc_i += 1
+    EndWhile
+    loc_cursor_pos = 55
+    SetCursorPosition(loc_cursor_pos)
+    AddHeaderOption("$UD_CUSTOMMOD_DATAFORM_1")                     ; Form #1 (Trigger form #1)
+    loc_cursor_pos += 2
+    If loc_mod_pp.Form1_Variants != None
+        loc_i = 0
+        While loc_i < loc_mod_pp.Form1_Variants.GetSize()
+            SetCursorPosition(loc_cursor_pos)
+            AddTextOption("[" + loc_i + "]", _GetFormVariantCaption(loc_mod_pp.Form1_Variants.GetAt(loc_i)), FlagSwitch(true))
+            loc_cursor_pos += 2
+            loc_i += 1
+        EndWhile
+    Else
+        SetCursorPosition(loc_cursor_pos)
+        AddTextOption("None", "", FlagSwitch(False))
+        loc_cursor_pos += 2
+    EndIf
+    SetCursorPosition(loc_cursor_pos)
+    AddHeaderOption("$UD_CUSTOMMOD_DATAFORM_2")                     ; Form #2 (Outcome form #1)
+    loc_cursor_pos += 2
+    If loc_mod_pp.Form2_Variants != None
+        loc_i = 0
+        While loc_i < loc_mod_pp.Form2_Variants.GetSize()
+            SetCursorPosition(loc_cursor_pos)
+            AddTextOption("[" + loc_i + "]", _GetFormVariantCaption(loc_mod_pp.Form2_Variants.GetAt(loc_i)), FlagSwitch(true))
+            loc_cursor_pos += 2
+            loc_i += 1
+        EndWhile
+    Else
+        SetCursorPosition(loc_cursor_pos)
+        AddTextOption("None", "", FlagSwitch(False))
+        loc_cursor_pos += 2
+    EndIf
+    SetCursorPosition(loc_cursor_pos)
+    AddHeaderOption("$UD_CUSTOMMOD_DATAFORM_3")                     ; Form #3 (Outcome form #2)
+    loc_cursor_pos += 2
+    If loc_mod_pp.Form3_Variants != None
+        loc_i = 0
+        While loc_i < loc_mod_pp.Form3_Variants.GetSize()
+            SetCursorPosition(loc_cursor_pos)
+            AddTextOption("[" + loc_i + "]", _GetFormVariantCaption(loc_mod_pp.Form3_Variants.GetAt(loc_i)), FlagSwitch(true))
+            loc_cursor_pos += 2
+            loc_i += 1
+        EndWhile
+    Else
+        SetCursorPosition(loc_cursor_pos)
+        AddTextOption("None", "", FlagSwitch(False))
+        loc_cursor_pos += 2
+    EndIf
+    SetCursorPosition(loc_cursor_pos)
+    AddHeaderOption("$UD_CUSTOMMOD_DATAFORM_4")                     ; Form #4 (Trigger in Generic)
+    loc_cursor_pos += 2
+    If loc_mod_pp.Form4_Variants != None
+        loc_i = 0
+        While loc_i < loc_mod_pp.Form4_Variants.GetSize()
+            SetCursorPosition(loc_cursor_pos)
+            AddTextOption("[" + loc_i + "]", _GetFormVariantCaption(loc_mod_pp.Form4_Variants.GetAt(loc_i)), FlagSwitch(true))
+            loc_cursor_pos += 2
+            loc_i += 1
+        EndWhile
+    Else
+        SetCursorPosition(loc_cursor_pos)
+        AddTextOption("None", "", FlagSwitch(False))
+        loc_cursor_pos += 2
+    EndIf
+    SetCursorPosition(loc_cursor_pos)
+    AddHeaderOption("$UD_CUSTOMMOD_DATAFORM_5")                     ; Form #5 (Outcome in Generic)
+    loc_cursor_pos += 2
+    If loc_mod_pp.Form5_Variants != None
+        loc_i = 0
+        While loc_i < loc_mod_pp.Form5_Variants.GetSize()
+            SetCursorPosition(loc_cursor_pos)
+            AddTextOption("[" + loc_i + "]", _GetFormVariantCaption(loc_mod_pp.Form5_Variants.GetAt(loc_i)), FlagSwitch(true))
+            loc_cursor_pos += 2
+            loc_i += 1
+        EndWhile
+    Else
+        SetCursorPosition(loc_cursor_pos)
+        AddTextOption("None", "", FlagSwitch(False))
+        loc_cursor_pos += 2
+    EndIf
 
 EndFunction
 
@@ -526,4 +629,15 @@ Function PageInfo(int aiOption)
         UD_Modifier loc_mod = UDmain.UDMOM.GetModifierFromStorage(UD_ModifierStorageSelected, UD_ModifierSelected)
         SetInfoText(loc_mod.Description)
     endif
+EndFunction
+
+String Function _GetFormVariantCaption(Form akForm)
+    UDmain.Log(Self + "::_GetFormVariantCaption() akForm = " + akForm, 3)
+    If akForm != None && akForm.GetName() != ""
+        Return akForm.GetName()
+    Else
+        String loc_str = (akForm as String)
+        loc_str = UD_MenuTextFormatter.ReplaceSubstr(loc_str, "<", "&#60;")
+        Return loc_str
+    EndIf
 EndFunction

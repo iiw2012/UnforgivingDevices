@@ -253,7 +253,7 @@ EndFunction
 ;/  Function: GetDataStr
 
     Forms a string with parameters for the modifier. Takes into account global difficulty settings and difficulty variance settings.
-    It uses values from DataStr_Easy, DataStr_Ground and DataStr_Hard as references.
+    In the latest version, the function uses data from the DataStr array, which contains a piecewise-linear function for each parameter.
     
     Parameters:
         afGlobalSeverityShift               - Difficulty shift.
@@ -264,8 +264,10 @@ EndFunction
 /;
 String Function GetDataStr(Float afGlobalSeverityShift = 0.0, Float afGlobalSeverityDispersionMult = 1.0)
     If DataStr.Length > 0
+    ; using data in DataStr array
         Return GetDataStrFromArray(afGlobalSeverityShift, afGlobalSeverityDispersionMult)
     EndIf
+    ; obsolete code
     Int i = 0
     String loc_types = DataStr_Types
     Int loc_size = UD_Native.GetStringParamAll(DataStr_Ground).Length

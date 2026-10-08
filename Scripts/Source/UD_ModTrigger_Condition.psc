@@ -49,7 +49,7 @@ import UD_Native
 /;
 Bool Function ConditionLoss(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Int aiCondition, String asDataStr, Form akForm1)
     If aiCondition > 3
-    ; ignoring "destroyed" state. Use UD_ModTrigger_SimpleEvent + DeviceBroken instead.
+    ; ignoring "destroyed" state. Use UD_ModTrigger_DeviceEvent + DeviceBroken instead.
         Return False
     EndIf
     Int loc_min_condition   = iRange(GetParamInt(akModifier, akDevice, asDataStr, 0, 0,       "Input"),       0, 4)

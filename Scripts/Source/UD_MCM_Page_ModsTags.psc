@@ -34,8 +34,7 @@ Function PageReset(Bool abLockMenu)
     UD_ModTags_StartIndex = -1
     While loc_i < UD_ModTags_Array.Length
         String loc_tag = UD_ModTags_Array[loc_i]
-        String loc_tag_case = UDMain.UDMTF.ForceCase(loc_tag, abUpperCase = True)
-        Int loc_temp = AddToggleOption(loc_tag_case, UDCDmain.UDPatcher.IsModifierTagEnabled(loc_tag), UD_LockMenu_flag)
+        Int loc_temp = AddToggleOption(_GetTagInfoString(loc_tag, False), UDCDmain.UDPatcher.IsModifierTagEnabled(loc_tag), UD_LockMenu_flag)
         If UD_ModTags_StartIndex < 0 
             UD_ModTags_StartIndex = loc_temp
         EndIf
@@ -61,13 +60,38 @@ Function PageInfo(int aiOption)
     if (aiOption >= UD_ModTags_StartIndex && aiOption < UD_ModTags_EndIndex)
         Int loc_index = aiOption - UD_ModTags_StartIndex
         String loc_tag = UD_ModTags_Array[loc_index]
-        If StringUtil.GetNthChar(loc_tag, StringUtil.GetLength(loc_tag) - 1) == "-"
-            loc_tag = StringUtil.Substring(loc_tag, 0, StringUtil.GetLength(loc_tag) - 1) + "M"
-        ElseIf StringUtil.GetNthChar(loc_tag, StringUtil.GetLength(loc_tag) - 1) == "+"
-            loc_tag = StringUtil.Substring(loc_tag, 0, StringUtil.GetLength(loc_tag) - 1) + "P"
-        EndIf
-        SetInfoText("$UD_CUSTOMMOD_TAG_" + loc_tag + "_INFO")
+        SetInfoText(_GetTagInfoString(loc_tag, True))
     ElseIf (aiOption == UD_ModTags_Hint_T)
         SetInfoText("$UD_CUSTOMMOD_TAGLIST_HINT_INFO")
+    EndIf
+EndFunction
+
+String Function _GetTagInfoString(String asTag, Bool abInfo)
+    String t = "a"
+    If StringUtil.GetNthChar(asTag, StringUtil.GetLength(asTag) - 1) == "-"
+        asTag = StringUtil.Substring(asTag, 0, StringUtil.GetLength(asTag) - 1) + "M"
+    ElseIf StringUtil.GetNthChar(asTag, StringUtil.GetLength(asTag) - 1) == "+"
+        asTag = StringUtil.Substring(asTag, 0, StringUtil.GetLength(asTag) - 1) + "P"
+    EndIf
+    String loc_res = "$UD_CUSTOMMOD_TAG_"
+    Int loc_n = StringUtil.GetLength(asTag)
+    Int loc_i = 0
+    While loc_i < loc_n
+        String loc_char = StringUtil.GetNthChar(asTag, loc_i)
+        Int loc_code = StringUtil.AsOrd(loc_char)
+        If loc_code >= 65 && loc_code <= 90             ; Upper case Latin
+            loc_res += StringUtil.AsChar(loc_code)
+        ElseIf loc_code >= 97 && loc_code <= 122        ; Lower case Latin
+            loc_code -= 32
+            loc_res += StringUtil.AsChar(loc_code)
+        Else
+            loc_res += loc_char
+        EndIf
+        loc_i += 1
+    EndWhile
+    If abInfo
+        Return loc_res + "_INFO"
+    Else
+        Return loc_res
     EndIf
 EndFunction
