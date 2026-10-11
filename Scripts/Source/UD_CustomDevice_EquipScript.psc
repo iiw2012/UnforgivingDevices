@@ -755,7 +755,9 @@ Event LockDevice(Actor akActor, Bool abUseMutex = True)
                 _actorselfbound = false
             endif
         endif
-        if DestroyOnRemove && !akActor.GetItemCount(deviceRendered)
+        if (DestroyOnRemove && prelock_fail != 4) && !akActor.GetItemCount(deviceRendered)
+        ; added check if it failed on EquipDeviceMenu player choice
+        ; if the player refuses to wear the device, there is no need to destroy it
             akActor.RemoveItem(deviceInventory,1,true)
         endif
         
@@ -1025,31 +1027,32 @@ EndFunction
 ; Return        true    - don't put it on
 ;               false   - put it on
 bool Function EquipDeviceMenu(Actor akActor)
-    Int msgChoice = zad_DeviceMsg.Show() ; display menu
-    if msgChoice == 0 ;equip
-        StorageUtil.SetIntValue(akActor, "zad_Equipped" + libs.LookupDeviceType(zad_DeviousDevice) + "_ManipulatedStatus", 0)
-        If !DisableLockManipulation && libs.Config.UseItemManipulation && ( deviceRendered.HasKeyword(libs.zad_Lockable) || deviceInventory.HasKeyword(libs.zad_Lockable) ) && !deviceInventory.HasKeyword(libs.zad_QuestItem) && !deviceRendered.HasKeyword(libs.zad_QuestItem) && !deviceInventory.HasKeyword(libs.zad_BlockGeneric) && !deviceRendered.HasKeyword(libs.zad_BlockGeneric) 
-            Int Choice = 0
-            If zad_DD_OnPutOnDevice
-                Choice = zad_DD_OnPutOnDevice.Show()
-            Else
-                Choice = libs.zad_DD_OnPutOnDevice.Show()
-            EndIf
-            If Choice == 1
-                StorageUtil.SetIntValue(akActor, "zad_Equipped" + libs.LookupDeviceType(zad_DeviousDevice) + "_ManipulatedStatus", 1)
-                If UDmain.TraceAllowed()
-                    UDmain.Log(Self + "::EquipDeviceMenu() zad_Equipped" + libs.LookupDeviceType(zad_DeviousDevice) + "_ManipulatedStatus := 1", 3)
+    While True
+        Int msgChoice = zad_DeviceMsg.Show() ; display menu
+        if msgChoice == 0           ; equip
+            StorageUtil.SetIntValue(akActor, "zad_Equipped" + libs.LookupDeviceType(zad_DeviousDevice) + "_ManipulatedStatus", 0)
+            If !DisableLockManipulation && libs.Config.UseItemManipulation && ( deviceRendered.HasKeyword(libs.zad_Lockable) || deviceInventory.HasKeyword(libs.zad_Lockable) ) && !deviceInventory.HasKeyword(libs.zad_QuestItem) && !deviceRendered.HasKeyword(libs.zad_QuestItem) && !deviceInventory.HasKeyword(libs.zad_BlockGeneric) && !deviceRendered.HasKeyword(libs.zad_BlockGeneric) 
+                Int Choice = 0
+                If zad_DD_OnPutOnDevice
+                    Choice = zad_DD_OnPutOnDevice.Show()
+                Else
+                    Choice = libs.zad_DD_OnPutOnDevice.Show()
+                EndIf
+                If Choice == 1
+                    StorageUtil.SetIntValue(akActor, "zad_Equipped" + libs.LookupDeviceType(zad_DeviousDevice) + "_ManipulatedStatus", 1)
+                    If UDmain.TraceAllowed()
+                        UDmain.Log(Self + "::EquipDeviceMenu() zad_Equipped" + libs.LookupDeviceType(zad_DeviousDevice) + "_ManipulatedStatus := 1", 3)
+                    EndIf
                 EndIf
             EndIf
-        EndIf
-        return false
-    elseif msgChoice == 1 ;details
-        ShowDetails(akActor)
-        return true
-    else
-        return true
-    endif
-    return false
+            return False
+        elseif msgChoice == 1       ; details
+            ShowDetails(akActor)
+        else                        ; don't equip
+            return True
+        endif
+    EndWhile
+    return True
 EndFunction
 
 Function ShowDetails(Actor akActor)
@@ -1061,7 +1064,6 @@ Function ShowDetails(Actor akActor)
     loc_res += UDMain.UDMTF.HeaderSplit()
 
     loc_res += UDMain.UDMTF.TableRowDetails("Type:", libs.LookupDeviceType(zad_DeviousDevice))
-    loc_res += UDMain.UDMTF.LineGap()
     
     if deviceInventory.hasKeyword(UDmain.UDlibs.PatchedInventoryDevice) && deviceRendered.hasKeyword(UDmain.UDlibs.PatchedDevice)
         loc_res += UDMain.UDMTF.Paragraph("-- Patched device --", asAlign = "center")
@@ -1070,7 +1072,9 @@ Function ShowDetails(Actor akActor)
         loc_res += UDMain.UDMTF.TableRowDetails("Cut escape chance:", Round(CutDeviceEscapeChance) + "%")
         loc_res += UDMain.UDMTF.TableRowDetails("Lockpick escape chance:", Round(LockPickEscapeChance) + "%")
         loc_res += UDMain.UDMTF.TableRowDetails("Lock Access difficulty:", Round(LockAccessDifficulty) + "%")
-        loc_res += UDMain.UDMTF.TableRowDetails("Key:", deviceKey.getName())
+        If deviceKey != None
+            loc_res += UDMain.UDMTF.TableRowDetails("Key:", deviceKey.getName())
+        EndIf
     endif
     
     loc_res += UDMain.UDMTF.FooterSplit()

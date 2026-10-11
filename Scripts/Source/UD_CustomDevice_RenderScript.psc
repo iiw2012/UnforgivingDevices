@@ -1494,24 +1494,24 @@ function checkSentient(float afMult = 1.0)
 EndFunction
 
 ;function called when wearer is hit by source weapon
-Function weaponHit(Weapon akSource, Float afDamage = -1.0)
-    if onWeaponHitPre(akSource, afDamage)
-        onWeaponHitPost(akSource, afDamage)
+Function weaponHit(Weapon akSource, Float afDamage = -1.0, Int aiHits = 1)
+    if onWeaponHitPre(akSource, afDamage, aiHits)
+        onWeaponHitPost(akSource, afDamage, aiHits)
     endif
 EndFunction
 
 ;function called when wearer is hit by source spell
 ; akSource is a Spell or Enchantment
-Function spellHit(Form akSource, Float afDamage = -1.0)
-    if onSpellHitPre(akSource, afDamage)
-        onSpellHitPost(akSource, afDamage)
+Function spellHit(Form akSource, Float afDamage = -1.0, Int aiHits = 1)
+    if onSpellHitPre(akSource, afDamage, aiHits)
+        onSpellHitPost(akSource, afDamage, aiHits)
     endif
 EndFunction
 
 ;function is called when the wearer cast a spell
-Function spellCast(Spell akSource)
-    if onSpellCastPre(akSource)
-        onSpellCastPost(akSource)
+Function spellCast(Spell akSource, Int aiHits = 1)
+    if onSpellCastPre(akSource, aiHits)
+        onSpellCastPost(akSource, aiHits)
     endif
 EndFunction
 
@@ -7843,11 +7843,11 @@ EndFunction
 Function onSpecialButtonReleased(Float fHoldTime)
 EndFunction
 
-bool Function onWeaponHitPre(Weapon source, Float afDamage = -1.0)
+bool Function onWeaponHitPre(Weapon source, Float afDamage = -1.0, Int aiHits = 1)
     return true
 EndFunction
 
-Function onWeaponHitPost(Weapon source, Float afDamage = -1.0)
+Function onWeaponHitPost(Weapon source, Float afDamage = -1.0, Int aiHits = 1)
     ;check if weapon is wooded (whips and canes have also this keyword)
     if source.haskeyword(UDlibs.WoodedWeapon)
         ;weapon is wooden, no damage should be deald
@@ -7865,30 +7865,30 @@ Function onWeaponHitPost(Weapon source, Float afDamage = -1.0)
     endif
     If !IsUnlocked
         If afDamage > 0.0
-            Udmain.UDMOM.Procces_UpdateModifiers_WeaponHit(self, source, afDamage)
+            Udmain.UDMOM.Procces_UpdateModifiers_WeaponHit(self, source, afDamage, aiHits)
         EndIf
     EndIf
 EndFunction
 
-bool Function onSpellHitPre(Form source, Float afDamage = -1.0)
+bool Function onSpellHitPre(Form source, Float afDamage = -1.0, Int aiHits = 1)
     return True
 EndFunction
 
-Function onSpellHitPost(Form source, Float afDamage = -1.0)
+Function onSpellHitPost(Form source, Float afDamage = -1.0, Int aiHits = 1)
     if !IsUnlocked; && getModResistMagicka(1.0,0.25) != 1.0
         If afDamage >= 0.0
-            Udmain.UDMOM.Procces_UpdateModifiers_SpellHit(self, source, afDamage)
+            Udmain.UDMOM.Procces_UpdateModifiers_SpellHit(self, source, afDamage, aiHits)
         EndIf
     endif
 EndFunction
 
-bool Function onSpellCastPre(Spell source)
+bool Function onSpellCastPre(Spell source, Int aiHits = 1)
     return True
 EndFunction
 
-Function onSpellCastPost(Spell source)
+Function onSpellCastPost(Spell source, Int aiHits = 1)
     if !IsUnlocked; && getModResistMagicka(1.0,0.25) != 1.0
-        Udmain.UDMOM.Procces_UpdateModifiers_SpellCast(self, source)
+        Udmain.UDMOM.Procces_UpdateModifiers_SpellCast(self, source, aiHits)
     endif
 EndFunction
 

@@ -236,13 +236,13 @@ EndFunction
 Function MinigameEndedAsync(UD_CustomDevice_RenderScript akModDevice, UD_CustomDevice_RenderScript akMinigameDevice, String asMinigameName, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
 EndFunction
 
-Function WeaponHit(UD_CustomDevice_RenderScript akDevice, Weapon akWeapon, Float afDamage, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+Function WeaponHit(UD_CustomDevice_RenderScript akDevice, Weapon akWeapon, Float afDamage, Int aiHits, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
 EndFunction
 
-Function SpellHit(UD_CustomDevice_RenderScript akDevice, Form akSpell, Float afDamage, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+Function SpellHit(UD_CustomDevice_RenderScript akDevice, Form akSpell, Float afDamage, Int aiHits, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
 EndFunction
 
-Function SpellCast(UD_CustomDevice_RenderScript akDevice, Spell akSpell, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+Function SpellCast(UD_CustomDevice_RenderScript akDevice, Spell akSpell, Int aiHits, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
 EndFunction
 
 Function ConditionLoss(UD_CustomDevice_RenderScript akDevice, Int aiCondition, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)

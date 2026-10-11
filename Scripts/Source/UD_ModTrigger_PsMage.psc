@@ -30,20 +30,26 @@ import UD_Native
 ===========================================================================================
 /;
 Bool Function ActorAction(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Int aiActorAction, Int aiEquipSlot, Form akSource, String asDataStr, Form akForm1)
-    Float loc_prob = GetParamFlt(akModifier, akDevice, asDataStr, 0, 0.0, "Probability")
-    If aiActorAction == 2
-    ; Spell Fire
-        If akSource as Spell
-        ; TODO PR195: check associated skill
-        EndIf
-
-        If RandomFloat(0.0, 100.0) < 10.0 * akModifier.MultVerboseness
-            PrintNotification(akDevice, ;/ reacted /;"because of your actions. For a moment, you see the silhouette of a mage.")
-        EndIf
-
-        Return (RandomFloat(0.0, 100.0) < loc_prob)
-    EndIf
+; it is too much spam with spell cast actor action event
     Return False
+EndFunction
+
+Bool Function SpellCast(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Spell akSpell, Int aiHits, String asDataStr, Form akForm1)
+    If akSpell as Spell
+        Int loc_i = akSpell.GetCostliestEffectIndex()
+        MagicEffect loc_me = akSpell.GetNthEffectMagicEffect(loc_i)
+        String loc_skill = loc_me.GetAssociatedSkill()
+        If loc_skill == "Restoration"
+            Return False
+        EndIf
+    EndIf
+    Float loc_prob = GetParamFlt(akModifier, akDevice, asDataStr, 0, 0.0, "Probability")
+
+    If RandomFloat(0.0, 100.0) < 10.0 * akModifier.MultVerboseness
+        PrintNotification(akDevice, ;/ reacted /;"because of your actions. For a moment, you see the silhouette of a mage.")
+    EndIf
+
+    Return (RandomFloat(0.0, 100.0) < loc_prob * aiHits)
 EndFunction
 
 Bool Function SkillIncreased(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, String asSkill, Int aiValue, String asDataStr, Form akForm1)

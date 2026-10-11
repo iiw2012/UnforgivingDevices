@@ -153,26 +153,26 @@ Function MinigameEndedAsync(UD_CustomDevice_RenderScript akDevice, UD_CustomDevi
     EndIf
 EndFunction
 
-Function WeaponHit(UD_CustomDevice_RenderScript akDevice, Weapon akWeapon, Float afDamage, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+Function WeaponHit(UD_CustomDevice_RenderScript akDevice, Weapon akWeapon, Float afDamage, Int aiHits, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     UD_ModTrigger loc_trigger = GetTrigger(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
     UD_ModOutcome loc_outcome = GetOutcome(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    If loc_trigger.WeaponHit(Self, akDevice, akWeapon, afDamage, asDataStr, akForm1) == True
+    If loc_trigger.WeaponHit(Self, akDevice, akWeapon, afDamage, aiHits, asDataStr, akForm1) == True
         _DoCallOutcome(loc_outcome, akDevice, asDataStr, akForm2, akForm3)
     EndIf
 EndFunction
 
-Function SpellHit(UD_CustomDevice_RenderScript akDevice, Form akSpell, Float afDamage, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+Function SpellHit(UD_CustomDevice_RenderScript akDevice, Form akSpell, Float afDamage, Int aiHits, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     UD_ModTrigger loc_trigger = GetTrigger(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
     UD_ModOutcome loc_outcome = GetOutcome(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    If loc_trigger.SpellHit(Self, akDevice, akSpell, afDamage, asDataStr, akForm1) == True
+    If loc_trigger.SpellHit(Self, akDevice, akSpell, afDamage, aiHits, asDataStr, akForm1) == True
         _DoCallOutcome(loc_outcome, akDevice, asDataStr, akForm2, akForm3)
     EndIf
 EndFunction
 
-Function SpellCast(UD_CustomDevice_RenderScript akDevice, Spell akSpell, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+Function SpellCast(UD_CustomDevice_RenderScript akDevice, Spell akSpell, Int aiHits, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     UD_ModTrigger loc_trigger = GetTrigger(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
     UD_ModOutcome loc_outcome = GetOutcome(akDevice, asDataStr, akForm1, akForm2, akForm3, akForm4, akForm5)
-    If loc_trigger.SpellCast(Self, akDevice, akSpell, asDataStr, akForm1) == True
+    If loc_trigger.SpellCast(Self, akDevice, akSpell, aiHits, asDataStr, akForm1) == True
         _DoCallOutcome(loc_outcome, akDevice, asDataStr, akForm2, akForm3)
     EndIf
 EndFunction

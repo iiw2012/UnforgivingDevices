@@ -52,6 +52,9 @@ Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDe
         If loc_count > 0 && ManifestExplosion != None
             ManifestExplosion.Cast(akDevice.GetWearer())
         EndIf
+        if loc_count == 0
+            UDmain.Log("UD_ModOutcome_LockDevice::Outcome() No devices were locked", 3)
+        EndIf
         Return
     EndIf
     
@@ -72,7 +75,7 @@ Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDe
 
     If loc_method_list3 != ""
         loc_remain -= UDCDmain.ManifestDevicesFromArray(akDevice.GetWearer(), akDevice.getDeviceName(), loc_forms, loc_method == "R" || loc_method == "RANDOM", loc_remain)
-        loc_forms = PapyrusUtil.ResizeFormArray(loc_forms, 0)
+        loc_forms = Utility.ResizeFormArray(loc_forms, 0)
         loc_method = loc_method_list3
     EndIf
     
@@ -91,6 +94,9 @@ Function Outcome(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDe
     
     If loc_remain < loc_count && ManifestExplosion != None
         ManifestExplosion.Cast(akDevice.GetWearer())
+    EndIf
+    if loc_remain == loc_count
+        UDmain.Log("UD_ModOutcome_LockDevice::Outcome() No devices were locked", 3)
     EndIf
     
 EndFunction

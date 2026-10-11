@@ -102,15 +102,15 @@ Bool Function MinigameEndedAsync(UD_Modifier_Combo akModifier, UD_CustomDevice_R
     Return False
 EndFunction
 
-Bool Function WeaponHit(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Weapon akWeapon, Float afDamage, String asDataStr, Form akForm1)
+Bool Function WeaponHit(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Weapon akWeapon, Float afDamage, Int aiHits, String asDataStr, Form akForm1)
     Return False
 EndFunction
 
-Bool Function SpellHit(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Form akSpell, Float afDamage, String asDataStr, Form akForm1)
+Bool Function SpellHit(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Form akSpell, Float afDamage, Int aiHits, String asDataStr, Form akForm1)
     Return False
 EndFunction
 
-Bool Function SpellCast(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Spell akSpell, String asDataStr, Form akForm1)
+Bool Function SpellCast(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Spell akSpell, Int aiHits, String asDataStr, Form akForm1)
     Return False
 EndFunction
 

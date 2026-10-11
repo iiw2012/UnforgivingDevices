@@ -67,7 +67,6 @@ Function PageInfo(int aiOption)
 EndFunction
 
 String Function _GetTagInfoString(String asTag, Bool abInfo)
-    String t = "a"
     If StringUtil.GetNthChar(asTag, StringUtil.GetLength(asTag) - 1) == "-"
         asTag = StringUtil.Substring(asTag, 0, StringUtil.GetLength(asTag) - 1) + "M"
     ElseIf StringUtil.GetNthChar(asTag, StringUtil.GetLength(asTag) - 1) == "+"

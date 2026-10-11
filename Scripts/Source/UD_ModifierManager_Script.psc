@@ -654,7 +654,7 @@ Function Procces_UpdateModifiers_MinigameEndedAsync(UD_CustomDevice_RenderScript
 
 EndFunction
 
-Function Procces_UpdateModifiers_WeaponHit(UD_CustomDevice_RenderScript akDevice, Weapon akWeapon, Float afDamage)
+Function Procces_UpdateModifiers_WeaponHit(UD_CustomDevice_RenderScript akDevice, Weapon akWeapon, Float afDamage, Int aiHits)
     If akDevice.GetRealTimeLockedTime() < 0.001
         Return
     EndIf
@@ -662,11 +662,11 @@ Function Procces_UpdateModifiers_WeaponHit(UD_CustomDevice_RenderScript akDevice
     while loc_modid 
         loc_modid -= 1
         UD_Modifier loc_mod = (akDevice.UD_ModifiersRef[loc_modid] as UD_Modifier)
-        loc_mod.WeaponHit(akDevice, akWeapon, afDamage, akDevice.UD_ModifiersDataStr[loc_modid], akDevice.UD_ModifiersDataForm1[loc_modid], akDevice.UD_ModifiersDataForm2[loc_modid], akDevice.UD_ModifiersDataForm3[loc_modid], akDevice.UD_ModifiersDataForm4[loc_modid],akDevice.UD_ModifiersDataForm5[loc_modid])
+        loc_mod.WeaponHit(akDevice, akWeapon, afDamage, aiHits, akDevice.UD_ModifiersDataStr[loc_modid], akDevice.UD_ModifiersDataForm1[loc_modid], akDevice.UD_ModifiersDataForm2[loc_modid], akDevice.UD_ModifiersDataForm3[loc_modid], akDevice.UD_ModifiersDataForm4[loc_modid],akDevice.UD_ModifiersDataForm5[loc_modid])
     endwhile
 EndFunction
 
-Function Procces_UpdateModifiers_SpellHit(UD_CustomDevice_RenderScript akDevice, Form akSpell, Float afDamage)
+Function Procces_UpdateModifiers_SpellHit(UD_CustomDevice_RenderScript akDevice, Form akSpell, Float afDamage, Int aiHits)
     If akDevice.GetRealTimeLockedTime() < 0.001
         Return
     EndIf
@@ -674,11 +674,11 @@ Function Procces_UpdateModifiers_SpellHit(UD_CustomDevice_RenderScript akDevice,
     while loc_modid 
         loc_modid -= 1
         UD_Modifier loc_mod = (akDevice.UD_ModifiersRef[loc_modid] as UD_Modifier)
-        loc_mod.SpellHit(akDevice, akSpell, afDamage, akDevice.UD_ModifiersDataStr[loc_modid], akDevice.UD_ModifiersDataForm1[loc_modid], akDevice.UD_ModifiersDataForm2[loc_modid], akDevice.UD_ModifiersDataForm3[loc_modid], akDevice.UD_ModifiersDataForm4[loc_modid],akDevice.UD_ModifiersDataForm5[loc_modid])
+        loc_mod.SpellHit(akDevice, akSpell, afDamage, aiHits, akDevice.UD_ModifiersDataStr[loc_modid], akDevice.UD_ModifiersDataForm1[loc_modid], akDevice.UD_ModifiersDataForm2[loc_modid], akDevice.UD_ModifiersDataForm3[loc_modid], akDevice.UD_ModifiersDataForm4[loc_modid],akDevice.UD_ModifiersDataForm5[loc_modid])
     endwhile
 EndFunction
 
-Function Procces_UpdateModifiers_SpellCast(UD_CustomDevice_RenderScript akDevice, Spell akSpell)
+Function Procces_UpdateModifiers_SpellCast(UD_CustomDevice_RenderScript akDevice, Spell akSpell, Int aiHits)
     If akDevice.GetRealTimeLockedTime() < 0.001
         Return
     EndIf
@@ -686,7 +686,7 @@ Function Procces_UpdateModifiers_SpellCast(UD_CustomDevice_RenderScript akDevice
     while loc_modid 
         loc_modid -= 1
         UD_Modifier loc_mod = (akDevice.UD_ModifiersRef[loc_modid] as UD_Modifier)
-        loc_mod.SpellCast(akDevice, akSpell, akDevice.UD_ModifiersDataStr[loc_modid], akDevice.UD_ModifiersDataForm1[loc_modid], akDevice.UD_ModifiersDataForm2[loc_modid], akDevice.UD_ModifiersDataForm3[loc_modid], akDevice.UD_ModifiersDataForm4[loc_modid],akDevice.UD_ModifiersDataForm5[loc_modid])
+        loc_mod.SpellCast(akDevice, akSpell, aiHits, akDevice.UD_ModifiersDataStr[loc_modid], akDevice.UD_ModifiersDataForm1[loc_modid], akDevice.UD_ModifiersDataForm2[loc_modid], akDevice.UD_ModifiersDataForm3[loc_modid], akDevice.UD_ModifiersDataForm4[loc_modid],akDevice.UD_ModifiersDataForm5[loc_modid])
     endwhile
 EndFunction
 

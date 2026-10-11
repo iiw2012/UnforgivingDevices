@@ -33,21 +33,25 @@ import UD_Native
 ===========================================================================================
 /;
 Bool Function ActorAction(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Int aiActorAction, Int aiEquipSlot, Form akSource, String asDataStr, Form akForm1)
-    If aiActorAction == 0
-    ; weapon swing
-    ; TODO PR195: check weapon type to exclude daggers and staffs
-        Float loc_prob = GetParamFlt(akModifier, akDevice, asDataStr, 0, 0.0, "Probability")
-
-        If RandomFloat(0.0, 100.0) < 10.0 * akModifier.MultVerboseness
-            PrintNotification(akDevice, ;/ reacted /;"because of your actions. For a moment, you see the silhouette of a warrior.")
-        EndIf
-
-        Return (RandomFloat(0.0, 100.0) < loc_prob)
+    If aiActorAction != 0
+        Return False
     EndIf
-    Return False
+    ; weapon swing
+    If akSource As Weapon
+        Int loc_type = (akSource As Weapon).GetWeaponType()
+        If loc_type == 2 || loc_type >= 7 || loc_type == 9
+        ; excluding Daggers, Staffs, Bows and Crossbows
+            Return False
+        EndIf
+    EndIf
+    Float loc_prob = GetParamFlt(akModifier, akDevice, asDataStr, 0, 0.0, "Probability")
+    If RandomFloat(0.0, 100.0) < 10.0 * akModifier.MultVerboseness
+        PrintNotification(akDevice, ;/ reacted /;"because of your actions. For a moment, you see the silhouette of a warrior.")
+    EndIf
+    Return (RandomFloat(0.0, 100.0) < loc_prob)
 EndFunction
 
-Bool Function WeaponHit(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Weapon akWeapon, Float afDamage, String asDataStr, Form akForm1)
+Bool Function WeaponHit(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Weapon akWeapon, Float afDamage, Int aiHits, String asDataStr, Form akForm1)
     If akWeapon && akWeapon.GetWeaponType() <= 6
     ; melee or unarmed
         Float loc_prob = GetParamFlt(akModifier, akDevice, asDataStr, 2, 0.0, "Probability")

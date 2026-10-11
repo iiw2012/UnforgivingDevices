@@ -914,8 +914,8 @@ Auto State HTML
     EndFunction
 
     String Function _CleanPage(String asPage)
-        Debug.Trace(Self + "::_CleanPage() Before: begining = " + StringUtil.Substring(asPage, 0, 150))
-        Debug.Trace(Self + "::_CleanPage() Before:   ending = " + StringUtil.Substring(asPage, StringUtil.GetLength(asPage) - 150))
+;        Debug.Trace(Self + "::_CleanPage() Before: begining = " + StringUtil.Substring(asPage, 0, 150))
+;        Debug.Trace(Self + "::_CleanPage() Before:   ending = " + StringUtil.Substring(asPage, StringUtil.GetLength(asPage) - 150))
         String loc_res = asPage
         loc_res = RemoveSubstr(loc_res, "<g/>")
         loc_res = TrimSubstr(loc_res, "<br/>")
@@ -927,8 +927,8 @@ Auto State HTML
         loc_res = ReplaceSubstr(loc_res, "<br/></textformat></p>", "</textformat></p>")
         loc_res = ReplaceSubstr(loc_res, "<gap/>", "<font size='12'> <br/></font>") ;"<textformat leading='-10'> <br/></textformat>"
 ;        loc_res = ReplaceSubstr(loc_res, "<br/>", "\n")
-        Debug.Trace(Self + "::_CleanPage() After: begining = " + StringUtil.Substring(loc_res, 0, 150))
-        Debug.Trace(Self + "::_CleanPage() After:   ending = " + StringUtil.Substring(loc_res, StringUtil.GetLength(loc_res) - 150))
+;        Debug.Trace(Self + "::_CleanPage() After: begining = " + StringUtil.Substring(loc_res, 0, 150))
+;        Debug.Trace(Self + "::_CleanPage() After:   ending = " + StringUtil.Substring(loc_res, StringUtil.GetLength(loc_res) - 150))
         Return loc_res
     EndFunction
 

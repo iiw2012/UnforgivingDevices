@@ -43,7 +43,7 @@ import UD_Native
 ===========================================================================================
 ===========================================================================================
 /;
-Bool Function SpellCast(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Spell akSpell, String asDataStr, Form akForm1)
+Bool Function SpellCast(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Spell akSpell, Int aiHits, String asDataStr, Form akForm1)
     Int loc_cost            = iRange(akSpell.GetMagickaCost(), 5, 100)
     Int loc_min_value       = GetParamInt(akModifier, akDevice, asDataStr, 0, 0,      "Input")
     Float loc_prob_base     = GetParamFlt(akModifier, akDevice, asDataStr, 1, 100.0,  "Probability")

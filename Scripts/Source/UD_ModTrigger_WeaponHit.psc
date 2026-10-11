@@ -42,7 +42,7 @@ import UD_Native
 ===========================================================================================
 ===========================================================================================
 /;
-Bool Function WeaponHit(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Weapon akWeapon, Float afDamage, String asDataStr, Form akForm1)
+Bool Function WeaponHit(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Weapon akWeapon, Float afDamage, Int aiHits, String asDataStr, Form akForm1)
     If UDmain.TraceAllowed()
         UDmain.Log("UD_ModTrigger_WeaponHit::WeaponHit() akModifier = " + akModifier + ", akDevice = " + akDevice + ", akWeapon = " + akWeapon + ", afDamage = " + afDamage + ", asDataStr = " + asDataStr, 3)
     EndIf

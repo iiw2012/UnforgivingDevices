@@ -43,7 +43,7 @@ Bool Function TimeUpdateSeconds(UD_Modifier_Combo akModifier, UD_CustomDevice_Re
     Float loc_min_value     = GetParamFlt(akModifier, akDevice, asDataStr, 0, 0,      "Input")
     Float loc_prob_base     = GetParamFlt(akModifier, akDevice, asDataStr, 1, 100.0,  "Probability")
     Float loc_prob_acc      = GetParamFlt(akModifier, akDevice, asDataStr, 2, 0.0,    "Probability")
-    Bool loc_repeat         = GetParamBln(akModifier, akDevice, asDataStr, 3, False)
+    Bool loc_repeat         = GetParamBln(akModifier, akDevice, asDataStr, 3, True)
     
     If !BaseTriggerIsActive(asDataStr, 4)
         Return False
@@ -71,7 +71,7 @@ String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice
     Float loc_min_value     = GetParamFlt(akModifier, akDevice, asDataStr, 0, 0,      "Input")
     Float loc_prob_base     = GetParamFlt(akModifier, akDevice, asDataStr, 1, 100.0,  "Probability")
     Float loc_prob_acc      = GetParamFlt(akModifier, akDevice, asDataStr, 2, 0.0,    "Probability")
-    Bool loc_repeat         = GetParamBln(akModifier, akDevice, asDataStr, 3, False)
+    Bool loc_repeat         = GetParamBln(akModifier, akDevice, asDataStr, 3, True)
     Float loc_accum         = GetParamFlt(akModifier, akDevice, asDataStr, 4, 0.0)
     
     String loc_res = ""

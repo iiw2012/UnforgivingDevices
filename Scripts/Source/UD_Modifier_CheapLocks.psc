@@ -53,7 +53,7 @@ Function TimeUpdateHour(UD_CustomDevice_RenderScript akDevice, Float afGameHours
     EndIf
 EndFunction
 
-Function WeaponHit(UD_CustomDevice_RenderScript akDevice, Weapon akWeapon, Float afDamage, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
+Function WeaponHit(UD_CustomDevice_RenderScript akDevice, Weapon akWeapon, Float afDamage, Int aiHits, String asDataStr, Form akForm1, Form akForm2, Form akForm3, Form akForm4, Form akForm5)
     If akWeapon == None || afDamage < 0.0
         Return
     EndIf

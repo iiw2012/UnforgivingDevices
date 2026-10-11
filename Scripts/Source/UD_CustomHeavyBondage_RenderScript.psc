@@ -143,17 +143,17 @@ EndFunction
 Function onSpecialButtonReleased(Float fHoldTime)
     parent.onSpecialButtonReleased(fHoldTime)
 EndFunction
-bool Function onWeaponHitPre(Weapon source, Float afDamage = -1.0)
-    return parent.onWeaponHitPre(source, afDamage)
+bool Function onWeaponHitPre(Weapon source, Float afDamage = -1.0, Int aiHits = 1)
+    return parent.onWeaponHitPre(source, afDamage, aiHits)
 EndFunction
-Function onWeaponHitPost(Weapon source, Float afDamage = -1.0)
-    parent.onWeaponHitPost(source, afDamage)
+Function onWeaponHitPost(Weapon source, Float afDamage = -1.0, Int aiHits = 1)
+    parent.onWeaponHitPost(source, afDamage, aiHits)
 EndFunction
-bool Function onSpellHitPre(Form source, Float afDamage = -1.0)
-    return parent.onSpellHitPre(source, afDamage)
+bool Function onSpellHitPre(Form source, Float afDamage = -1.0, Int aiHits = 1)
+    return parent.onSpellHitPre(source, afDamage, aiHits)
 EndFunction
-Function onSpellHitPost(Form source, Float afDamage = -1.0)
-    parent.onSpellHitPost(source, afDamage)
+Function onSpellHitPost(Form source, Float afDamage = -1.0, Int aiHits = 1)
+    parent.onSpellHitPost(source, afDamage, aiHits)
 EndFunction
 string Function addInfoString(string str = "")
     return parent.addInfoString(str)

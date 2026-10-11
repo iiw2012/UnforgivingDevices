@@ -42,7 +42,7 @@ import UD_Native
 ===========================================================================================
 ===========================================================================================
 /;
-Bool Function SpellHit(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Form akSpell, Float afDamage, String asDataStr, Form akForm1)
+Bool Function SpellHit(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Form akSpell, Float afDamage, Int aiHits, String asDataStr, Form akForm1)
     If afDamage <= 0.0
         Return False
     EndIf

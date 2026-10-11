@@ -632,7 +632,6 @@ Function PageInfo(int aiOption)
 EndFunction
 
 String Function _GetFormVariantCaption(Form akForm)
-    UDmain.Log(Self + "::_GetFormVariantCaption() akForm = " + akForm, 3)
     If akForm != None && akForm.GetName() != ""
         Return akForm.GetName()
     Else
