@@ -23,22 +23,30 @@ String      Property DisplayName = "General Preset"     Auto
 
 ;/  Variable: DataStr_Easy
     Easiest DataStr configuration when adding a modifier with the Patcher
+    
+    Obsolete. Use DataStr array instead
 /;
 String      Property DataStr_Easy                       Auto
 
 ;/  Variable: DataStr_Ground
     Medium DataStr configuration when adding a modifier with the Patcher
     (Silly name to be displayed in the correct order)
+    
+    Obsolete. Use DataStr array instead
 /;
 String      Property DataStr_Ground                     Auto
 
 ;/  Variable: DataStr_Hard
     Hardest DataStr configuration when adding a modifier with the Patcher
+    
+    Obsolete. Use DataStr array instead
 /;
 String      Property DataStr_Hard                       Auto
 
 ;/  Variable: DataStr_Types
     Types of the parameters in configurations
+    
+    Obsolete. Use DataStr array instead
 /;
 String      Property DataStr_Types                      Auto
 
@@ -51,6 +59,11 @@ String      Property DataStr_Types                      Auto
         "S: L"
         "I: 1 > 3"
     val1, val2, val3 - points used for interpolation when generating a configuration for a specific device
+    
+    Possible types:
+        F, D    - float number
+        I, N    - integer number (or boolean as 0|1)
+        S       - string
 /;
 String[]    Property DataStr                            Auto
 
@@ -268,51 +281,52 @@ String Function GetDataStr(Float afGlobalSeverityShift = 0.0, Float afGlobalSeve
         Return GetDataStrFromArray(afGlobalSeverityShift, afGlobalSeverityDispersionMult)
     EndIf
     ; obsolete code
-    Int i = 0
-    String loc_types = DataStr_Types
-    Int loc_size = UD_Native.GetStringParamAll(DataStr_Ground).Length
-    String loc_datastr = ""
-    While i < loc_size
-        String loc_type = GetStringParamString(loc_types, i, "")
-        String loc_rnd_str = ""
-        If GetStringParamString(DataStr_Ground, i, "") != ""
-            Float loc_rnd = BiasedRandom3(afGlobalSeverityShift, afGlobalSeverityDispersionMult)
-            Float loc_rnd_01 = (loc_rnd + 1.0) / 2.0          ; scaling to interval (0; 1)
-            If loc_type == "I"
-                Int loc_zero = GetStringParamInt(DataStr_Ground, i, 0)
-                Int loc_min = GetStringParamInt(DataStr_Easy, i, loc_zero)
-                Int loc_max = GetStringParamInt(DataStr_Hard, i, loc_zero)
-                If loc_rnd < 0
-                    loc_rnd_str = UD_Native.Round(loc_rnd * (loc_zero - loc_min) + loc_zero) as String
+    If DataStr_Types.Length > 0
+        Int i = 0
+        String loc_types = DataStr_Types
+        Int loc_size = UD_Native.GetStringParamAll(DataStr_Ground).Length
+        String loc_datastr = ""
+        While i < loc_size
+            String loc_type = GetStringParamString(loc_types, i, "")
+            String loc_rnd_str = ""
+            If GetStringParamString(DataStr_Ground, i, "") != ""
+                Float loc_rnd = BiasedRandom3(afGlobalSeverityShift, afGlobalSeverityDispersionMult)
+                Float loc_rnd_01 = (loc_rnd + 1.0) / 2.0          ; scaling to interval (0; 1)
+                If loc_type == "I"
+                    Int loc_zero = GetStringParamInt(DataStr_Ground, i, 0)
+                    Int loc_min = GetStringParamInt(DataStr_Easy, i, loc_zero)
+                    Int loc_max = GetStringParamInt(DataStr_Hard, i, loc_zero)
+                    If loc_rnd < 0
+                        loc_rnd_str = UD_Native.Round(loc_rnd * (loc_zero - loc_min) + loc_zero) as String
+                    Else
+                        loc_rnd_str = UD_Native.Round(loc_rnd * (loc_max - loc_zero) + loc_zero) as String
+                    EndIf
+                ElseIf loc_type == "F"
+                    Float loc_zero = GetStringParamFloat(DataStr_Ground, i, 0.0)
+                    Float loc_min = GetStringParamFloat(DataStr_Easy, i, loc_zero)
+                    Float loc_max = GetStringParamFloat(DataStr_Hard, i, loc_zero)
+                    If loc_rnd < 0
+                        loc_rnd_str = FormatFloat(loc_rnd * (loc_zero - loc_min) + loc_zero, 2)
+                    Else
+                        loc_rnd_str = FormatFloat(loc_rnd * (loc_max - loc_zero) + loc_zero, 2)
+                    EndIf
                 Else
-                    loc_rnd_str = UD_Native.Round(loc_rnd * (loc_max - loc_zero) + loc_zero) as String
-                EndIf
-            ElseIf loc_type == "F"
-                Float loc_zero = GetStringParamFloat(DataStr_Ground, i, 0.0)
-                Float loc_min = GetStringParamFloat(DataStr_Easy, i, loc_zero)
-                Float loc_max = GetStringParamFloat(DataStr_Hard, i, loc_zero)
-                If loc_rnd < 0
-                    loc_rnd_str = FormatFloat(loc_rnd * (loc_zero - loc_min) + loc_zero, 2)
-                Else
-                    loc_rnd_str = FormatFloat(loc_rnd * (loc_max - loc_zero) + loc_zero, 2)
-                EndIf
-            Else
-                String loc_val_0 = GetStringParamString(DataStr_Ground, i, "")
-                String loc_val_min = GetStringParamString(DataStr_Easy, i, loc_val_0)
-                String loc_val_max = GetStringParamString(DataStr_Hard, i, loc_val_0)
-                If loc_rnd < -0.33
-                    loc_rnd_str = loc_val_min
-                ElseIf loc_rnd > 0.33
-                    loc_rnd_str = loc_val_max
-                Else 
-                    loc_rnd_str = loc_val_0
+                    String loc_val_0 = GetStringParamString(DataStr_Ground, i, "")
+                    String loc_val_min = GetStringParamString(DataStr_Easy, i, loc_val_0)
+                    String loc_val_max = GetStringParamString(DataStr_Hard, i, loc_val_0)
+                    If loc_rnd < -0.33
+                        loc_rnd_str = loc_val_min
+                    ElseIf loc_rnd > 0.33
+                        loc_rnd_str = loc_val_max
+                    Else 
+                        loc_rnd_str = loc_val_0
+                    EndIf
                 EndIf
             EndIf
-        EndIf
-        loc_datastr += loc_rnd_str + ","
-        i += 1
-    EndWhile
-    
+            loc_datastr += loc_rnd_str + ","
+            i += 1
+        EndWhile
+    EndIf
     Return loc_datastr
 EndFunction
 
