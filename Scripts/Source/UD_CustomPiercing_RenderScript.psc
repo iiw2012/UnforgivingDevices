@@ -60,6 +60,16 @@ float Function getAccesibility()
     return ValidateAccessibility(loc_res)
 EndFunction
 
+String Function GetDeviceMainMenuAccessibilityText()
+    String loc_res = ""
+    if (isPiercing(True, False) && wearerHaveBra()) || (isPiercing(False, True) && wearerHaveBelt())
+        loc_res += UDMTF.LineBreak()
+        loc_res += UDMTF.Text("Access to the piercing is blocked by devices worn over it!", asColor = UDMTF.BoolToRainbow(False))
+        loc_res += UDMTF.LineBreak()
+    EndIf
+    Return loc_res
+EndFunction
+
 ;============================================================================================================================
 ;unused override function, theese are from base script. Extending different script means you also have to add their overrride functions                                                
 ;theese function should be on every object instance, as not having them may cause multiple function calls to default class

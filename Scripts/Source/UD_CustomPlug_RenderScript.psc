@@ -130,6 +130,19 @@ float Function getAccesibility()
     return ValidateAccessibility(loc_res)
 EndFunction
 
+String Function GetDeviceMainMenuAccessibilityText()
+    String loc_res = ""
+    Int loc_beltstate = UDCDmain.ActorBelted(getWearer())
+    If loc_beltstate > 0 ;belted
+        If (loc_beltstate == 1) || (loc_beltstate == 2 && getPlugType() == 0) ; all holes belted or anal hole not belted but plug is vaginal
+            loc_res += UDMTF.LineBreak()
+            loc_res += UDMTF.Text("Your belt or harness is preventing the device from being removed!", asColor = UDMTF.BoolToRainbow(False))
+            loc_res += UDMTF.LineBreak()
+        EndIf
+    EndIf
+    Return loc_res
+EndFunction
+
 ;returns plug type
 ;0 -> Vaginal plug
 ;1 -> Anal plug

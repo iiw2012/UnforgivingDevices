@@ -537,11 +537,12 @@ bool Function canBeActivated()
     endif
 EndFunction
 
-String Function GetDeviceMainMenuTextAddition()
+String Function GetDeviceMainMenuAccessibilityText()
     String loc_res = ""
     If getPlugInflateLevel() >= 5
         loc_res += UDMTF.LineBreak()
         loc_res += UDMTF.Text("There's no way you can get the plug out while it's so inflated!", asColor = UDMTF.BoolToRainbow(False))
+        loc_res += UDMTF.LineBreak()
     EndIf
     Return loc_res
 EndFunction

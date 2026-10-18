@@ -7148,6 +7148,8 @@ String Function _GetDeviceMainMenuText()
             loc_i += 1
         EndWhile
     EndIf
+    
+    loc_res += GetDeviceMainMenuAccessibilityText()
 
     loc_res += GetDeviceMainMenuTextAddition()
 
@@ -7158,6 +7160,16 @@ String Function _GetDeviceMainMenuText()
     loc_res += UDMTF.ParagraphEnd()
     loc_res += UDMTF.FontEnd()
     
+    Return loc_res
+EndFunction
+
+String Function GetDeviceMainMenuAccessibilityText()
+    String loc_res = ""
+    If getAccesibility() <= 0
+        loc_res += UDMTF.LineBreak()
+        loc_res += UDMTF.Text("You don't have direct access to the device to struggle effectively!", asColor = UDMTF.BoolToRainbow(False))
+        loc_res += UDMTF.LineBreak()
+    EndIf
     Return loc_res
 EndFunction
 
