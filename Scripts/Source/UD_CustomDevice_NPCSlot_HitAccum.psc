@@ -214,7 +214,7 @@ Function RaiseSpellCastEvents()
     GoToState("Busy")
     Form[] loc_arr_no_dupes = PapyrusUtil.RemoveDupeForm(_SpellCast_Forms)
     loc_arr_no_dupes = PapyrusUtil.ClearNone(loc_arr_no_dupes)
-    If UDmain.TraceAllowed()
+    If loc_arr_no_dupes.Length > 0 && UDmain.TraceAllowed()
         UDmain.Log(Self + "::RaiseSpellCastEvents() " + _SpellCast_Forms.Length + " event(s) from " + loc_arr_no_dupes.Length + " spells", 3)
     EndIf
     Int loc_form_index = 0
@@ -230,7 +230,7 @@ Function RaiseSpellCastEvents()
         EndIf
         loc_form_index += 1
     EndWhile
-    Utility.ResizeFormArray(_SpellCast_Forms, 0)
+    _SpellCast_Forms = Utility.ResizeFormArray(_SpellCast_Forms, 0)
     _SpellCast_Index = 0
     GoToState("")
 EndFunction
@@ -238,7 +238,7 @@ EndFunction
 Function RaiseSpellHitEvents()
     GoToState("Busy")
     Form[] loc_arr_no_dupes = PapyrusUtil.RemoveDupeForm(_SpellHitTaken_Forms)
-    If UDmain.TraceAllowed()
+    If loc_arr_no_dupes.Length > 0 && UDmain.TraceAllowed()
         UDmain.Log(Self + "::RaiseSpellHitEvents() " + _SpellHitTaken_Forms.Length + " event(s) from " + loc_arr_no_dupes.Length + " spell(s)", 3)
     EndIf
     Int loc_form_index = 0
@@ -255,8 +255,8 @@ Function RaiseSpellHitEvents()
         EndIf
         loc_form_index += 1
     EndWhile
-    Utility.ResizeFormArray(_SpellHitTaken_Forms, 0)
-    Utility.ResizeFloatArray(_SpellHitTaken_Values, 0)
+    _SpellHitTaken_Forms = Utility.ResizeFormArray(_SpellHitTaken_Forms, 0)
+    _SpellHitTaken_Values = Utility.ResizeFloatArray(_SpellHitTaken_Values, 0)
     _SpellHitTaken_Index = 0
     GoToState("")
 EndFunction
@@ -265,7 +265,7 @@ Function RaiseWeaponHitEvents()
     GoToState("Busy")
     Form[] loc_arr_no_dupes = PapyrusUtil.RemoveDupeForm(_WeaponHitTaken_Forms)
     loc_arr_no_dupes = PapyrusUtil.ClearNone(loc_arr_no_dupes)
-    If UDmain.TraceAllowed()
+    If loc_arr_no_dupes.Length > 0 && UDmain.TraceAllowed()
         UDmain.Log(Self + "::RaiseWeaponHitEvents() " + _WeaponHitTaken_Forms.Length + " event(s) from " + loc_arr_no_dupes.Length + " weapon(s)", 3)
     EndIf
     Int loc_form_index = 0
@@ -282,8 +282,8 @@ Function RaiseWeaponHitEvents()
         EndIf
         loc_form_index += 1
     EndWhile
-    Utility.ResizeFormArray(_WeaponHitTaken_Forms, 0)
-    Utility.ResizeFloatArray(_WeaponHitTaken_Values, 0)
+    _WeaponHitTaken_Forms = Utility.ResizeFormArray(_WeaponHitTaken_Forms, 0)
+    _WeaponHitTaken_Values = Utility.ResizeFloatArray(_WeaponHitTaken_Values, 0)
     _WeaponHitTaken_Index = 0
     GoToState("")
 EndFunction

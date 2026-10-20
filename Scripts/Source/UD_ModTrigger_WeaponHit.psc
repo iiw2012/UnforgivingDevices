@@ -46,7 +46,7 @@ Bool Function WeaponHit(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScri
     If UDmain.TraceAllowed()
         UDmain.Log("UD_ModTrigger_WeaponHit::WeaponHit() akModifier = " + akModifier + ", akDevice = " + akDevice + ", akWeapon = " + akWeapon + ", afDamage = " + afDamage + ", asDataStr = " + asDataStr, 3)
     EndIf
-    If afDamage <= 0.0
+    If afDamage <= 0.0 || aiHits < 1
         Return False
     EndIf
     Int loc_min_value       = GetParamInt(akModifier, akDevice, asDataStr, 0, 0,      "Input")
@@ -54,15 +54,25 @@ Bool Function WeaponHit(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScri
     Float loc_prob_delta    = GetParamFlt(akModifier, akDevice, asDataStr, 2, 0.0,    "Probability")
     Float loc_prob_acc      = GetParamFlt(akModifier, akDevice, asDataStr, 3, 0.0,    "Probability")
     Bool loc_repeat         = GetParamBln(akModifier, akDevice, asDataStr, 4, False)
-
-    If TriggerOnValueDelta(akDevice, akModifier.NameAlias, asDataStr, afValueDelta = afDamage, afMinAccum = loc_min_value, afProbBase = loc_prob_base, afProbDelta = loc_prob_delta, afProbAccum = loc_prob_acc, abRepeat = loc_repeat, aiAccumParamIndex = 5)
-        Return True
-    Else
-        If BaseTriggerIsActive(asDataStr, 5) && RandomFloat(0.0, 100.0) < 10.0 * akModifier.MultVerboseness
-            PrintNotification(akDevice, ;/ reacted /;"by absorbing and recharging from the energy of a hit.")
-        EndIf    
-        Return False
+    
+; in case of damage from trap we count it once per trigger call
+    If akWeapon.GetFormID() == 0x000001F4 && aiHits > 1
+        aiHits = 1 
     EndIf
+; from the total damage to the value per hit
+    afDamage /= aiHits
+; checking trigger condition for every effective hit
+    While aiHits > 0
+        If TriggerOnValueDelta(akDevice, akModifier.NameAlias, asDataStr, afValueDelta = afDamage, afMinAccum = loc_min_value, afProbBase = loc_prob_base, afProbDelta = loc_prob_delta, afProbAccum = loc_prob_acc, abRepeat = loc_repeat, aiAccumParamIndex = 5)
+            Return True
+        EndIf
+        aiHits -= 1
+    EndWhile
+
+    If BaseTriggerIsActive(asDataStr, 5) && RandomFloat(0.0, 100.0) < 10.0 * akModifier.MultVerboseness
+        PrintNotification(akDevice, ;/ reacted /;"by absorbing and recharging from the energy of a hit.")
+    EndIf    
+    Return False
 EndFunction
 
 ;/  Group: User interface

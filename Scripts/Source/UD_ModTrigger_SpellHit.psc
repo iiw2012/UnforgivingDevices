@@ -43,7 +43,7 @@ import UD_Native
 ===========================================================================================
 /;
 Bool Function SpellHit(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScript akDevice, Form akSpell, Float afDamage, Int aiHits, String asDataStr, Form akForm1)
-    If afDamage <= 0.0
+    If afDamage <= 0.0 || aiHits < 1
         Return False
     EndIf
     Int loc_min_value       = GetParamInt(akModifier, akDevice, asDataStr, 0, 0,      "Input")
@@ -52,14 +52,26 @@ Bool Function SpellHit(UD_Modifier_Combo akModifier, UD_CustomDevice_RenderScrip
     Float loc_prob_acc      = GetParamFlt(akModifier, akDevice, asDataStr, 3, 0.0,    "Probability")
     Bool loc_repeat         = GetParamBln(akModifier, akDevice, asDataStr, 4, False)
 
-    If TriggerOnValueDelta(akDevice, akModifier.NameAlias, asDataStr, afValueDelta = afDamage, afMinAccum = loc_min_value, afProbBase = loc_prob_base, afProbDelta = loc_prob_delta, afProbAccum = loc_prob_acc, abRepeat = loc_repeat, aiAccumParamIndex = 5)
-        Return True
-    Else
-        If BaseTriggerIsActive(asDataStr, 5) && RandomFloat(0.0, 100.0) < 5.0 * akModifier.MultVerboseness
-            PrintNotification(akDevice, ;/ reacted /;"by absorbing and recharging from the spell that affects you.")
-        EndIf
-        Return False
+; in case of concentration spell we count it once per trigger call
+    If (akSpell as Spell) != None && IsConcentrationSpell(akSpell as Spell) && aiHits > 1
+        aiHits = 1
+    ElseIf (akSpell as Enchantment) != None && IsConcentrationEnch(akSpell as Enchantment) && aiHits > 1
+        aiHits = 1
     EndIf
+; from the total damage to the value per hit
+    afDamage /= aiHits
+; check trigger condition for every effective hit
+    While aiHits > 0
+        If TriggerOnValueDelta(akDevice, akModifier.NameAlias, asDataStr, afValueDelta = afDamage, afMinAccum = loc_min_value, afProbBase = loc_prob_base, afProbDelta = loc_prob_delta, afProbAccum = loc_prob_acc, abRepeat = loc_repeat, aiAccumParamIndex = 5)
+            Return True
+        EndIf
+        aiHits -= 1
+    EndWhile
+
+    If BaseTriggerIsActive(asDataStr, 5) && RandomFloat(0.0, 100.0) < 5.0 * akModifier.MultVerboseness
+        PrintNotification(akDevice, ;/ reacted /;"by absorbing and recharging from the spell that affects you.")
+    EndIf
+    Return False
 EndFunction
 
 ;/  Group: User interface
