@@ -144,7 +144,7 @@ Function PageReset(Bool abLockMenu)
     
     UD_ModStorageList_M = AddMenuOption("$UD_MODSTORAGE_SELECTED", loc_storage.GetName(), FlagSwitch(true))       ; Selected storage
     UD_ModifierList_M = AddMenuOption("$UD_CUSTOMMOD_SELECTED", loc_mod.NameFull, FlagSwitch(true))               ; Selected modifier
-    UD_ModReset_T = AddTextOption("==RESET==", "$-PRESS-")
+    UD_ModReset_T = AddTextOption("$UD_CUSTOMMOD_RELOAD_ALL", "$-PRESS-")
     AddEmptyOption()
     
     String[] loc_presets_names = loc_mod.GetPatcherPresetsNames()
@@ -370,13 +370,11 @@ Function PageOptionSelect(Int aiOption)
         loc_mod_pp.IsAbsoluteProbability = !loc_mod_pp.IsAbsoluteProbability
         SetToggleOptionValue(UD_ModPP_IsAbsoluteProbability_T, loc_mod_pp.IsAbsoluteProbability)
     elseif aiOption == UD_ModReset_T
-        if ShowMessage("Do you really want to reset the modifier storage and set it to default values?")
-            UD_Modifier loc_mod = UDmain.UDMOM.GetModifierFromStorage(UD_ModifierStorageSelected, UD_ModifierSelected)
-            Quest loc_storage   = loc_mod.GetOwningQuest()
+        if ShowMessage("$UD_CUSTOMMOD_RELOAD_ALL_MSG")
+            Quest loc_storage = UDmain.UDMOM.GetNthModifierStorage(UD_ModifierStorageSelected) as Quest
             loc_storage.Stop()
             Utility.WaitMenuMode(1.0)
             loc_storage.Reset()
-            ;loc_outfit.Reset()
             forcePageReset()
         endif
     endif
@@ -628,6 +626,8 @@ Function PageInfo(int aiOption)
     ElseIf aiOption == UD_ModifierDescription_T
         UD_Modifier loc_mod = UDmain.UDMOM.GetModifierFromStorage(UD_ModifierStorageSelected, UD_ModifierSelected)
         SetInfoText(loc_mod.Description)
+    ElseIf aiOption == UD_ModReset_T
+        SetInfoText("$UD_CUSTOMMOD_RELOAD_ALL_INFO")
     endif
 EndFunction
 

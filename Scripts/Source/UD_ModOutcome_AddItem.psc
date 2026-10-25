@@ -83,12 +83,12 @@ String Function GetParamsTableRows(UD_Modifier_Combo akModifier, UD_CustomDevice
     Bool loc_use    = GetParamBln(akModifier, akDevice, asDataStr, 2, False)
 
     loc_res += UDmain.UDMTF.TableRowDetails("Number of items:", loc_min + " - " + loc_max)
+    loc_res += UDmain.UDMTF.TableRowDetails("Instant use:", InlineIfStr(loc_use, "True", "False"))
     If akForm2
         loc_res += akModifier.PrintFormListSelectionDetails(akForm2, "R")
     EndIf
     If akForm3
         loc_res += akModifier.PrintFormListSelectionDetails(akForm3, "R")
     EndIf
-    loc_res += UDmain.UDMTF.TableRowDetails("Instant use:", InlineIfStr(loc_use, "True", "False"))
     Return loc_res
 EndFunction

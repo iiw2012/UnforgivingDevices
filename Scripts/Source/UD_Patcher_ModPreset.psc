@@ -572,7 +572,7 @@ EndFunction
 /;
 Int Function CheckWearerCompatibility(Actor akActor)
     Bool loc_is_player = UD_Native.IsPlayer(akActor)
-    If ((loc_is_player && ApplicableToPlayer) || (!loc_is_player && ApplicableToNPC)) && BaseProbability > 0.0
+    If ((loc_is_player && ApplicableToPlayer) || (!loc_is_player && ApplicableToNPC))
         Return 1
     Else
         Return -1

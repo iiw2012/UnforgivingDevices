@@ -339,7 +339,13 @@ String Function PrintFormListSelectionDetails(Form akForm, String asMethod)
         loc_padding = "              "
     EndIF
     loc_res += UDmain.UDMTF.TableRowDetails("Selected Forms:", GetSelectionMethodString(asMethod))
-    If akForm as FormList 
+    If akForm as LeveledItem
+        loc_name = akForm.GetName()
+        If loc_name == ""
+            loc_name = "(Level Item List)"
+        EndIf
+        loc_res += UDmain.UDMTF.TableRowDetails(loc_padding, loc_name)
+    ElseIf akForm as FormList
         FormList loc_fl = akForm as FormList
         Int loc_i = 0
         Int loc_n = loc_fl.GetSize()
@@ -349,7 +355,7 @@ String Function PrintFormListSelectionDetails(Form akForm, String asMethod)
         While loc_i < loc_n
             loc_name = loc_fl.GetAt(loc_i).GetName()
             If loc_name == ""
-                loc_name = "<Unnamed form>"
+                loc_name = "(Unnamed form)"
             EndIf
             If StringUtil.GetLength(loc_name) > 20
                 loc_name = StringUtil.Substring(loc_name, 0, 18) + "..."
@@ -358,19 +364,19 @@ String Function PrintFormListSelectionDetails(Form akForm, String asMethod)
             loc_i += 1
         EndWhile
         If loc_i == 0
-            loc_res += UDmain.UDMTF.TableRowDetails(loc_padding, "<Empty List>")
+            loc_res += UDmain.UDMTF.TableRowDetails(loc_padding, "(Empty List)")
         EndIf
     ElseIf akForm
         loc_name = akForm.GetName()
         If loc_name == ""
-            loc_name = "<Unnamed form>"
+            loc_name = "(Unnamed form)"
         EndIf
         If StringUtil.GetLength(loc_name) > 20
             loc_name = StringUtil.Substring(loc_name, 0, 18) + "..."
         EndIf
         loc_res += UDmain.UDMTF.TableRowDetails(loc_padding, loc_name)
     Else 
-        loc_res += UDmain.UDMTF.TableRowDetails(loc_padding, "<None>")
+        loc_res += UDmain.UDMTF.TableRowDetails(loc_padding, "(None)")
     EndIf
 
     Return loc_res
